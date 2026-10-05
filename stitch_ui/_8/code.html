@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary-fixed": "#a4f3cd", "on-tertiary-fixed": "#251a00", "on-tertiary-fixed-variant": "#5a4300", "on-error": "#ffffff", "on-secondary-fixed-variant": "#005138", "secondary-fixed-dim": "#88d6b2", "on-surface": "#141e1b", "surface-container-highest": "#dae5e0", "secondary": "#176b4d", "primary-fixed-dim": "#a1d0bf", "on-primary-fixed": "#002018", "on-surface-variant": "#404945", "on-primary": "#ffffff", "on-secondary": "#ffffff", "surface-bright": "#f1fcf7", "on-secondary-container": "#207153", "on-error-container": "#93000a", "inverse-primary": "#a1d0bf", "inverse-on-surface": "#e8f3ee", "surface-tint": "#3b6758", "outline-variant": "#c0c8c3", "primary-container": "#1e4b3e", "surface-variant": "#dae5e0", "surface-container-lowest": "#ffffff", "primary-fixed": "#bdeddb", "inverse-surface": "#28332f", "surface-container": "#e5f0eb", "tertiary-fixed-dim": "#e5c375", "on-background": "#141e1b", "surface-container-high": "#dfebe6", "on-secondary-fixed": "#002115", "tertiary": "#3b2b00", "primary": "#013428", "on-primary-container": "#8cbaa9", "error-container": "#ffdad6", "on-primary-fixed-variant": "#224e41", "on-tertiary": "#ffffff", "background": "#f1fcf7", "tertiary-fixed": "#ffdf99", "surface": "#f1fcf7", "surface-dim": "#d1ddd8", "secondary-container": "#a4f3cd", "outline": "#717975", "tertiary-container": "#564000", "surface-container-low": "#ebf6f1", "on-tertiary-container": "#cdac61", "error": "#ba1a1a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "1rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "0.875rem", "gutter-mobile": "0.75rem", "space-xs": "0.25rem", "margin-mobile": "1rem", "space-lg": "1.25rem", "margin": "1.25rem" }, fontFamily: { "scripture-lg": ["Noto Serif"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Noto Serif"], "headline-md": ["Noto Serif"], "scripture-md": ["Noto Serif"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Noto Serif"], "label-md": ["Plus Jakarta Sans"], "headline-xl": ["Noto Serif"], "body-md": ["Plus Jakarta Sans"] }, fontSize: { "scripture-lg": ["24px", { "lineHeight": "48px", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-lg": ["26px", { "lineHeight": "38px", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "30px", "fontWeight": "600" }], "scripture-md": ["19px", { "lineHeight": "38px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "500" }], "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-xl": ["32px", { "lineHeight": "48px", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen selection:bg-secondary-container selection:text-on-secondary-container"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="h-16 px-gutter-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="رجوع" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:text-primary hover:bg-surface-container-low transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_forward</span></button><img alt="Fadl Islamic Arabic calligraphy logo, brand mark showing the word 'فضل' with an elegant subtle crescent and dome motif, emerald green and warm gold palette, luxury spiritual aesthetic, vector clean symbol on transparent background. Design context: - Primary color: #1e4b3e
+- Font: notoSerif
+- Mode: light
+- Roundness: rounded-md
+. The logo should be visually consistent with these brand tokens." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VjAH23kldXstK6ia_qjv_2affBPsZziEJK4KcKDILEsRz9z3ujmo_fn86k5Mz60YFbthv4zlHopy8uwIZ1B7oK_DJUgARpiIv9Gagwlwji7AfTi0u2bTGoC_DXPAkBixD5hg4ABPSTvkbJcCL4Yh3NSMvf3rXRsA88BhEaJzuhH7WAUbwKcw3cCXKSkN62YB0d4OYpK0hhAK0jI5r73iU61kgSeJTyVLalpxqAjSsSzzPEvEzz278Ai1zY"/><h1 class="font-headline-sm text-headline-sm text-primary">Tasbeeh</h1></div><div class="flex items-center gap-space-xs"><button aria-label="خيارات" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">more_vert</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full px-margin-mobile pb-space-xl gap-space-lg select-none">
+<!-- Reciter & Mode Selector Pill -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-sm rounded-full shadow-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">record_voice_over</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">القارئ الحالي</span>
+<span class="font-label-md text-label-md text-primary">الشيخ عبد الباسط عبد الصمد</span>
+</div>
+</div>
+<button class="flex items-center gap-1 bg-surface-container-highest px-space-md py-1 rounded-full text-primary hover:bg-secondary-container transition-colors" type="button">
+<span class="font-label-sm text-label-sm">تغيير</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+<!-- Decorative Islamic Rosette Artwork & Surah Meta -->
+<div class="relative flex flex-col items-center justify-center py-space-md">
+<!-- Ambient Radial Glow Backdrop -->
+<div class="absolute w-64 h-64 rounded-full bg-secondary-container/40 blur-3xl pointer-events-none"></div>
+<!-- Sacred Arabesque Medal / Rosette -->
+<div class="relative w-56 h-56 rounded-full bg-gradient-to-tr from-primary-container via-secondary to-primary-container p-1 shadow-xl flex items-center justify-center">
+<div class="w-full h-full rounded-full bg-surface-container-lowest/15 backdrop-blur-md flex items-center justify-center p-3">
+<!-- Geometric Star / Rosette SVG Inner Frame -->
+<div class="relative w-full h-full rounded-full bg-primary flex items-center justify-center overflow-hidden shadow-inner">
+<svg class="absolute inset-0 w-full h-full opacity-25 text-tertiary-fixed-dim" fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<g stroke="currentColor" stroke-width="1.2">
+<circle cx="100" cy="100" r="92"></circle>
+<circle cx="100" cy="100" r="76" stroke-dasharray="3 3"></circle>
+<circle cx="100" cy="100" r="48"></circle>
+<!-- 8-Pointed Star -->
+<rect height="116" rx="4" transform="rotate(0 100 100)" width="116" x="42" y="42"></rect>
+<rect height="116" rx="4" transform="rotate(45 100 100)" width="116" x="42" y="42"></rect>
+<rect height="116" rx="4" transform="rotate(22.5 100 100)" width="116" x="42" y="42"></rect>
+<rect height="116" rx="4" transform="rotate(67.5 100 100)" width="116" x="42" y="42"></rect>
+</g>
+</svg>
+<!-- Center Calligraphic / Icon Badge -->
+<div class="relative z-10 flex flex-col items-center justify-center text-center px-space-sm">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[40px] drop-shadow-md">menu_book</span>
+<span class="font-headline-sm text-headline-sm text-surface-bright mt-1 tracking-wide">الجزء الأول</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed opacity-90">الحزب ١ • ربع ١</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Surah Title & Detail -->
+<div class="mt-space-md text-center">
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-wide">سُورَةُ الفَاتِحَةِ</h2>
+<div class="flex items-center justify-center gap-space-sm mt-1">
+<span class="bg-secondary-container/60 text-on-secondary-container px-space-sm py-0.5 rounded-full font-label-sm text-label-sm">مكّيّة</span>
+<span class="text-outline text-[12px]">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">٧ آيات</span>
+<span class="text-outline text-[12px]">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">رواية حفص عن عاصم</span>
+</div>
+</div>
+</div>
+<!-- Synchronized Active Ayah Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-l from-primary via-secondary to-tertiary-fixed-dim"></div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-sm text-label-sm text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">graphic_eq</span>
+        الآية الجارية (٥ من ٧)
+      </span>
+<button class="text-on-surface-variant hover:text-primary flex items-center gap-0.5 font-label-sm text-label-sm" type="button">
+<span>عرض السورة كاملة</span>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+</button>
+</div>
+<p class="font-scripture-lg text-scripture-lg text-primary text-center leading-loose py-space-xs font-semibold" dir="rtl">
+      ﴿ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ﴾
+    </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center mt-1">
+      نخصُّك وحدك بالعبادة، ونستعين بك وحدك في جميع أمورنا
+    </p>
+</div>
+<!-- Audio Progress Scrubber -->
+<div class="flex flex-col gap-1 w-full bg-surface-container-low p-space-md rounded-xl shadow-sm">
+<div class="relative w-full h-3 flex items-center cursor-pointer group" id="progress-container">
+<!-- Background track -->
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<!-- Active Progress Fill (RTL orientation) -->
+<div class="h-full bg-gradient-to-l from-secondary to-primary rounded-full" id="progress-fill" style="width: 32%;"></div>
+</div>
+<!-- Progress Knob -->
+<div class="absolute w-4 h-4 bg-primary rounded-full shadow-md right-[32%] -translate-x-1/2 group-hover:scale-125 transition-transform flex items-center justify-center" id="progress-thumb">
+<div class="w-1.5 h-1.5 rounded-full bg-surface-bright"></div>
+</div>
+</div>
+<!-- Time Indicators -->
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm px-0.5">
+<span id="current-time">02:15</span>
+<div class="flex items-center gap-1 text-secondary font-label-sm">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span>مرتل</span>
+</div>
+<span id="total-time">07:32</span>
+</div>
+</div>
+<!-- Audio Playback Controls -->
+<div class="flex flex-col gap-space-md items-center">
+<!-- Main Control Bar -->
+<div class="flex items-center justify-between w-full max-w-sm px-space-sm">
+<!-- Repeat Mode Toggle -->
+<button aria-label="تكرار السورة" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors" id="repeat-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">repeat</span>
+</button>
+<!-- Previous Ayah -->
+<button aria-label="الآية السابقة" class="w-12 h-12 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-high transition-transform active:scale-90" type="button">
+<span class="material-symbols-outlined text-[28px]">skip_next</span>
+</button>
+<!-- Rewind 10 Seconds -->
+<button aria-label="تأخير ١٠ ثوان" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[24px]">replay_10</span>
+</button>
+<!-- Primary Play / Pause Central Button -->
+<button aria-label="تشغيل أو إيقاف مؤقت" class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary-container active:scale-95 transition-all" id="play-pause-btn" type="button">
+<span class="material-symbols-outlined text-[36px]" id="play-pause-icon" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+<!-- Forward 10 Seconds -->
+<button aria-label="تقديم ١٠ ثوان" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[24px]">forward_10</span>
+</button>
+<!-- Next Ayah -->
+<button aria-label="الآية التالية" class="w-12 h-12 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-high transition-transform active:scale-90" type="button">
+<span class="material-symbols-outlined text-[28px]">skip_previous</span>
+</button>
+<!-- Audio Speed Pill -->
+<button aria-label="سرعة التلاوة" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container text-primary font-label-sm text-label-sm hover:bg-surface-container-highest transition-colors" id="speed-btn" type="button">
+        1.0x
+      </button>
+</div>
+<!-- Quick Audio Options Pills -->
+<div class="flex items-center gap-space-xs w-full overflow-x-auto pb-1 scrollbar-none justify-center">
+<!-- Background Audio Toggle -->
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[16px]">headphones</span>
+<span>تشغيل بالخلفية</span>
+</button>
+<!-- Sleep Timer -->
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container font-label-md text-label-md shadow-sm whitespace-nowrap transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">bedtime</span>
+<span>مؤقت النوم: ٣٠ د</span>
+</button>
+<!-- Memorization Repeat -->
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container font-label-md text-label-md shadow-sm whitespace-nowrap transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">loop</span>
+<span>تكرار التحفيظ</span>
+</button>
+</div>
+</div>
+<!-- Memorial & Sadaqah Jariyah Dedication Card -->
+<div class="mt-space-xs bg-gradient-to-br from-primary-container to-primary text-on-primary rounded-xl p-space-md shadow-md relative overflow-hidden">
+<!-- Subtle Background Islamic Pattern -->
+<div class="absolute -left-6 -bottom-6 w-28 h-28 rounded-full bg-secondary-container/10 pointer-events-none"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest/15 flex items-center justify-center text-tertiary-fixed">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-tertiary-fixed">صدقة جارية</span>
+<span class="font-label-lg text-label-lg font-bold">عن المرحوم فضل سليم محمد صالح</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed bg-surface-container-lowest/10 px-2 py-0.5 rounded-full">
+        رحمه الله
+      </span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-container-highest mt-space-sm leading-relaxed relative z-10">
+      "اللهم اجعل استماعنا وقراءتنا لهذا القرآن نوراً وضياءً في قبره ورفعةً في درجاته"
+    </p>
+<div class="mt-space-md pt-space-sm flex items-center justify-between border-t-0 relative z-10">
+<span class="font-label-sm text-label-sm text-on-primary-container">إهداء ثواب الاستماع</span>
+<button class="flex items-center gap-1.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md px-space-md py-1.5 rounded-lg shadow-sm hover:brightness-105 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span>دعاء للوالد</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for player state
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const playPauseIcon = document.getElementById('play-pause-icon');
+  let isPlaying = true;
+
+  if (playPauseBtn && playPauseIcon) {
+    playPauseBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playPauseIcon.textContent = isPlaying ? 'pause' : 'play_arrow';
+    });
+  }
+
+  // Speed cycler micro-interaction
+  const speedBtn = document.getElementById('speed-btn');
+  const speeds = ['1.0x', '1.25x', '1.5x', '0.75x'];
+  let speedIdx = 0;
+  if (speedBtn) {
+    speedBtn.addEventListener('click', () => {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      speedBtn.textContent = speeds[speedIdx];
+    });
+  }
+
+  // Repeat toggle
+  const repeatBtn = document.getElementById('repeat-btn');
+  let repeatActive = false;
+  if (repeatBtn) {
+    repeatBtn.addEventListener('click', () => {
+      repeatActive = !repeatActive;
+      if (repeatActive) {
+        repeatBtn.classList.add('text-secondary', 'bg-secondary-container/50');
+      } else {
+        repeatBtn.classList.remove('text-secondary', 'bg-secondary-container/50');
+      }
+    });
+  }
+</script></main></body></html>

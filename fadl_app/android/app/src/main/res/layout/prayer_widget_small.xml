@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="3dp"
+    android:padding="7dp"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:layoutDirection="rtl"
+    android:background="@drawable/prayer_widget_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView android:id="@+id/widget_prayer"
+            android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:textSize="14sp"
+            android:textStyle="bold" android:textColor="@color/widget_primary"
+            android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/widget_time"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="12sp" android:textColor="@color/widget_primary"
+            android:singleLine="true" />
+    </LinearLayout>
+    <Chronometer android:id="@+id/widget_countdown"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="13sp" android:textColor="@color/widget_secondary"
+        android:singleLine="true" />
+    <TextView android:id="@+id/widget_hijri"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="10sp" android:textColor="@color/widget_secondary"
+        android:maxLines="1" android:ellipsize="end" />
+</LinearLayout>

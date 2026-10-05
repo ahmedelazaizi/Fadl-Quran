@@ -1,0 +1,508 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm]
+}
+
+// ─────────────────────────────── Quran ───────────────────────────────
+
+enum RevelationType {
+  MECCAN
+  MEDINAN
+}
+
+model Surah {
+  id             Int            @id // 1..114
+  nameAr         String
+  nameEn         String
+  nameTranslit   String
+  revelationType RevelationType
+  ayahCount      Int
+  startPage      Int
+  ayahs          Ayah[]
+}
+
+model Ayah {
+  id          Int     @id // global number 1..6236
+  surahId     Int
+  number      Int // number inside the surah
+  key         String  @unique // "2:255"
+  textUthmani String
+  textSimple  String
+  /// Normalized Arabic (no diacritics, unified letters) used for search.
+  textSearch  String
+  juz         Int
+  hizbQuarter Int
+  page        Int
+  manzil      Int
+  ruku        Int
+  sajda       Boolean @default(false)
+
+  surah     Surah      @relation(fields: [surahId], references: [id])
+  texts     AyahText[]
+  bookmarks Bookmark[]
+
+  @@unique([surahId, number])
+  @@index([page])
+  @@index([juz])
+  @@index([textSearch(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+enum EditionType {
+  TAFSIR
+  TRANSLATION
+}
+
+enum EditionSource {
+  /// Fully seeded into the database.
+  LOCAL
+  /// Fetched from the Quran.com API on first request, then cached.
+  QURAN_COM
+}
+
+model TextEdition {
+  slug       String        @id // "ar.muyassar", "ar.saddi", "en.sahih"...
+  type       EditionType
+  language   String
+  nameAr     String
+  nameEn     String
+  source     EditionSource
+  /// Resource id on Quran.com for QURAN_COM editions.
+  externalId Int?
+  isDefault  Boolean       @default(false)
+  texts      AyahText[]
+}
+
+model AyahText {
+  editionSlug String
+  ayahId      Int
+  text        String
+  fetchedAt   DateTime @default(now())
+
+  edition TextEdition @relation(fields: [editionSlug], references: [slug])
+  ayah    Ayah        @relation(fields: [ayahId], references: [id])
+
+  @@id([editionSlug, ayahId])
+}
+
+model Reciter {
+  id            String  @id // CDN identifier, e.g. "ar.abdulbasitmurattal"
+  nameAr        String
+  nameEn        String
+  style         String // مرتل / مجود
+  riwaya        String  @default("حفص عن عاصم")
+  /// Available bitrates for verse-by-verse files.
+  verseBitrates Int[]
+  /// Bitrate for full-surah files; null when only verse-by-verse exists.
+  surahBitrate  Int?
+  sortOrder     Int     @default(0)
+  isDefault     Boolean @default(false)
+}
+
+// ─────────────────────────── Athkar & Duas ───────────────────────────
+
+model AthkarCategory {
+  id        Int     @id @default(autoincrement())
+  slug      String  @unique
+  nameAr    String  @unique
+  /// Featured categories are shown as chips/cards on the athkar screen.
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+  items     Dhikr[]
+}
+
+model Dhikr {
+  id         Int     @id @default(autoincrement())
+  categoryId Int
+  text       String
+  /// الفضل
+  virtue     String?
+  repeat     Int     @default(1)
+  reference  String?
+  sortOrder  Int     @default(0)
+  textSearch String
+
+  category      AthkarCategory      @relation(fields: [categoryId], references: [id])
+  inCollections DuaCollectionItem[]
+  progress      AthkarProgress[]
+
+  @@index([categoryId])
+  @@index([textSearch(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+/// Curated dua groups shown on the dedication / duas screen
+/// (للوالدين، للمتوفى، الشفاء، الرزق...). Items point either at a dhikr
+/// or at a verse range from the Quran, so no text is duplicated.
+model DuaCollection {
+  id        Int                 @id @default(autoincrement())
+  slug      String              @unique
+  nameAr    String
+  sortOrder Int                 @default(0)
+  items     DuaCollectionItem[]
+}
+
+model DuaCollectionItem {
+  id           Int     @id @default(autoincrement())
+  collectionId Int
+  dhikrId      Int?
+  /// Verse range, e.g. "17:24" or "14:40-41".
+  verseRange   String?
+  repeat       Int     @default(1)
+  sortOrder    Int     @default(0)
+
+  collection DuaCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  dhikr      Dhikr?        @relation(fields: [dhikrId], references: [id])
+}
+
+/// Global "آمين" counter per dua (key = "dhikr:12" or "verse:71:28").
+model AmenCounter {
+  targetKey String @id
+  count     Int    @default(0)
+}
+
+// ─────────────────────────────── Users ───────────────────────────────
+
+/// Anonymous identity of one app installation (the app has no sign-in).
+model User {
+  id          String   @id @default(uuid())
+  displayName String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  settings         UserSettings?
+  notifications    NotificationSettings?
+  credentials      DeviceCredential[]
+  devices          Device[]
+  bookmarks        Bookmark[]
+  khatmas          KhatmaPlan[]
+  tasbeehDhikrs    TasbeehDhikr[]
+  tasbeehEntries   TasbeehEntry[]
+  athkarProgress   AthkarProgress[]
+  dedications      Dedication[]
+  customDuas       CustomDua[]
+  amens            UserAmen[]
+  checklist        DailyChecklist[]
+  notificationLogs NotificationLog[]
+}
+
+/// Long-lived secret stored on the device; exchanged for access tokens.
+model DeviceCredential {
+  id         String    @id @default(uuid())
+  userId     String
+  secretHash String    @unique
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserSettings {
+  userId           String   @id
+  // Location & prayer calculation
+  latitude         Float?
+  longitude        Float?
+  locationName     String?
+  timezone         String   @default("Asia/Riyadh")
+  calcMethod       String   @default("UmmAlQura")
+  madhab           String   @default("shafi")
+  highLatRule      String? // middleofthenight | seventhofthenight | twilightangle
+  /// Minutes added to each prayer, e.g. {"fajr":0,"isha":2}.
+  adjustments      Json     @default("{}")
+  hijriAdjustment  Int      @default(0)
+  // Reading & listening
+  theme            String   @default("light") // light | dark | auto
+  mushafScript     String   @default("uthmani_hafs")
+  fontSize         Int      @default(24)
+  reciterId        String   @default("ar.abdulbasitmurattal")
+  audioQuality     Int      @default(128)
+  continuousPlay   Boolean  @default(true)
+  tafsirSlug       String   @default("ar.muyassar")
+  language         String   @default("ar")
+  // Sadaqah jariyah
+  dedicateeName    String?
+  tasbeehDailyGoal Int      @default(100)
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ───────────────────────────── Sync data ─────────────────────────────
+
+enum BookmarkKind {
+  BOOKMARK
+  LAST_READ
+}
+
+model Bookmark {
+  id        String       @id @default(uuid())
+  userId    String
+  ayahId    Int
+  kind      BookmarkKind @default(BOOKMARK)
+  note      String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ayah Ayah @relation(fields: [ayahId], references: [id])
+
+  @@unique([userId, ayahId, kind])
+  @@index([userId, kind])
+}
+
+enum KhatmaStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+model KhatmaPlan {
+  id           String       @id @default(uuid())
+  userId       String
+  title        String
+  khatmaCount  Int          @default(1)
+  durationDays Int
+  startDate    DateTime     @db.Date
+  /// Next page to read, counted across all khatmas (1 .. 604 * khatmaCount + 1).
+  currentPage  Int          @default(1)
+  status       KhatmaStatus @default(ACTIVE)
+  reminderTime String? // "HH:mm" in the user's timezone
+  dedicated    Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs KhatmaLog[]
+
+  @@index([userId, status])
+}
+
+model KhatmaLog {
+  id        String   @id @default(uuid())
+  planId    String
+  date      DateTime @db.Date
+  fromPage  Int
+  toPage    Int
+  pages     Int
+  createdAt DateTime @default(now())
+
+  plan KhatmaPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId, date])
+}
+
+model TasbeehDhikr {
+  id        String   @id @default(uuid())
+  userId    String
+  text      String
+  target    Int      @default(33)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries TasbeehEntry[]
+
+  @@index([userId])
+}
+
+model TasbeehEntry {
+  id            String   @id @default(uuid())
+  userId        String
+  dhikrId       String
+  date          DateTime @db.Date
+  count         Int
+  /// Client-generated id that makes offline uploads idempotent.
+  clientEventId String?  @unique
+  createdAt     DateTime @default(now())
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dhikr TasbeehDhikr @relation(fields: [dhikrId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model AthkarProgress {
+  userId  String
+  dhikrId Int
+  date    DateTime @db.Date
+  count   Int
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dhikr Dhikr @relation(fields: [dhikrId], references: [id])
+
+  @@id([userId, dhikrId, date])
+}
+
+/// Generic per-day checklist (e.g. Ramadan sunnahs: suhoor, iftar dua, taraweeh).
+model DailyChecklist {
+  userId String
+  date   DateTime @db.Date
+  key    String
+  done   Boolean  @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, date, key])
+}
+
+// ─────────────────────── Sadaqah jariyah / إهداء ───────────────────────
+
+enum DedicationType {
+  KHATMA
+  READING
+  LISTENING
+  TASBEEH
+  ATHKAR
+  DUA
+  OTHER
+}
+
+model Dedication {
+  id            String         @id @default(uuid())
+  userId        String
+  type          DedicationType
+  /// Pages, tasbeeh count, khatmas... depending on type.
+  amount        Int            @default(1)
+  dedicateeName String?
+  refKey        String?
+  createdAt     DateTime       @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+
+model CustomDua {
+  id        String   @id @default(uuid())
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserAmen {
+  userId    String
+  targetKey String
+  date      DateTime @db.Date
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, targetKey, date])
+}
+
+// ─────────────────────────── Notifications ───────────────────────────
+
+model Device {
+  id         String   @id @default(uuid())
+  userId     String
+  fcmToken   String   @unique
+  platform   String // android | ios | web
+  locale     String   @default("ar")
+  appVersion String?
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model NotificationSettings {
+  userId             String   @id
+  enabled            Boolean  @default(true)
+  /// Per-prayer adhan toggle: {"fajr":true,"sunrise":false,...}
+  adhan              Json     @default("{\"fajr\":true,\"sunrise\":false,\"dhuhr\":true,\"asr\":true,\"maghrib\":true,\"isha\":true}")
+  adhanSound         String   @default("makkah")
+  /// Minutes before each prayer; 0 disables the pre-alert.
+  preAlertMinutes    Int      @default(15)
+  morningAthkarTime  String?  @default("06:00")
+  eveningAthkarTime  String?  @default("17:00")
+  sleepAthkarTime    String?
+  /// Reminder at the start of the last third of the night.
+  qiyamEnabled       Boolean  @default(false)
+  duhaEnabled        Boolean  @default(false)
+  fridayKahf         Boolean  @default(true)
+  fridayHour         Boolean  @default(false)
+  mondayThursdayFast Boolean  @default(false)
+  whiteDaysFast      Boolean  @default(false)
+  khatmaReminder     Boolean  @default(true)
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model NotificationLog {
+  id        String   @id @default(uuid())
+  userId    String
+  /// Deterministic key, e.g. "adhan:fajr:2026-03-01", used for de-duplication.
+  key       String
+  type      String
+  fireAt    DateTime
+  status    String   @default("SENT") // SENT | FAILED | NO_DEVICE
+  error     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@index([createdAt])
+}
+
+// ─────────────────────────────── Hadith ───────────────────────────────
+
+model HadithBook {
+  id          Int             @id
+  slug        String          @unique
+  nameAr      String
+  nameEn      String
+  authorAr    String
+  group       String // nine | forties | other
+  hadithCount Int             @default(0)
+  sortOrder   Int             @default(0)
+  chapters    HadithChapter[]
+  hadiths     Hadith[]
+}
+
+model HadithChapter {
+  id      Int        @id @default(autoincrement())
+  bookId  Int
+  number  Int
+  nameAr  String
+  nameEn  String?
+  book    HadithBook @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  hadiths Hadith[]
+
+  @@unique([bookId, number])
+}
+
+model Hadith {
+  id          Int     @id @default(autoincrement())
+  bookId      Int
+  chapterId   Int?
+  /// Number of the hadith inside its book (as numbered by the source dataset).
+  number      Int
+  textAr      String
+  textSearch  String
+  textEn      String?
+  narratorEn  String?
+  /// Arabic grade, e.g. "صحيح"; null when no verified grade is available.
+  grade       String?
+  gradeSource String?
+
+  book    HadithBook     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  chapter HadithChapter? @relation(fields: [chapterId], references: [id])
+
+  @@unique([bookId, number])
+  @@index([chapterId])
+  @@index([textSearch(ops: raw("gin_trgm_ops"))], type: Gin)
+}

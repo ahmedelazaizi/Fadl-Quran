@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prayer_widget_description">الصلاة القادمة والتاريخ الهجري</string>
+    <color name="widget_background">#F4F8F5</color>
+    <color name="widget_primary">#163C34</color>
+    <color name="widget_secondary">#456A60</color>
+</resources>

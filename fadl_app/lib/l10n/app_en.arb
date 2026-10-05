@@ -1,0 +1,709 @@
+{
+  "@@locale": "en",
+  "home": "Home",
+  "mushaf": "Mushaf",
+  "athkar": "Remembrances",
+  "prayerTimes": "Prayer times",
+  "more": "More",
+  "quranReading": "Read the Quran",
+  "quranReadingDescription": "Open the Mushaf, listen to reciters, and follow your reading plan",
+  "reciters": "Reciters",
+  "quranCompletion": "Quran reading plan",
+  "worship": "Prayer and worship",
+  "worshipDescription": "Your next prayer, prayer log, and remembrances",
+  "dailyTools": "Daily tools",
+  "dailyToolsDescription": "Tasbeeh, supplications, Ramadan, and more",
+  "qibla": "Qibla",
+  "tasbeeh": "Tasbeeh",
+  "parentDua": "Prayer for a parent",
+  "ramadan": "Ramadan",
+  "moreTools": "Hijri calendar • fasting tracker • zakat calculator in More",
+  "prayerTracker": "Prayer tracker",
+  "prayerTrackerDescription": "Log your prayers or open the missed-prayer record",
+  "appTagline": "Quran • remembrance • supplication",
+  "dedicationPrefix": "An ongoing charity in memory of ",
+  "continueReading": "Continue reading",
+  "dailyAyah": "Verse of the day",
+  "dailyBlessing": "Today's reflection",
+  "share": "Share",
+  "openMushaf": "Open in Mushaf",
+  "nextPrayerIn": "Next prayer in",
+  "allPrayerTimes": "All prayer times",
+  "setLocation": "Set your location",
+  "setLocationDescription": "See prayer times, countdown, and Qibla direction",
+  "dailyProgress": "Daily progress",
+  "noActivePlan": "No active reading plan",
+  "planCompleted": "Reading plan completed, praise be to Allah",
+  "startPlan": "Start a reading plan",
+  "hadithToday": "Hadith of the day",
+  "hadithLibrary": "Hadith library",
+  "dedicateToday": "Dedicate today's reading",
+  "honoringParents": "Honoring parents",
+  "shareDua": "Share supplication",
+  "dedicatedReward": "Reward dedicated",
+  "hijriCalendar": "Hijri calendar",
+  "fastingTracker": "Fasting tracker",
+  "zakatCalculator": "Zakat calculator",
+  "quranAssistant": "Quran assistant",
+  "audioLibrary": "Audio library",
+  "library": "Library",
+  "downloads": "Downloads",
+  "tasbeehElectronic": "Digital tasbeeh",
+  "qiblaDirection": "Qibla direction",
+  "settings": "Settings",
+  "appearance": "Appearance and reading",
+  "appTheme": "App theme",
+  "light": "Light",
+  "dark": "Dark",
+  "automatic": "Automatic",
+  "mushafFontSize": "Mushaf font size",
+  "defaultReciter": "Default reciter",
+  "defaultTafsir": "Default tafsir",
+  "availableOffline": "Available offline",
+  "needsDownload": "Download from Offline tafsir first",
+  "loadsOnDemand": "Loaded on demand",
+  "manageLibrary": "Manage tafsir, tajweed, hadith, and recitations",
+  "coloredTajweed": "Color-coded Tajweed text",
+  "offlineTafsir": "Offline tafsir",
+  "optionalDownload": "Optional download; delete to save space",
+  "locationPrayer": "Location and prayer times",
+  "location": "Location",
+  "myLocation": "My location",
+  "notSet": "Not set yet",
+  "calculationMethod": "Calculation method",
+  "asrSchool": "Asr school",
+  "hijriAdjustment": "Hijri date adjustment",
+  "notifications": "Notifications",
+  "enableNotifications": "Enable notifications",
+  "notificationDescription": "Adhan and reminders on this device",
+  "preAdhanAlert": "Before-adhan alert",
+  "perPrayerAdhan": "Configure each prayer's adhan in Prayer times",
+  "off": "Off",
+  "morningAthkar": "Morning remembrances",
+  "eveningAthkar": "Evening remembrances",
+  "sleepAthkar": "Bedtime remembrances",
+  "qiyam": "Night prayer",
+  "qiyamDescription": "At the start of the last third of the night",
+  "duha": "Duha prayer",
+  "duhaDescription": "Midway between sunrise and noon",
+  "kahf": "Surah Al-Kahf",
+  "kahfDescription": "Every Friday after Fajr",
+  "fridayHour": "Friday's hour of supplication",
+  "fridayHourDescription": "One hour before Maghrib",
+  "mondayThursday": "Monday and Thursday fasting",
+  "mondayThursdayDescription": "Reminder the night before",
+  "whiteDays": "White days fasting",
+  "whiteDaysDescription": "13th, 14th, and 15th of each Hijri month",
+  "planReminder": "Daily reading reminder",
+  "planReminderDescription": "When today's reading has pages remaining",
+  "dataAbout": "Data and about",
+  "deleteMyData": "Delete my data",
+  "deleteDescription": "Permanently deletes reading plans, counters, bookmarks, and settings",
+  "accountDescription": "Your account is anonymous; no sign-in required. Fadl is completely free.",
+  "dedicationLabel": "Ongoing charity in memory of",
+  "recipientName": "Recipient's name",
+  "recipientExample": "For example: Fadl Salim Mohammed Saleh",
+  "cancel": "Cancel",
+  "save": "Save",
+  "nameSaved": "Name saved",
+  "delete": "Delete",
+  "myDataDeleted": "Your data was deleted",
+  "restartAfterDelete": "Your data was deleted. Restart the app to begin again.",
+  "tajweedDownloaded": "Tajweed text downloaded",
+  "tajweedRedownload": "You can download it again when online.",
+  "download": "Download",
+  "notDownloaded": "Not downloaded",
+  "downloading": "Downloading…",
+  "tajweedDisclaimer": "The color-coded text is not bundled; download is optional when online. ",
+  "tajweedLegal": "Colors are a visual aid, not a religious ruling.",
+  "tafsirRedownload": "You can download it again anytime.",
+  "verseByVerse": "Verse-by-verse recitation — synchronized verses",
+  "fullSurah": "Full-surah recitations — no automatic verse sync",
+  "searchReciter": "Search reciters",
+  "all": "All",
+  "murattal": "Measured",
+  "mujawwad": "Melodic",
+  "muallim": "Teaching",
+  "searchReciterBoth": "Search reciters in Arabic or Latin script",
+  "streamingNotice": "Streaming only; permission to listen does not grant redistribution rights.",
+  "chooseEdition": "Choose a reading or edition",
+  "searchSurah": "Search surahs",
+  "cancelDownload": "Cancel download",
+  "downloaded": "Downloaded",
+  "deleteDownload": "Delete download",
+  "partiallyDownloaded": "Partially downloaded",
+  "resumeDownload": "Resume download",
+  "downloadOffline": "Download for offline listening",
+  "language": "App language",
+  "arabic": "Arabic",
+  "english": "English",
+  "pageNumber": "Page {page}",
+  "@pageNumber": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "surahPage": "Surah {surah} (page {page})",
+  "@surahPage": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "surahVerse": "Surah {surah}: verse {verse}",
+  "@surahVerse": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "verse": {
+        "type": "String"
+      }
+    }
+  },
+  "surahName": "Surah {surah}",
+  "@surahName": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "versesCount": "{count} verses",
+  "@versesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPrayer": "{prayer} prayer",
+  "@nextPrayer": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "currentPlan": "Current plan ({title})",
+  "@currentPlan": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "percentComplete": "{percent}% complete",
+  "@percentComplete": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingPages": "Remaining today: {count} pages",
+  "@remainingPages": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "editionsCount": "{count} editions • {edition}",
+  "@editionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "edition": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyAt": "Daily at {time}",
+  "@dailyAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "minutesShort": "{minutes} min",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "optionalSource": "Optional download • Source: {source}",
+  "@optionalSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadedSize": "Downloaded • {size}",
+  "@downloadedSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "notDownloadedSize": "Not downloaded • about {size}",
+  "@notDownloadedSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadingSize": "Downloading: {size}",
+  "@downloadingSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadedTafsir": "Downloaded {name}",
+  "@downloadedTafsir": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteNamed": "Delete {name}",
+  "@deleteNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fullSurahLoadError": "Could not load full-surah reciters. Check your connection: {error}",
+  "@fullSurahLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerTrackerMore": "Log, make up, and review prayers",
+  "hijriCalendarMore": "Dates and occasions",
+  "fastingTrackerMore": "History and missed Ramadan fasts",
+  "zakatMore": "Offline estimate",
+  "hadithMore": "The nine books, Gardens of the Righteous, and the Forty Hadith",
+  "assistantMore": "Search verses, hadith, and remembrances",
+  "audioMore": "Recitations and memorization settings",
+  "libraryMore": "Saved content and downloadable books",
+  "downloadsMore": "Surahs downloaded for offline listening",
+  "tasbeehMore": "Remembrance counter and daily goal",
+  "planMore": "Reading plan and daily progress",
+  "qiblaMore": "Compass and distance to Makkah",
+  "ramadanMore": "Fasting times and Ramadan practices",
+  "parentMore": "Ongoing charity and traditional supplications",
+  "settingsMore": "Appearance, notifications, and reciter",
+  "deleteBackendWarning": "All your server data will be permanently deleted: reading plans, counters, bookmarks, supplications, and settings. This cannot be undone.",
+  "deleteLocalWarning": "Data saved on this device will be permanently deleted: reading plans, counters, bookmarks, and settings. This cannot be undone.",
+  "deleteTajweedQuestion": "Delete color-coded Tajweed text?",
+  "tafsirDownloadDescription": "No tafsir is bundled. Download the editions you need when online, then read them offline. Space used: {size}",
+  "@tafsirDownloadDescription": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "tajweedDetails": "Source: {source}\n{url}\nThe color-coded text is not bundled; download is optional when online. Source size about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.",
+  "@tajweedDetails": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      },
+      "approx": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      },
+      "used": {
+        "type": "String"
+      }
+    }
+  },
+  "mushafTitle": "The Noble Quran",
+  "surahsTab": "Surahs",
+  "juzTab": "Juz",
+  "quizShortcut": "Quran memorization quiz • Review pages",
+  "searchMushaf": "Search by surah name, number, or page",
+  "surahSummary": "{count} verses • page {page}",
+  "@surahSummary": {"placeholders": {"count": {"type": "String"}, "page": {"type": "String"}}},
+  "meccan": "Meccan",
+  "medinan": "Medinan",
+  "juzName": "Juz {name}",
+  "@juzName": {"placeholders": {"name": {"type": "String"}}},
+  "verseNumber": "Verse {verse}",
+  "@verseNumber": {"placeholders": {"verse": {"type": "String"}}},
+  "readingPageJuz": "Page {page} • Juz {juz}",
+  "@readingPageJuz": {"placeholders": {"page": {"type": "String"}, "juz": {"type": "String"}}},
+  "quizTitle": "Quran memorization quiz",
+  "quizLoadError": "Could not load the Mushaf data",
+  "reviewSaveError": "Could not save your review on this device",
+  "reviewsDue": "Reviews due: {count}",
+  "@reviewsDue": {"placeholders": {"count": {"type": "String"}}},
+  "previousPage": "Previous page",
+  "nextPage": "Next page",
+  "quizPageLabel": "Mushaf page (1–604)",
+  "pageDue": "This page is due for review",
+  "nextReview": "Next review: {date} • in {days} days",
+  "@nextReview": {"placeholders": {"date": {"type": "String"}, "days": {"type": "String"}}},
+  "quizType": "Quiz type",
+  "completeNextVerse": "Complete the next verse",
+  "hiddenWords": "Hidden words",
+  "orderVerses": "Put the verses in order",
+  "rateRecall": "Rate your recall (0 = not remembered, 5 = remembered well)",
+  "reviewSaved": "Review saved on this device",
+  "newQuiz": "New quiz",
+  "showAnswer": "Show answer",
+  "answer": "Answer",
+  "dragVerses": "Drag the verses into order",
+  "checkOrder": "Check and reveal order",
+  "correctOrder": "Correct order",
+  "actualOrder": "Correct order:",
+  "back": "Back",
+  "nightMode": "Night mode",
+  "dayMode": "Day mode",
+  "blackMode": "Pure black",
+  "increaseFont": "Increase font size ({size})",
+  "@increaseFont": {"placeholders": {"size": {"type": "String"}}},
+  "decreaseFont": "Decrease font size",
+  "tajweedColors": "Tajweed colors",
+  "tajweedScheme": "Tajweed colors: {scheme}",
+  "@tajweedScheme": {"placeholders": {"scheme": {"type": "String"}}},
+  "goToPage": "Go to page",
+  "myBookmarks": "My bookmarks",
+  "dedicateReading": "Dedicate the reward of reading",
+  "previous": "Previous",
+  "next": "Next",
+  "togglePlayback": "Play or pause",
+  "bookmarkPage": "Bookmark this page",
+  "mushafIndex": "Mushaf index",
+  "goTo": "Go to",
+  "quickSearch": "Quick search",
+  "emphasisNotMarked": "Emphatic letters are not marked in the source data.",
+  "colorsIllustrative": "Colors are illustrative only",
+  "pause": "Pause",
+  "playFromPage": "Play from this page",
+  "listenWhileReading": "Listen while reading",
+  "repeatNow": "Repeat now • {count}",
+  "@repeatNow": {"placeholders": {"count": {"type": "String"}}},
+  "startSelectedVerse": "Start from the selected verse or the first verse on this page",
+  "surahAndVerse": "Surah {surah} • verse {verse}",
+  "@surahAndVerse": {"placeholders": {"surah": {"type": "String"}, "verse": {"type": "String"}}},
+  "previousVerse": "Previous verse",
+  "nextVerse": "Next verse",
+  "memorizationSettings": "Memorization settings",
+  "chooseReciter": "Choose reciter",
+  "jumpInMushaf": "Navigate the Mushaf",
+  "pageTab": "Page",
+  "surahTab": "Surah",
+  "juzTabSingular": "Juz",
+  "jump": "Go",
+  "juzHizbPage": "Juz {juz} • Hizb {hizb} • p. {page}",
+  "@juzHizbPage": {"placeholders": {"juz": {"type": "String"}, "hizb": {"type": "String"}, "page": {"type": "String"}}},
+  "surahOrder": "No. {number}",
+  "@surahOrder": {"placeholders": {"number": {"type": "String"}}},
+  "surahVerses": "{count} verses",
+  "@surahVerses": {"placeholders": {"count": {"type": "String"}}},
+  "recitationError": "Could not play the recitation",
+  "bookmarkSaved": "Bookmark saved",
+  "pageLoadError": "Could not load the page",
+  "readingPositionSaved": "Reading position saved",
+  "tafsirNotDownloaded": "This tafsir is not downloaded on this device.",
+  "offlineTafsirSettings": "Settings • Offline tafsir",
+  "tafsirUnavailable": "No tafsir is available for this verse in this edition.",
+  "listen": "Listen",
+  "saveBookmark": "Save bookmark",
+  "markRead": "Mark as read",
+  "noBookmarks": "No bookmarks saved yet",
+  "deleteBookmark": "Delete bookmark",
+  "sharedFromFadl": "From the Fadl app",
+  "listenToQuran": "Listen to the Quran",
+  "surahLoadError": "Could not load the surah",
+  "sleepTimer": "Sleep timer",
+  "cancelTimer": "Cancel timer",
+  "timerEndsAt": "Stops at {time}",
+  "@timerEndsAt": {"placeholders": {"time": {"type": "String"}}},
+  "dedicateListening": "Dedicate the reward of listening",
+  "previousSurah": "Previous surah",
+  "nextSurah": "Next surah",
+  "currentVerse": "Current verse ({verse} of {total})",
+  "@currentVerse": {"placeholders": {"verse": {"type": "String"}, "total": {"type": "String"}}},
+  "rewindTen": "Back 10 seconds",
+  "forwardTen": "Forward 10 seconds",
+  "repeatEachVerse": "Repeat each verse",
+  "unlimited": "Unlimited",
+  "repeatSegment": "Repeat a passage from the surah",
+  "fromVerse": "From verse",
+  "toVerse": "To verse",
+  "repeatPassage": "Repeat passage",
+  "recitationPause": "Pause after each verse for repetition",
+  "verseLength": "Verse length",
+  "doubleVerseLength": "Twice the verse length",
+  "recitationSpeed": "Recitation speed",
+  "saveSettings": "Save settings",
+  "secondsCount": "{count} seconds",
+  "@secondsCount": {"placeholders": {"count": {"type": "String"}}},
+  "speedMultiplier": "{speed}×",
+  "@speedMultiplier": {"placeholders": {"speed": {"type": "String"}}},
+  "fullSurahHeading": "Surah {surah} • {edition}",
+  "@fullSurahHeading": {"placeholders": {"surah": {"type": "String"}, "edition": {"type": "String"}}},
+  "fullSurahOnlineNotice": "Online streaming only; permission to listen does not grant redistribution rights.",
+  "fullSurahPlayError": "Could not play this surah. Check your connection.",
+  "fullSurahInterrupted": "Playback stopped unexpectedly. Try again.",
+  "retry": "Try again",
+  "play": "Play",
+  "simpleTajweed": "Simple colors",
+  "darAlMaarifaTajweed": "Dar Al-Maarifa",
+  "tajweedMadd": "Prolongation",
+  "tajweedGhunnah": "Nasalization / concealment",
+  "tajweedIdgham": "Assimilation / conversion",
+  "tajweedQalqalah": "Echoing",
+  "tajweedWasl": "Joining / lam",
+  "tajweedSilent": "Silent letters",
+  "tajweedTwoCounts": "Two-count prolongation",
+  "tajweedOptionalCounts": "Optional 2-, 4-, or 6-count prolongation",
+  "tajweedObligatoryCounts": "Obligatory 4- or 5-count prolongation",
+  "tajweedNecessaryCounts": "Necessary 6-count prolongation",
+  "tajweedNasalization": "Concealment and nasalization (two counts)",
+  "tajweedUnpronounced": "Assimilation and unpronounced letters",
+  "hijriMuharram": "Muharram", "hijriSafar": "Safar", "hijriRabiI": "Rabi' al-Awwal", "hijriRabiII": "Rabi' al-Thani", "hijriJumadaI": "Jumada al-Ula", "hijriJumadaII": "Jumada al-Akhira", "hijriRajab": "Rajab", "hijriShaban": "Sha'ban", "hijriRamadan": "Ramadan", "hijriShawwal": "Shawwal", "hijriDhulQadah": "Dhu al-Qi'dah", "hijriDhulHijjah": "Dhu al-Hijjah",
+  "hijriDate": "{day} {month} {year} AH", "@hijriDate": {"placeholders": {"day": {"type": "String"}, "month": {"type": "String"}, "year": {"type": "String"}}},
+  "prayerFajr": "Fajr", "prayerSunrise": "Sunrise", "prayerDhuhr": "Dhuhr", "prayerAsr": "Asr", "prayerMaghrib": "Maghrib", "prayerIsha": "Isha",
+  "methodUmmAlQura": "Umm al-Qura University, Makkah", "methodEgyptian": "Egyptian General Authority of Survey", "methodMuslimWorldLeague": "Muslim World League", "methodKarachi": "University of Islamic Sciences, Karachi", "methodDubai": "Dubai", "methodKuwait": "Kuwait", "methodQatar": "Qatar", "methodSingapore": "Singapore", "methodTurkey": "Turkish Presidency of Religious Affairs", "methodTehran": "Institute of Geophysics, Tehran", "methodNorthAmerica": "Islamic Society of North America (ISNA)", "methodMoonsightingCommittee": "Moonsighting Committee",
+  "madhabShafi": "Majority (Shafi'i, Maliki, Hanbali)", "madhabHanafi": "Hanafi (later Asr)", "asrCalculationSchool": "Asr calculation school",
+  "cityRiyadh": "Riyadh, Saudi Arabia", "cityMakkah": "Makkah, Saudi Arabia", "cityMadinah": "Madinah, Saudi Arabia", "cityJeddah": "Jeddah, Saudi Arabia", "cityCairo": "Cairo, Egypt", "cityAlexandria": "Alexandria, Egypt", "cityDubai": "Dubai, UAE", "cityKuwait": "Kuwait City, Kuwait", "cityDoha": "Doha, Qatar", "cityAmman": "Amman, Jordan", "cityCasablanca": "Casablanca, Morocco", "cityIstanbul": "Istanbul, Türkiye",
+  "currentLocation": "My current location", "locationUseGps": "Use my current location (GPS)", "locationPurpose": "Used only to calculate prayer times and Qibla direction", "locationFailed": "Could not determine your location. Choose a city from the list.", "prayerLocationPrompt": "Set your location to see prayer times", "qiblaLocationPrompt": "Set your location to find the Qibla", "ramadanLocationPrompt": "Set your location to see the fasting timetable",
+  "todayPrayerTimes": "Today's prayer times", "adhanSettings": "Adhan settings", "nextPrayerLabel": "Next prayer", "timeUntilAdhan": "Time until adhan", "upcoming": "Next", "nowLabel": "Now", "elapsed": "Passed", "moments": "Moments", "calculationTiming": "Calculation and timing settings", "hijriCalendarAdjustment": "Hijri calendar adjustment", "hijriAdjustmentHint": "Match your local moon sighting", "decreaseDay": "Subtract one day", "increaseDay": "Add one day",
+  "modeAdhan": "Adhan", "modeNotify": "Notification", "modeSilent": "Silent", "fajrSoundFallback": "No Fajr adhan has been imported; you will receive a short notification.", "perPrayerAlert": "Alert for each prayer", "adhanSound": "Adhan sound", "otherPrayers": "Other prayers", "adhanAndroidOnly": "Full adhan is available on Android only; on this device, prayers set to Adhan receive a notification at prayer time.", "adhanDisabled": "Notifications are off in general settings. Enable them to hear the adhan.", "fajrSoundNotice": "The bundled adhan does not include the Fajr phrase ‘prayer is better than sleep’, so it is not used for Fajr. Import a Fajr adhan from your phone or receive a short notification.", "fajrImportHint": "No Fajr adhan imported yet; you will receive a short notification.", "adhanOptions": "Options", "respectSilent": "Respect silent mode", "respectSilentHint": "When the phone is silent or vibrating: vibrate and notify instead of playing adhan", "testAdhan": "Test adhan in one minute", "testAdhanHint": "Schedules a real alarm; close the app or lock your screen to check", "batterySaving": "Battery optimization", "batteryExempt": "This app is exempt from battery optimization", "batteryWarning": "Battery optimization may delay or prevent the adhan", "batteryAdvice": "Some phones stop alarms from closed apps to save battery. Open settings, select All apps, then Fadl, and set it to Unrestricted or Not optimized. On some devices, also enable Autostart.", "openBatterySettings": "Open battery settings", "bundledAdhan": "Bundled adhan", "noFajrAdhan": "No adhan (short notification)", "importFajr": "Import Fajr adhan from phone", "importPhone": "Import from phone", "stopPreview": "Stop preview", "preview": "Preview", "deleteFile": "Delete file", "importsReadError": "Could not read imported files", "previewError": "Could not play preview", "importError": "Could not import file", "fileDeleted": "File deleted", "fileDeleteError": "Could not delete file", "testAdhanScheduled": "The test adhan will play in one minute; you can close the app", "testAdhanError": "Could not schedule the test", "batterySettingsError": "Could not open settings",
+  "change": "Change", "north": "North", "east": "East", "south": "South", "west": "West", "northEast": "Northeast", "southEast": "Southeast", "southWest": "Southwest", "northWest": "Northwest", "qiblaCompass": "Qibla compass", "qiblaAngle": "Qibla bearing", "distanceToMakkah": "Distance to Makkah", "fromTrueNorth": "from true north", "straightToKaaba": "Straight line to the Kaaba", "noCompassSensor": "No compass sensor is available on this device", "readingCompass": "Reading the compass…", "holdPhoneLevel": "Hold the phone level and away from metal", "facingQibla": "You are facing the Qibla", "turnRight": "Turn right", "turnLeft": "Turn left", "noSensorAdvice": "The bearing is calculated from your location, but live direction requires a compass sensor.", "calibrateCompass": "For better accuracy, move away from metal and magnets, and move your phone in a figure eight to calibrate the sensor.", "accuracyHigh": "High", "accuracyMedium": "Medium", "accuracyLow": "Low",
+  "ramadanTimetable": "Ramadan fasting timetable", "ramadanOfflineOnly": "The offline fasting timetable is available only during Ramadan within the supported Hijri calendar range.", "imsakiyaTable": "Fasting timetable", "imsakEstimate": "Imsak is an estimate: ten minutes before Fajr.", "oddNightHint": "Odd night of the last ten days (seek Laylat al-Qadr)", "ramadanDuas": "Ramadan and fasting supplications", "ramadanDuasHint": "New moon, iftar, and Witr supplications…", "ramadanGreeting": "Ramadan Kareem", "fastAccepted": "May Allah accept your fast", "untilIftar": "Until iftar", "iftar": "Iftar", "tomorrowImsak": "Tomorrow's imsak", "tomorrowFajr": "Tomorrow's Fajr", "dailySunnahs": "Today's practices", "sunnahSuhoor": "Suhoor", "sunnahIftarDua": "Iftar supplication", "sunnahTaraweeh": "Taraweeh prayer", "sunnahFeedFasting": "Feed a fasting person", "periodFirst": "First ten days", "periodMiddle": "Middle ten days", "periodLast": "Last ten days", "periodAll": "Full month", "imsak": "Imsak", "taraweeh": "Taraweeh", "day": "Day", "weekdaySun": "Sunday", "weekdayMon": "Monday", "weekdayTue": "Tuesday", "weekdayWed": "Wednesday", "weekdayThu": "Thursday", "weekdayFri": "Friday", "weekdaySat": "Saturday",
+  "prayerAfter": "{prayer} in {duration}", "@prayerAfter": {"placeholders": {"prayer": {"type": "String"}, "duration": {"type": "String"}}},
+  "afterDuration": "In {duration}", "@afterDuration": {"placeholders": {"duration": {"type": "String"}}},
+  "hoursMinutes": "{hours} hr {minutes} min", "@hoursMinutes": {"placeholders": {"hours": {"type": "String"}, "minutes": {"type": "String"}}},
+  "hoursOnly": "{hours} hr", "@hoursOnly": {"placeholders": {"hours": {"type": "String"}}},
+  "minutesOnly": "{minutes} min", "@minutesOnly": {"placeholders": {"minutes": {"type": "String"}}},
+  "timingMethod": "Method: {method}", "@timingMethod": {"placeholders": {"method": {"type": "String"}}},
+  "prayerAlertMode": "{prayer} alert: {mode}", "@prayerAlertMode": {"placeholders": {"prayer": {"type": "String"}, "mode": {"type": "String"}}},
+  "qiblaSummary": "{distance} km to Makkah • {bearing}° {direction}", "@qiblaSummary": {"placeholders": {"distance": {"type": "String"}, "bearing": {"type": "String"}, "direction": {"type": "String"}}},
+  "distanceKm": "{distance} km", "@distanceKm": {"placeholders": {"distance": {"type": "String"}}},
+  "bearingFromNorth": "{bearing}° from true north; use another compass", "@bearingFromNorth": {"placeholders": {"bearing": {"type": "String"}}},
+  "headingDeviation": "Heading {heading}° • deviation {deviation}°", "@headingDeviation": {"placeholders": {"heading": {"type": "String"}, "deviation": {"type": "String"}}},
+  "sensorAccuracy": "Sensor accuracy: {level} (±{degrees}°). If low, move your phone in a figure eight to calibrate it.", "@sensorAccuracy": {"placeholders": {"level": {"type": "String"}, "degrees": {"type": "String"}}},
+  "importedSound": "Imported ‘{name}’ and selected it", "@importedSound": {"placeholders": {"name": {"type": "String"}}},
+  "confirmDeleteSound": "Delete ‘{name}’ from the app?", "@confirmDeleteSound": {"placeholders": {"name": {"type": "String"}}},
+  "ramadanDayYear": "{day} Ramadan {year} AH", "@ramadanDayYear": {"placeholders": {"day": {"type": "String"}, "year": {"type": "String"}}},
+  "ramadanYear": "Ramadan {year} AH", "@ramadanYear": {"placeholders": {"year": {"type": "String"}}},
+  "daysToEid": "{days} days until Eid al-Fitr", "@daysToEid": {"placeholders": {"days": {"type": "String"}}},
+  "ramadanStartsIn": "Starts in {days} days — {date}", "@ramadanStartsIn": {"placeholders": {"days": {"type": "String"}, "date": {"type": "String"}}},
+  "ramadanStarts": "Starts {date}", "@ramadanStarts": {"placeholders": {"date": {"type": "String"}}},
+  "checklistProgress": "{done} of {total}", "@checklistProgress": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "trackerPrayerTitle": "Prayer and make-up tracker", "trackerImportJson": "Import JSON", "trackerExportJson": "Export JSON", "trackerPasteBackup": "Paste backup here", "trackerCancel": "Cancel", "trackerImport": "Import", "trackerInvalidJson": "Invalid JSON file", "trackerInvalidPrayerData": "Invalid prayer data", "trackerUnrecorded": "Not recorded", "trackerClear": "Clear record", "trackerQadaHelp": "Make-up prayers — adjust manually after completion", "trackerOnTime": "On time", "trackerCongregation": "In congregation", "trackerLate": "Late", "trackerMissed": "Missed", "trackerToday": "Record today's prayer", "trackerFastingTitle": "Fasting tracker", "trackerFastingType": "Type of fast", "trackerNotes": "Notes", "trackerDelete": "Delete", "trackerSave": "Save", "trackerManualFast": "Record manually; no day is marked as fasted automatically.", "trackerNoFast": "No fast recorded", "trackerRamadanQada": "Ramadan make-up (separate counter)", "trackerFastingNotice": "Monday, Thursday and white-day reminders are managed in existing notification settings; no extra reminders are created here.",
+  "trackerFastRamadan": "Ramadan", "trackerFastQada": "Make-up fast", "trackerFastMonday": "Monday", "trackerFastThursday": "Thursday", "trackerFastWhiteDays": "White days", "trackerFastArafah": "Arafah", "trackerFastAshura": "Ashura", "trackerFastShawwal": "Six days of Shawwal", "trackerFastOther": "Voluntary",
+  "trackerZakatTitle": "Zakat calculator", "trackerCash": "Cash", "trackerGoldGrams": "Gold (grams)", "trackerGoldPrice": "Gold price per gram", "trackerSilverGrams": "Silver (grams)", "trackerSilverPrice": "Silver price per gram", "trackerInventory": "Trade inventory", "trackerReceivables": "Collectible debts", "trackerCurrencyHint": "Use one currency for all amounts and prices; enter the price per gram in your currency.", "trackerGoldNisab": "Gold nisab", "trackerSilverNisab": "Silver nisab", "trackerGoldValue": "Gold value", "trackerSilverValue": "Silver value", "trackerTotalAssets": "Total entered assets", "trackerNisab": "Nisab", "trackerEstimatedZakat": "Estimated zakat (2.5%)",
+  "trackerCalendarTitle": "Hijri calendar and occasions", "trackerCalendarNotice": "Dates are calculated using the Umm al-Qura calendar and may differ according to moon sighting in your country. Monday, Thursday and white-day reminders are in notification settings.", "trackerSunShort": "Sun", "trackerMonShort": "Mon", "trackerTueShort": "Tue", "trackerWedShort": "Wed", "trackerThuShort": "Thu", "trackerFriShort": "Fri", "trackerSatShort": "Sat", "trackerGregorianShort": "CE", "trackerHijriShort": "AH",
+  "hadithLibraryTitle": "Hadith library", "hadithAllBooks": "All books", "hadithSearchHint": "Search hadith texts...", "hadithResults": "Search results", "hadithNoMatches": "No matching hadith found", "hadithLoadMore": "Load more", "hadithOfDay": "Hadith of the day", "hadithUnit": "hadith", "hadithDownloadTitle": "Download book?", "hadithDownload": "Download", "hadithDeleteDownload": "Delete download", "hadithDownloadBook": "Download book", "hadithNotDownloaded": "Not downloaded • requires an internet download", "hadithMissingBook": "This book is not downloaded. Connect to the internet and configure API_BASE to download it.", "hadithChapterSearch": "Search chapters...", "hadithShowAll": "Show all hadith in order", "hadithNoChapters": "No matching chapters", "hadithNoItems": "No hadith", "hadithUnknownGrade": "Not specified", "hadithGradeNotSpecified": "Grade not specified by the source — verify via Dorar", "hadithEnglishTranslation": "English translation", "hadithCopy": "Copy", "hadithShare": "Share", "hadithVerify": "Verify on Dorar", "hadithViewSunnah": "View on sunnah.com", "hadithDedicate": "Dedicate the reward of reading", "hadithReadMore": "Read more", "hadithShowLess": "Show less", "hadithLinkError": "Could not open link", "hadithCopied": "Hadith copied", "hadithMinimumQuery": "Enter at least two characters",
+  "trackerRecordPrayer": "Record {prayer}", "@trackerRecordPrayer": {"placeholders": {"prayer": {"type": "String"}}},
+  "trackerRecordedPrayer": "Recorded {prayer}: {status}", "@trackerRecordedPrayer": {"placeholders": {"prayer": {"type": "String"}, "status": {"type": "String"}}},
+  "trackerRemaining": "Remaining: {count}", "@trackerRemaining": {"placeholders": {"count": {"type": "String"}}},
+  "trackerDecreaseQada": "Decrease make-up {prayer}", "@trackerDecreaseQada": {"placeholders": {"prayer": {"type": "String"}}},
+  "trackerIncreaseQada": "Increase make-up {prayer}", "@trackerIncreaseQada": {"placeholders": {"prayer": {"type": "String"}}},
+  "trackerMissedCount": "Recorded missed prayers: {count}", "@trackerMissedCount": {"placeholders": {"count": {"type": "String"}}},
+  "trackerThisWeek": "This week: {summary}", "@trackerThisWeek": {"placeholders": {"summary": {"type": "String"}}},
+  "trackerThisMonth": "This month: {summary}", "@trackerThisMonth": {"placeholders": {"summary": {"type": "String"}}},
+  "trackerFastingDay": "Fast on {date}", "@trackerFastingDay": {"placeholders": {"date": {"type": "String"}}},
+  "trackerYearSummary": "Summary for {year} CE", "@trackerYearSummary": {"placeholders": {"year": {"type": "String"}}},
+  "trackerNextPrayer": "Next prayer: {prayer}", "@trackerNextPrayer": {"placeholders": {"prayer": {"type": "String"}}},
+  "trackerLocalTime": "Local time: {time}", "@trackerLocalTime": {"placeholders": {"time": {"type": "String"}}},
+  "hadithResultCount": "{count} results", "@hadithResultCount": {"placeholders": {"count": {"type": "String"}}},
+  "hadithCount": "{count} hadith", "@hadithCount": {"placeholders": {"count": {"type": "String"}}},
+  "hadithChapters": "Chapters ({count})", "@hadithChapters": {"placeholders": {"count": {"type": "String"}}},
+  "hadithNumber": "No. {number}", "@hadithNumber": {"placeholders": {"number": {"type": "String"}}},
+  "hadithGrade": "Grade: {grade}", "@hadithGrade": {"placeholders": {"grade": {"type": "String"}}},
+  "hadithDownloadPrompt": "{book} will be saved on your device for offline reading and search. The book may be several megabytes; an internet connection is required.", "@hadithDownloadPrompt": {"placeholders": {"book": {"type": "String"}}},
+  "hadithDownloadError": "Could not download: {error}", "@hadithDownloadError": {"placeholders": {"error": {"type": "String"}}},
+  "hadithDownloadedSize": "Downloaded • {size} MB", "@hadithDownloadedSize": {"placeholders": {"size": {"type": "String"}}},
+  "occasionRamadanBegins": "Start of Ramadan", "occasionEidAlFitr": "Eid al-Fitr", "occasionArafah": "Day of Arafah", "occasionEidAlAdha": "Eid al-Adha", "occasionAshura": "Ashura", "occasionWhiteDays": "White days", "occasionMonday": "Monday", "occasionThursday": "Thursday",
+  "hadithNineBooks": "The Nine Books", "hadithForties": "Forty Hadith collections", "hadithOtherBooks": "Other books",
+  "tasbeehResetTitle": "Reset counter", "tasbeehResetConfirm": "Delete today's counts for “{dhikr}”?", "@tasbeehResetConfirm": {"placeholders": {"dhikr": {"type": "String"}}}, "tasbeehReset": "Reset", "tasbeehAdd": "Add remembrance", "tasbeehEdit": "Edit remembrance", "tasbeehText": "Remembrance text", "tasbeehTargetInput": "Target (repetitions)", "tasbeehEditTarget": "Edit remembrance and target", "tasbeehDelete": "Delete remembrance from list", "tasbeehChoose": "Choose a remembrance",
+  "tasbeehRoundRemaining": "Round {round} • {remaining} remaining", "@tasbeehRoundRemaining": {"placeholders": {"round": {"type": "String"}, "remaining": {"type": "String"}}}, "tasbeehCountSemantics": "Count a remembrance, current count {count}", "@tasbeehCountSemantics": {"placeholders": {"count": {"type": "String"}}}, "tasbeehCurrentCount": "Current count", "tasbeehTap": "Tap to count", "tasbeehToday": "Today: {count}", "@tasbeehToday": {"placeholders": {"count": {"type": "String"}}}, "tasbeehVibrationOn": "Vibration on", "tasbeehVibrationOff": "Vibration off", "tasbeehSoundOn": "Sound on", "tasbeehSoundOff": "Sound",
+  "tasbeehDhikrProgress": "Target: {target} times • today {count}", "@tasbeehDhikrProgress": {"placeholders": {"target": {"type": "String"}, "count": {"type": "String"}}}, "tasbeehDailyGoal": "Daily goal", "tasbeehGoalProgress": "{total} of {goal} counts", "@tasbeehGoalProgress": {"placeholders": {"total": {"type": "String"}, "goal": {"type": "String"}}}, "tasbeehPercent": "{percent}%", "@tasbeehPercent": {"placeholders": {"percent": {"type": "String"}}}, "tasbeehThisWeek": "This week's progress", "tasbeehStreak": "🔥 {days} consecutive days", "@tasbeehStreak": {"placeholders": {"days": {"type": "String"}}},
+  "tasbeehMon": "Mon", "tasbeehTue": "Tue", "tasbeehWed": "Wed", "tasbeehThu": "Thu", "tasbeehFri": "Fri", "tasbeehSat": "Sat", "tasbeehSun": "Sun", "tasbeehCharity": "Ongoing charity and supplication", "tasbeehDedication": "Dedicate the reward of tasbeeh to a parent", "tasbeehDedicateAction": "Dedicate the reward of tasbeeh to my parent", "tasbeehCountFirst": "Count a remembrance before dedicating its reward", "tasbeehRoundComplete": "You completed a round ({target}) — بارك الله فيك", "@tasbeehRoundComplete": {"placeholders": {"target": {"type": "String"}}},
+  "athkarSearchHint": "Search Arabic remembrance and supplication text...",
+  "athkarNoResults": "No results for “{query}”",
+  "@athkarNoResults": {"placeholders": {"query": {"type": "String"}}},
+  "athkarRepeat": "Repeat: {count}",
+  "@athkarRepeat": {"placeholders": {"count": {"type": "String"}}},
+  "athkarAll": "All",
+  "athkarChapters": "Remembrance categories",
+  "athkarAllChapters": "All remembrances",
+  "athkarCategoryCount": "{count} categories",
+  "@athkarCategoryCount": {"placeholders": {"count": {"type": "String"}}},
+  "athkarOtherCount": "{count} categories",
+  "@athkarOtherCount": {"placeholders": {"count": {"type": "String"}}},
+  "athkarDailyWird": "Daily reading",
+  "athkarActiveWird": "Active daily reading",
+  "athkarDailyCompleted": "Completed {done} of {total} remembrances today",
+  "@athkarDailyCompleted": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "athkarStart": "Start reading",
+  "athkarContinue": "Continue reading",
+  "athkarPercent": "{percent}%",
+  "@athkarPercent": {"placeholders": {"percent": {"type": "String"}}},
+  "athkarComplete": "Complete",
+  "athkarPartial": "Partially complete • {done}/{total}",
+  "@athkarPartial": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "athkarNotStarted": "Not started",
+  "athkarEntryCount": "{count} remembrances and supplications",
+  "@athkarEntryCount": {"placeholders": {"count": {"type": "String"}}},
+  "athkarEmpty": "No remembrances in this category",
+  "athkarPosition": "Remembrance {current} of {total}",
+  "@athkarPosition": {"placeholders": {"current": {"type": "String"}, "total": {"type": "String"}}},
+  "athkarFinished": "Completed",
+  "athkarCompletedCount": "Completed {done} of {total}",
+  "@athkarCompletedCount": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "athkarVirtue": "Virtue:",
+  "athkarTapNext": "Done ✓ — Next",
+  "athkarTapCount": "Tap to count",
+  "athkarLongPress": "Long-press to reset count",
+  "athkarAccepted": "تقبّل الله منك",
+  "athkarRemaining": "{count} remembrances remaining",
+  "@athkarRemaining": {"placeholders": {"count": {"type": "String"}}},
+  "athkarFinishedToday": "Completed {category} for today",
+  "@athkarFinishedToday": {"placeholders": {"category": {"type": "String"}}},
+  "athkarReturnToFinish": "Go back to finish the remaining remembrances",
+  "athkarDedicate": "Dedicate the reward to my parent",
+  "athkarFinishRemaining": "Finish remaining remembrances",
+  "athkarBack": "Back",
+  "athkarCopied": "Remembrance copied",
+  "duaTitle": "Prayer for a parent",
+  "duaCollections": "Supplication collections",
+  "duaCharity": "Ongoing prayer and charity",
+  "duaMercy": "رحم الله والدي",
+  "duaGlobalDedications": "{count} dedications from Fadl users",
+  "@duaGlobalDedications": {"placeholders": {"count": {"type": "String"}}},
+  "duaLocalDedications": "{count} dedications recorded on this device",
+  "@duaLocalDedications": {"placeholders": {"count": {"type": "String"}}},
+  "duaFeatured": "Featured supplication for the deceased",
+  "duaDedicate": "Dedicate this prayer to my parent",
+  "duaVerseLabel": "Supplication from the Quran",
+  "duaTraditionLabel": "Traditional supplication",
+  "duaVirtue": "Virtue: {virtue}",
+  "@duaVirtue": {"placeholders": {"virtue": {"type": "String"}}},
+  "duaAmenCount": "Amen {count}",
+  "@duaAmenCount": {"placeholders": {"count": {"type": "String"}}},
+  "duaReadCount": "Read {done}/{total}",
+  "@duaReadCount": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "duaDedicateParent": "Dedicate reward to my parent",
+  "duaStats": "Dedication history",
+  "duaDedicationCount": "{count} dedications",
+  "@duaDedicationCount": {"placeholders": {"count": {"type": "String"}}},
+  "duaKhatmaStat": "Reading plans dedicated",
+  "duaTasbeehStat": "Tasbeeh counts dedicated",
+  "duaPrayerStat": "Prayers dedicated",
+  "duaReminder": "Reminder of times for supplication",
+  "duaReminderDescription": "بين الأذان والإقامة، الثلث الأخير من الليل، وساعة الجمعة — أكثر فيها من الدعاء لوالدك",
+  "duaReminderOn": "Reminders enabled",
+  "duaReminderOff": "Reminders disabled",
+  "duaPersonalTitle": "Add a personal prayer for your parent",
+  "duaPersonalDescription": "Write a prayer to save and dedicate its reward to your parent",
+  "duaPersonalHint": "Write your own prayer...",
+  "duaSaveDedicate": "Save prayer and dedicate reward",
+  "duaSaved": "My saved prayers",
+  "duaEnterFirst": "Enter your prayer first",
+  "duaAmenConfirmed": "آمين، تقبّل الله",
+  "duaAmenAlready": "You already said Amen to this prayer today",
+  "duaCopied": "Copied",
+  "duaDelete": "Delete",
+  "athkarDedicationRecorded": "Reward dedicated to {name} 🤍",
+  "@athkarDedicationRecorded": {"placeholders": {"name": {"type": "String"}}},
+  "librarySaved": "Installed",
+  "libraryDownloadTab": "Download",
+  "librarySearch": "Search the library",
+  "libraryCheckUpdates": "Check for updates",
+  "libraryTafsir": "Tafsir",
+  "libraryTajweed": "Color-coded Tajweed text",
+  "libraryHadithBooks": "Hadith books",
+  "libraryRecitations": "Recitations",
+  "libraryUpdates": "Updates available",
+  "libraryUpdateAll": "Update all",
+  "libraryReciterCatalog": "Reciter recordings",
+  "libraryChooseReciter": "Choose a reciter and surah to download",
+  "libraryUsedSpace": "Space used: {size}",
+  "@libraryUsedSpace": {"placeholders": {"size": {"type": "String"}}},
+  "libraryApproxSize": "Approx. download size: {size}",
+  "@libraryApproxSize": {"placeholders": {"size": {"type": "String"}}},
+  "libraryUnknownUpdate": "Updates cannot be checked for this source, or no previous download record exists",
+  "libraryCheckFailed": "Could not check {title} for updates. Check your internet connection.",
+  "@libraryCheckFailed": {"placeholders": {"title": {"type": "String"}}},
+  "libraryDownloaded": "Downloaded {title}",
+  "@libraryDownloaded": {"placeholders": {"title": {"type": "String"}}},
+  "libraryDownloadFailed": "Download failed. Check your internet connection and try again.",
+  "libraryDeleteConfirm": "Delete {title}?",
+  "@libraryDeleteConfirm": {"placeholders": {"title": {"type": "String"}}},
+  "libraryRedownloadNotice": "You can download it again when you have internet access.",
+  "libraryDeleteFailed": "Could not delete {title}",
+  "@libraryDeleteFailed": {"placeholders": {"title": {"type": "String"}}},
+  "libraryAboutTitle": "About: {title}",
+  "@libraryAboutTitle": {"placeholders": {"title": {"type": "String"}}},
+  "librarySourceLabel": "Source: {source}",
+  "@librarySourceLabel": {"placeholders": {"source": {"type": "String"}}},
+  "libraryGradesLabel": "Hadith grades: {url}",
+  "@libraryGradesLabel": {"placeholders": {"url": {"type": "String"}}},
+  "libraryAbout": "About",
+  "libraryClose": "Close",
+  "libraryCancel": "Cancel",
+  "libraryDelete": "Delete",
+  "libraryDownloading": "Downloading...",
+  "libraryUpdate": "Update",
+  "libraryRedownload": "Download again",
+  "libraryDownload": "Download",
+  "libraryReceived": "Downloaded {size}",
+  "@libraryReceived": {"placeholders": {"size": {"type": "String"}}},
+  "libraryReadError": "Could not load the library",
+  "downloadsUsedSpace": "Space used",
+  "downloadsDeleteAll": "Delete all",
+  "downloadsEmpty": "No recitations downloaded yet.\nDownload surahs from the audio library to listen offline.",
+  "downloadsReadError": "Could not load downloads",
+  "downloadsDeleteTitle": "Delete downloads",
+  "downloadsDeleteReciterConfirm": "Delete {name}'s recitations from this device?",
+  "@downloadsDeleteReciterConfirm": {"placeholders": {"name": {"type": "String"}}},
+  "downloadsDeletedReciter": "Deleted {name}'s recitations",
+  "@downloadsDeletedReciter": {"placeholders": {"name": {"type": "String"}}},
+  "downloadsDeleteAllTitle": "Delete all downloads",
+  "downloadsDeleteAllConfirm": "All downloaded recitations will be deleted. You cannot listen offline until you download them again.",
+  "downloadsDeletedAll": "All downloads deleted",
+  "downloadsCompleteSurahs": "{count} complete surahs",
+  "@downloadsCompleteSurahs": {"placeholders": {"count": {"type": "String"}}},
+  "downloadsDeleteReciterTooltip": "Delete reciter recordings"
+}
