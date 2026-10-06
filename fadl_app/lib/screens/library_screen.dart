@@ -136,7 +136,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   void _reload() {
-    if (mounted) setState(() => _entries = _load());
+    if (mounted) {
+      setState(() {
+        _entries = _load();
+      });
+    }
   }
 
   Future<void> _check() async {
@@ -180,13 +184,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
       await entry.download();
       _statuses.remove(entry.id);
       _reload();
-      if (mounted) showToast(context, prayerL(context).libraryDownloaded(entry.title));
+      if (mounted) {
+        showToast(context, prayerL(context).libraryDownloaded(entry.title));
+      }
     } catch (_) {
       if (mounted) {
-        showToast(
-          context,
-          prayerL(context).libraryDownloadFailed,
-        );
+        showToast(context, prayerL(context).libraryDownloadFailed);
       }
     } finally {
       _busy.remove(entry.id);
@@ -218,7 +221,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
       _statuses.remove(entry.id);
       _reload();
     } catch (_) {
-      if (mounted) showToast(context, prayerL(context).libraryDeleteFailed(entry.title));
+      if (mounted) {
+        showToast(context, prayerL(context).libraryDeleteFailed(entry.title));
+      }
     }
   }
 
@@ -253,7 +258,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               style: FadlFonts.ui(size: 16, weight: FontWeight.w700),
             ),
             Text(
-              '${entry.source} • ${entry.installed ? formatBytes(entry.bytes) : prayerL(context).libraryApproxSize(formatBytes(entry.approxBytes))}',
+              '${entry.source} • ${entry.installed ? prayerBytes(context, entry.bytes) : prayerL(context).libraryApproxSize(prayerBytes(context, entry.approxBytes))}',
               style: FadlFonts.ui(size: 12),
             ),
             if (entry.installed && !update && status == UpdateStatus.unknown)
@@ -289,7 +294,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ],
             ),
             if (busy && entry.id == 'tajweed' && _tajweed.receivedBytes > 0)
-              Text(prayerL(context).libraryReceived(formatBytes(_tajweed.receivedBytes))),
+              Text(
+                prayerL(
+                  context,
+                ).libraryReceived(prayerBytes(context, _tajweed.receivedBytes)),
+              ),
           ],
         ),
       ),
@@ -307,7 +316,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
     if (entries.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [SectionTitle(_groupLabel(title)), for (final entry in entries) _row(entry)],
+      children: [
+        SectionTitle(_groupLabel(title)),
+        for (final entry in entries) _row(entry),
+      ],
     );
   }
 
@@ -354,7 +366,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: ListTile(
                 title: Text(prayerL(context).libraryRecitations),
                 subtitle: Text(
-                  prayerL(context).libraryUsedSpace(formatBytes(snapshot.data ?? 0)),
+                  prayerL(
+                    context,
+                  ).libraryUsedSpace(prayerBytes(context, snapshot.data ?? 0)),
                 ),
                 trailing: const Icon(Icons.chevron_left_rounded),
               ),
@@ -466,7 +480,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           ),
                           child: ListTile(
                             title: Text(prayerL(context).libraryReciterCatalog),
-                            subtitle: Text(prayerL(context).libraryChooseReciter),
+                            subtitle: Text(
+                              prayerL(context).libraryChooseReciter,
+                            ),
                             trailing: Icon(Icons.chevron_left_rounded),
                           ),
                         ),

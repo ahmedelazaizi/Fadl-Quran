@@ -145,7 +145,9 @@ class _AssistantScreenState extends State<AssistantScreen>
   void _runSearch() {
     final q = _searchInput.text.trim();
     if (q.length < 2) return;
-    setState(() => _searchFuture = _fetchSearch(q));
+    setState(() {
+      _searchFuture = _fetchSearch(q);
+    });
   }
 
   @override

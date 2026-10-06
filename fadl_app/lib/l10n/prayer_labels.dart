@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_state.dart';
+import '../core/audio_store.dart';
 import '../core/format.dart';
 import 'app_localizations.dart';
 
@@ -12,6 +13,9 @@ bool englishPrayerUi(BuildContext context) =>
 
 String prayerNumber(BuildContext context, Object? value) =>
     englishPrayerUi(context) ? '$value' : arNum(value ?? '');
+
+String prayerBytes(BuildContext context, int bytes) =>
+    formatBytes(bytes, english: englishPrayerUi(context));
 
 String prayerTime(BuildContext context, String hm) {
   if (!englishPrayerUi(context)) return hm12(hm);
