@@ -392,7 +392,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get streamingNotice =>
-      'بث مباشر فقط؛ إتاحة الاستماع لا تعني إذن إعادة توزيع التسجيلات.';
+      'تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.';
 
   @override
   String get chooseEdition => 'اختر الرواية أو إصدار المصحف';
@@ -964,7 +964,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullSurahOnlineNotice =>
-      'بث عبر الإنترنت فقط؛ إتاحة الاستماع لا تمنح إذن إعادة توزيع التسجيلات.';
+      'تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.';
 
   @override
   String get fullSurahPlayError => 'تعذّر تشغيل السورة. تحقق من الاتصال.';
@@ -2700,4 +2700,29 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get fullSurahSaveWhileListening => 'احفظ السور التي أستمع إليها';
+
+  @override
+  String get fullSurahSaveHint =>
+      'تُحفظ السورة للاستماع دون اتصال بعد اكتمال تحميلها أثناء التشغيل.';
+
+  @override
+  String get fullSurahDownloadFailed =>
+      'تعذّر تنزيل السورة. تحقق من الاتصال وأعد المحاولة.';
+
+  @override
+  String get fullSurahDownloads => 'تلاوات السور كاملة';
+
+  @override
+  String fullSurahSavedCount(String count, String size) {
+    return 'السور المحفوظة: $count • $size';
+  }
+
+  @override
+  String get fullSurahDeleteEdition => 'حذف السور المحفوظة لهذا القارئ؟';
+
+  @override
+  String get fullSurahPlayingOffline => 'تُشغَّل من جهازك';
 }

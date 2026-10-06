@@ -851,7 +851,7 @@ abstract class AppLocalizations {
   /// No description provided for @streamingNotice.
   ///
   /// In en, this message translates to:
-  /// **'Streaming only; permission to listen does not grant redistribution rights.'**
+  /// **'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.'**
   String get streamingNotice;
 
   /// No description provided for @chooseEdition.
@@ -1823,7 +1823,7 @@ abstract class AppLocalizations {
   /// No description provided for @fullSurahOnlineNotice.
   ///
   /// In en, this message translates to:
-  /// **'Online streaming only; permission to listen does not grant redistribution rights.'**
+  /// **'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.'**
   String get fullSurahOnlineNotice;
 
   /// No description provided for @fullSurahPlayError.
@@ -4861,6 +4861,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Every hour} other{Every {number} hours}}'**
   String dhikrEvery(int count, String number);
+
+  /// No description provided for @fullSurahSaveWhileListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Save surahs I listen to'**
+  String get fullSurahSaveWhileListening;
+
+  /// No description provided for @fullSurahSaveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A surah is kept for offline listening once it has fully loaded while playing.'**
+  String get fullSurahSaveHint;
+
+  /// No description provided for @fullSurahDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the surah. Check your connection and try again.'**
+  String get fullSurahDownloadFailed;
+
+  /// No description provided for @fullSurahDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-surah recitations'**
+  String get fullSurahDownloads;
+
+  /// No description provided for @fullSurahSavedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved surahs: {count} • {size}'**
+  String fullSurahSavedCount(String count, String size);
+
+  /// No description provided for @fullSurahDeleteEdition.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this reciter\'s saved surahs?'**
+  String get fullSurahDeleteEdition;
+
+  /// No description provided for @fullSurahPlayingOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing from your device'**
+  String get fullSurahPlayingOffline;
 }
 
 class _AppLocalizationsDelegate

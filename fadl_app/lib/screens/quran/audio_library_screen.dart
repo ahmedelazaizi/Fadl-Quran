@@ -7,6 +7,7 @@ import '../../core/app_state.dart';
 import '../../core/audio_store.dart';
 import '../../core/format.dart';
 import '../../core/full_surah_reciters.dart';
+import '../../core/full_surah_store.dart';
 import '../../core/quran_storage.dart';
 import '../../core/reciters.dart';
 import '../../core/theme.dart';
@@ -34,6 +35,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
 
   final store = AudioStore.instance;
   final fullCatalog = FullSurahCatalog();
+  final fullStore = FullSurahStore.instance;
   bool fullSurahMode = false;
   int? fullReciterId;
   FullSurahEdition? fullEdition;
@@ -49,6 +51,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
   void initState() {
     super.initState();
     store.ready().catchError((_) {});
+    fullStore.ready().catchError((_) {});
   }
 
   @override
@@ -435,30 +438,70 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView(
-            children: [
-              ListTile(
-                title: Text(edition.editionName),
-                subtitle: Text(l.fullSurah),
-              ),
-              for (final surah in snapshot.data!)
-                if (edition.surahs.contains(surah['id']))
-                  ListTile(
-                    title: Text(surah['nameAr'] as String),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => FullSurahPlayerScreen(
-                          edition: edition,
-                          surah: surah['id'] as int,
+          return ListenableBuilder(
+            listenable: fullStore,
+            builder: (context, _) => ListView(
+              children: [
+                ListTile(
+                  title: Text(edition.editionName),
+                  subtitle: Text(l.fullSurah),
+                ),
+                for (final surah in snapshot.data!)
+                  if (edition.surahs.contains(surah['id']))
+                    ListTile(
+                      title: Text(surah['nameAr'] as String),
+                      trailing: _fullSurahStatus(edition, surah['id'] as int),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (_) => FullSurahPlayerScreen(
+                            edition: edition,
+                            surah: surah['id'] as int,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-            ],
+              ],
+            ),
           );
         },
       );
+
+  /// Saved, downloading (tap to cancel) or a download button.
+  Widget _fullSurahStatus(FullSurahEdition edition, int surah) {
+    if (fullStore.isDownloaded(edition, surah)) {
+      return Tooltip(
+        message: l.availableOffline,
+        child: const Icon(Icons.offline_pin_rounded, color: FadlColors.sage),
+      );
+    }
+    if (fullStore.isDownloading(edition, surah)) {
+      return IconButton(
+        tooltip: l.cancelDownload,
+        onPressed: () => fullStore.cancel(edition, surah),
+        icon: SizedBox.square(
+          dimension: 22,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            value: fullStore.progress(edition, surah),
+          ),
+        ),
+      );
+    }
+    return IconButton(
+      tooltip: l.downloadOffline,
+      icon: const Icon(Icons.download_rounded),
+      onPressed: () async {
+        try {
+          await fullStore.download(edition, surah);
+        } on FullSurahDownloadCancelled {
+          // The user stopped it.
+        } catch (_) {
+          if (mounted) showToast(context, l.fullSurahDownloadFailed);
+        }
+      },
+    );
+  }
 
   Widget _surahList() => FutureBuilder<List<Map<String, dynamic>>>(
     future: QuranIndex.surahs(),

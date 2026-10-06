@@ -396,7 +396,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get streamingNotice =>
-      'Streaming only; permission to listen does not grant redistribution rights.';
+      'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.';
 
   @override
   String get chooseEdition => 'Choose a reading or edition';
@@ -974,7 +974,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fullSurahOnlineNotice =>
-      'Online streaming only; permission to listen does not grant redistribution rights.';
+      'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.';
 
   @override
   String get fullSurahPlayError =>
@@ -2722,4 +2722,29 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get fullSurahSaveWhileListening => 'Save surahs I listen to';
+
+  @override
+  String get fullSurahSaveHint =>
+      'A surah is kept for offline listening once it has fully loaded while playing.';
+
+  @override
+  String get fullSurahDownloadFailed =>
+      'Could not download the surah. Check your connection and try again.';
+
+  @override
+  String get fullSurahDownloads => 'Full-surah recitations';
+
+  @override
+  String fullSurahSavedCount(String count, String size) {
+    return 'Saved surahs: $count • $size';
+  }
+
+  @override
+  String get fullSurahDeleteEdition => 'Delete this reciter\'s saved surahs?';
+
+  @override
+  String get fullSurahPlayingOffline => 'Playing from your device';
 }

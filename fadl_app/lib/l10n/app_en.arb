@@ -125,7 +125,7 @@
   "mujawwad": "Melodic",
   "muallim": "Teaching",
   "searchReciterBoth": "Search reciters in Arabic or Latin script",
-  "streamingNotice": "Streaming only; permission to listen does not grant redistribution rights.",
+  "streamingNotice": "Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.",
   "chooseEdition": "Choose a reading or edition",
   "searchSurah": "Search surahs",
   "cancelDownload": "Cancel download",
@@ -479,7 +479,7 @@
   "@speedMultiplier": {"placeholders": {"speed": {"type": "String"}}},
   "fullSurahHeading": "Surah {surah} • {edition}",
   "@fullSurahHeading": {"placeholders": {"surah": {"type": "String"}, "edition": {"type": "String"}}},
-  "fullSurahOnlineNotice": "Online streaming only; permission to listen does not grant redistribution rights.",
+  "fullSurahOnlineNotice": "Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.",
   "fullSurahPlayError": "Could not play this surah. Check your connection.",
   "fullSurahInterrupted": "Playback stopped unexpectedly. Try again.",
   "retry": "Try again",
@@ -744,5 +744,13 @@
   "dhikrReminder": "Dhikr reminders",
   "dhikrReminderHint": "A short remembrance or supplication between 8 AM and 10 PM",
   "dhikrEvery": "{count, plural, =1{Every hour} other{Every {number} hours}}",
-  "@dhikrEvery": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
+  "@dhikrEvery": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}},
+  "fullSurahSaveWhileListening": "Save surahs I listen to",
+  "fullSurahSaveHint": "A surah is kept for offline listening once it has fully loaded while playing.",
+  "fullSurahDownloadFailed": "Could not download the surah. Check your connection and try again.",
+  "fullSurahDownloads": "Full-surah recitations",
+  "fullSurahSavedCount": "Saved surahs: {count} • {size}",
+  "fullSurahDeleteEdition": "Delete this reciter's saved surahs?",
+  "fullSurahPlayingOffline": "Playing from your device",
+  "@fullSurahSavedCount": {"placeholders": {"count": {"type": "String"}, "size": {"type": "String"}}}
 }

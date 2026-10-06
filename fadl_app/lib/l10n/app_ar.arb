@@ -125,7 +125,7 @@
   "mujawwad": "مجود",
   "muallim": "معلم",
   "searchReciterBoth": "ابحث عن قارئ بالعربية أو باللاتينية",
-  "streamingNotice": "بث مباشر فقط؛ إتاحة الاستماع لا تعني إذن إعادة توزيع التسجيلات.",
+  "streamingNotice": "تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.",
   "chooseEdition": "اختر الرواية أو إصدار المصحف",
   "searchSurah": "ابحث عن سورة",
   "cancelDownload": "إلغاء التنزيل",
@@ -479,7 +479,7 @@
   "@speedMultiplier": {"placeholders": {"speed": {"type": "String"}}},
   "fullSurahHeading": "سورة {surah} • {edition}",
   "@fullSurahHeading": {"placeholders": {"surah": {"type": "String"}, "edition": {"type": "String"}}},
-  "fullSurahOnlineNotice": "بث عبر الإنترنت فقط؛ إتاحة الاستماع لا تمنح إذن إعادة توزيع التسجيلات.",
+  "fullSurahOnlineNotice": "تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.",
   "fullSurahPlayError": "تعذّر تشغيل السورة. تحقق من الاتصال.",
   "fullSurahInterrupted": "انقطع تشغيل السورة. حاول مجددًا.",
   "retry": "إعادة المحاولة",
@@ -744,5 +744,13 @@
   "dhikrReminder": "تذكير بالأذكار",
   "dhikrReminderHint": "ذكر أو دعاء قصير بين الثامنة صباحًا والعاشرة مساءً",
   "dhikrEvery": "{count, plural, =1{كل ساعة} =2{كل ساعتين} few{كل {number} ساعات} other{كل {number} ساعة}}",
-  "@dhikrEvery": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
+  "@dhikrEvery": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}},
+  "fullSurahSaveWhileListening": "احفظ السور التي أستمع إليها",
+  "fullSurahSaveHint": "تُحفظ السورة للاستماع دون اتصال بعد اكتمال تحميلها أثناء التشغيل.",
+  "fullSurahDownloadFailed": "تعذّر تنزيل السورة. تحقق من الاتصال وأعد المحاولة.",
+  "fullSurahDownloads": "تلاوات السور كاملة",
+  "fullSurahSavedCount": "السور المحفوظة: {count} • {size}",
+  "fullSurahDeleteEdition": "حذف السور المحفوظة لهذا القارئ؟",
+  "fullSurahPlayingOffline": "تُشغَّل من جهازك",
+  "@fullSurahSavedCount": {"placeholders": {"count": {"type": "String"}, "size": {"type": "String"}}}
 }
