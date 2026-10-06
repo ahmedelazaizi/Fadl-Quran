@@ -146,6 +146,21 @@ void main() {
       expect(soundForPrayer(const {}, 'dhuhr'), defaultAdhanSound);
     });
 
+    test('any bundled muezzin can serve dhuhr…isha but never Fajr', () {
+      for (final sound in bundledAdhanSounds) {
+        expect(soundForPrayer({'regularSound': sound}, 'isha'), sound);
+        expect(
+          soundForPrayer({'fajrSound': sound, 'regularSound': sound}, 'fajr'),
+          isNull,
+        );
+      }
+      // Unknown ids fall back to the default instead of failing silently.
+      expect(
+        soundForPrayer({'regularSound': 'adhan_unknown'}, 'asr'),
+        defaultAdhanSound,
+      );
+    });
+
     test('Fajr in adhan mode without an imported Fajr adhan is a plugin '
         'notification, never a native event', () {
       final now = DateTime.utc(2026, 5, 1, 0);

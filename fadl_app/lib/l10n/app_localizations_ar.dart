@@ -596,7 +596,7 @@ class AppLocalizationsAr extends AppLocalizations {
     String limit,
     String used,
   ) {
-    return 'المصدر: $source\n$url\nلا يُضمّن النص الملوّن في التطبيق؛ التنزيل اختياري عند توفر الإنترنت. حجم المصدر نحو $approx (حد الأمان $limit). المساحة المستخدمة: $used. التلوين وسيلة إيضاح بصرية لا حكم فقهي.';
+    return 'المصدر: $source\n$url\nالنص الملوّن مضمَّن في التطبيق ويعمل دون اتصال؛ تثبيته يجهّز نحو $approx (حد الأمان $limit). المساحة المستخدمة: $used. التلوين وسيلة إيضاح بصرية لا حكم فقهي.';
   }
 
   @override
@@ -1290,7 +1290,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openBatterySettings => 'فتح إعدادات البطارية';
 
   @override
-  String get bundledAdhan => 'الأذان المرفق مع التطبيق';
+  String get bundledAdhan => 'الأذان الأساسي (هادئ)';
 
   @override
   String get noFajrAdhan => 'بدون أذان (إشعار قصير)';
@@ -2671,4 +2671,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'الترجمة الإنجليزية: $url';
   }
+
+  @override
+  String get adhanMadinah => 'أذان المسجد النبوي (تسجيل)';
+
+  @override
+  String get adhanMakkah => 'أذان المسجد الحرام (تسجيل ٢٠١٣)';
 }

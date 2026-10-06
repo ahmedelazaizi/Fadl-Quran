@@ -32,6 +32,22 @@ Future<void> main() async {
       'https://creativecommons.org/publicdomain/zero/1.0/',
     );
     yield const LicenseEntryWithLineBreaks(
+      ['Adhan recording: Prophet\'s Mosque'],
+      'res/raw/adhan_madinah.ogg: "Call to prayer from the Prophet\'s Mosque" '
+      'recorded by ejaz215 (Freesound), via Wikimedia Commons\n'
+      'https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg\n'
+      'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
+      'Modified: converted to mono Ogg Vorbis.',
+    );
+    yield const LicenseEntryWithLineBreaks(
+      ['Adhan recording: Masjid al-Haram'],
+      'res/raw/adhan_makkah.ogg: "Adhan, Great Mosque of Mecca - Jan 21, 2013" '
+      'by Seyfula Islam, via Wikimedia Commons\n'
+      'https://commons.wikimedia.org/wiki/File:Adhan,_Great_Mosque_of_Mecca_-_Jan_21,_2013.webm\n'
+      'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
+      'Modified: audio extracted and converted to mono Ogg Vorbis.',
+    );
+    yield const LicenseEntryWithLineBreaks(
       ['Tajweed colors'],
       'Tajweed annotations by Collin Fair, cpfair/quran-tajweed\n'
       'https://github.com/cpfair/quran-tajweed\n'

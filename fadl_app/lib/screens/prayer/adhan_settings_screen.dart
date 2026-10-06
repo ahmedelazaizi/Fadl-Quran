@@ -245,7 +245,7 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               title: prayerL(context).prayerFajr,
               kind: 'fajr',
               selected: soundForPrayer(notifications, 'fajr'),
-              builtIn: null,
+              builtIn: const [],
               imported: [
                 for (final s in _imported)
                   if (s.kind == 'fajr') s,
@@ -267,7 +267,7 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               title: prayerL(context).otherPrayers,
               kind: 'regular',
               selected: soundForPrayer(notifications, 'dhuhr'),
-              builtIn: defaultAdhanSound,
+              builtIn: bundledAdhanSounds,
               imported: [
                 for (final s in _imported)
                   if (s.kind == 'regular') s,
@@ -453,8 +453,8 @@ class _SoundCard extends StatelessWidget {
   final String kind;
   final String? selected;
 
-  /// Bundled sound offered for this kind, or null (Fajr).
-  final String? builtIn;
+  /// Bundled sounds offered for this kind; none for Fajr.
+  final List<String> builtIn;
   final List<AdhanSound> imported;
   final String? previewing;
   final bool busy;
@@ -475,10 +475,10 @@ class _SoundCard extends StatelessWidget {
             child: Text(title, style: FadlFonts.heading(size: 17)),
           ),
           const SizedBox(height: 4),
-          if (builtIn != null)
-            _option(context, id: builtIn, name: prayerL(context).bundledAdhan)
-          else
+          if (builtIn.isEmpty)
             _option(context, id: null, name: prayerL(context).noFajrAdhan),
+          for (final id in builtIn)
+            _option(context, id: id, name: _bundledName(context, id)),
           for (final sound in imported)
             _option(context, id: sound.id, name: sound.name, sound: sound),
           Align(
@@ -497,6 +497,12 @@ class _SoundCard extends StatelessWidget {
       ),
     );
   }
+
+  static String _bundledName(BuildContext context, String id) => switch (id) {
+    'adhan_madinah' => prayerL(context).adhanMadinah,
+    'adhan_makkah' => prayerL(context).adhanMakkah,
+    _ => prayerL(context).bundledAdhan,
+  };
 
   Widget _option(
     BuildContext context, {

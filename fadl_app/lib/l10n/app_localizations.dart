@@ -1157,7 +1157,7 @@ abstract class AppLocalizations {
   /// No description provided for @tajweedDetails.
   ///
   /// In en, this message translates to:
-  /// **'Source: {source}\n{url}\nThe color-coded text is not bundled; download is optional when online. Source size about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.'**
+  /// **'Source: {source}\n{url}\nThe color-coded text ships with the app and works offline; installing it unpacks about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.'**
   String tajweedDetails(
     String source,
     String url,
@@ -2459,7 +2459,7 @@ abstract class AppLocalizations {
   /// No description provided for @bundledAdhan.
   ///
   /// In en, this message translates to:
-  /// **'Bundled adhan'**
+  /// **'Default adhan (calm)'**
   String get bundledAdhan;
 
   /// No description provided for @noFajrAdhan.
@@ -4825,6 +4825,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English translation: {url}'**
   String libraryTranslationLabel(String url);
+
+  /// No description provided for @adhanMadinah.
+  ///
+  /// In en, this message translates to:
+  /// **'Prophet\'s Mosque, Madinah (recording)'**
+  String get adhanMadinah;
+
+  /// No description provided for @adhanMakkah.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid al-Haram, Makkah (2013 recording)'**
+  String get adhanMakkah;
 }
 
 class _AppLocalizationsDelegate

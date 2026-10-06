@@ -201,8 +201,14 @@ class AdhanService : Service() {
     private fun resolveSource(event: JSONObject): Any? {
         val sound = event.optString("sound")
         val fajr = event.optString("prayer") == "fajr"
-        // The bundled adhan lacks the Fajr-specific words: never use it for Fajr.
-        if (sound == "adhan_default") return if (fajr) null else R.raw.adhan_default
+        // Bundled adhans lack the Fajr-specific words: never use them for Fajr.
+        val bundled = when (sound) {
+            "adhan_default" -> R.raw.adhan_default
+            "adhan_madinah" -> R.raw.adhan_madinah
+            "adhan_makkah" -> R.raw.adhan_makkah
+            else -> null
+        }
+        if (bundled != null) return if (fajr) null else bundled
         val dir = File(filesDir, "adhan").canonicalFile
         val file = File(dir, sound).canonicalFile
         val usable = sound.isNotEmpty() && file.isFile && file.parentFile == dir &&

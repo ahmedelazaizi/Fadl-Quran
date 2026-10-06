@@ -10,7 +10,7 @@ import 'offline_athkar.dart';
 /// - `adhan`: legacy per-prayer bool map (still synced with the backend);
 ///   `false` means the prayer is silent.
 /// - `adhanModes`: per-prayer `adhan` | `notify` | `silent`.
-/// - `regularSound`: sound for dhuhr…isha (`adhan_default` or an import id).
+/// - `regularSound`: sound for dhuhr…isha (a bundled id or an import id).
 /// - `fajrSound`: imported Fajr adhan id, or null.
 /// - `respectSilent`: vibrate + notify instead of sound in silent/vibrate mode.
 
@@ -27,6 +27,10 @@ const adhanModeValues = ['adhan', 'notify', 'silent'];
 
 /// Bundled raw resource; it lacks the Fajr-specific words, so never Fajr.
 const defaultAdhanSound = 'adhan_default';
+
+/// Every bundled adhan (Android raw resources, see the licenses page). None
+/// carries the Fajr-specific words, so they serve dhuhr…isha only.
+const bundledAdhanSounds = [defaultAdhanSound, 'adhan_madinah', 'adhan_makkah'];
 
 /// Window of native alarms; matches the 48h of plugin notifications.
 const adhanScheduleWindow = Duration(hours: 48);
@@ -64,7 +68,8 @@ String? soundForPrayer(Map notifications, String prayer) {
     return value is String && value.startsWith('fajr_') ? value : null;
   }
   final value = notifications['regularSound'];
-  return value is String && value.startsWith('regular_')
+  return value is String &&
+          (value.startsWith('regular_') || bundledAdhanSounds.contains(value))
       ? value
       : defaultAdhanSound;
 }

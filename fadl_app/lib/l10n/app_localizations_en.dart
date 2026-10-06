@@ -601,7 +601,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String limit,
     String used,
   ) {
-    return 'Source: $source\n$url\nThe color-coded text is not bundled; download is optional when online. Source size about $approx (safety limit $limit). Space used: $used. Colors are a visual aid, not a religious ruling.';
+    return 'Source: $source\n$url\nThe color-coded text ships with the app and works offline; installing it unpacks about $approx (safety limit $limit). Space used: $used. Colors are a visual aid, not a religious ruling.';
   }
 
   @override
@@ -1309,7 +1309,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openBatterySettings => 'Open battery settings';
 
   @override
-  String get bundledAdhan => 'Bundled adhan';
+  String get bundledAdhan => 'Default adhan (calm)';
 
   @override
   String get noFajrAdhan => 'No adhan (short notification)';
@@ -2695,4 +2695,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'English translation: $url';
   }
+
+  @override
+  String get adhanMadinah => 'Prophet\'s Mosque, Madinah (recording)';
+
+  @override
+  String get adhanMakkah => 'Masjid al-Haram, Makkah (2013 recording)';
 }
