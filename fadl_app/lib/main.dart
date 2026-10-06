@@ -12,6 +12,7 @@ import 'core/local_notifications.dart';
 import 'core/reciters.dart';
 import 'core/theme.dart';
 import 'screens/shell.dart';
+import 'widgets/adaptive_layout.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -101,6 +102,8 @@ class FadlApp extends StatelessWidget {
       theme: buildTheme(Brightness.light),
       darkTheme: buildTheme(Brightness.dark),
       themeMode: state.themeMode,
+      // Tablets: a centred frame instead of stretching across the screen.
+      builder: (context, child) => TabletFrame(child: child!),
       home: const AppGate(),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../widgets/adaptive_layout.dart';
 
 import 'athkar/athkar_screen.dart';
 import 'home_screen.dart';
@@ -8,7 +9,8 @@ import 'more_screen.dart';
 import 'prayer/prayer_times_screen.dart';
 import 'quran/mushaf_index_screen.dart';
 
-/// Bottom navigation: الرئيسية / المصحف / الأذكار / المواقيت / المزيد.
+/// Tabs الرئيسية / المصحف / الأذكار / المواقيت / المزيد: a bottom bar on
+/// phones, a side rail on wide windows.
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
 
@@ -23,6 +25,9 @@ class AppShellState extends State<AppShell> {
   int index = 0;
   final Set<int> _visited = {0};
 
+  /// Keeps every tab's state when rotating between the bar and the rail.
+  final _tabsKey = GlobalKey();
+
   void goTo(int tab) => setState(() {
     index = tab;
     _visited.add(tab);
@@ -33,61 +38,66 @@ class AppShellState extends State<AppShell> {
     final l =
         (AppLocalizations.of(context) ??
         lookupAppLocalizations(const Locale('ar')));
+    final destinations = [
+      (Icons.home_outlined, Icons.home_rounded, l.home),
+      (Icons.menu_book_outlined, Icons.menu_book_rounded, l.mushaf),
+      (Icons.auto_awesome_outlined, Icons.auto_awesome, l.athkar),
+      (Icons.schedule_outlined, Icons.schedule, l.prayerTimes),
+      (Icons.grid_view_outlined, Icons.grid_view_rounded, l.more),
+    ];
+    final tabs = IndexedStack(
+      key: _tabsKey,
+      index: index,
+      children: [
+        for (final (tab, screen) in const [
+          (0, HomeScreen()),
+          (1, MushafIndexScreen()),
+          (2, AthkarScreen()),
+          (3, PrayerTimesScreen()),
+          (4, MoreScreen()),
+        ])
+          if (_visited.contains(tab)) screen else const SizedBox.shrink(),
+      ],
+    );
+    // Wide windows (iPad landscape) keep the tabs in a side rail.
+    if (useSideNavigation(context)) {
+      return Scaffold(
+        body: Row(
+          children: [
+            SafeArea(
+              child: NavigationRail(
+                selectedIndex: index,
+                onDestinationSelected: goTo,
+                labelType: NavigationRailLabelType.all,
+                groupAlignment: 0,
+                destinations: [
+                  for (final (icon, selected, label) in destinations)
+                    NavigationRailDestination(
+                      icon: Icon(icon),
+                      selectedIcon: Icon(selected),
+                      label: Text(label),
+                    ),
+                ],
+              ),
+            ),
+            const VerticalDivider(width: 1),
+            Expanded(child: tabs),
+          ],
+        ),
+      );
+    }
     return Scaffold(
-      body: IndexedStack(
-        index: index,
-        children: [
-          if (_visited.contains(0))
-            const HomeScreen()
-          else
-            const SizedBox.shrink(),
-          if (_visited.contains(1))
-            const MushafIndexScreen()
-          else
-            const SizedBox.shrink(),
-          if (_visited.contains(2))
-            const AthkarScreen()
-          else
-            const SizedBox.shrink(),
-          if (_visited.contains(3))
-            const PrayerTimesScreen()
-          else
-            const SizedBox.shrink(),
-          if (_visited.contains(4))
-            const MoreScreen()
-          else
-            const SizedBox.shrink(),
-        ],
-      ),
+      body: tabs,
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
         onDestinationSelected: goTo,
         destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: l.home,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            selectedIcon: Icon(Icons.menu_book_rounded),
-            label: l.mushaf,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.auto_awesome_outlined),
-            selectedIcon: Icon(Icons.auto_awesome),
-            label: l.athkar,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.schedule_outlined),
-            selectedIcon: Icon(Icons.schedule),
-            label: l.prayerTimes,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.grid_view_outlined),
-            selectedIcon: Icon(Icons.grid_view_rounded),
-            label: l.more,
-          ),
+          for (final (icon, selected, label) in destinations)
+            NavigationDestination(
+              icon: Icon(icon),
+              selectedIcon: Icon(selected),
+              label: label,
+            ),
         ],
       ),
     );
