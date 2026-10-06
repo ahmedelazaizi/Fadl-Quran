@@ -47,6 +47,7 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
   List<AdhanSound> _imported = const [];
   String? _previewing;
   bool? _batteryExempt;
+  bool? _exactAlarms;
   bool _busy = false;
 
   @override
@@ -55,6 +56,7 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
     WidgetsBinding.instance.addObserver(this);
     _refreshImports();
     _refreshBattery();
+    _refreshExactAlarms();
   }
 
   @override
@@ -67,7 +69,10 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // The user may come back from the battery settings page.
-    if (state == AppLifecycleState.resumed) _refreshBattery();
+    if (state == AppLifecycleState.resumed) {
+      _refreshBattery();
+      _refreshExactAlarms();
+    }
   }
 
   Future<void> _refreshImports() async {
@@ -76,6 +81,23 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
       if (mounted) setState(() => _imported = list);
     } on PlatformException catch (e) {
       _toast(e.message ?? _l.importsReadError);
+    }
+  }
+
+  Future<void> _refreshExactAlarms() async {
+    try {
+      final exact = await _adhan.canScheduleExactAlarms();
+      if (!mounted) return;
+      final granted = _exactAlarms == false && exact == true;
+      setState(() => _exactAlarms = exact);
+      // Re-arm everything exactly once the user grants the permission.
+      if (granted) {
+        unawaited(
+          LocalNotifications.instance.reschedule(context.read<AppState>()),
+        );
+      }
+    } on PlatformException {
+      // Unknown status; keep the card hidden.
     }
   }
 
@@ -297,6 +319,20 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
                 ],
               ),
             ),
+            if (_exactAlarms != null) ...[
+              const SizedBox(height: 8),
+              SectionTitle(prayerL(context).exactAlarmTitle),
+              _ExactAlarmCard(
+                allowed: _exactAlarms!,
+                onOpen: () async {
+                  try {
+                    await _adhan.openExactAlarmSettings();
+                  } on PlatformException catch (e) {
+                    _toast(e.message ?? _l.batterySettingsError);
+                  }
+                },
+              ),
+            ],
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).batterySaving),
             _BatteryCard(
@@ -550,6 +586,49 @@ class _BatteryCard extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
             label: Text(prayerL(context).openBatterySettings),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExactAlarmCard extends StatelessWidget {
+  const _ExactAlarmCard({required this.allowed, required this.onOpen});
+  final bool allowed;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = prayerL(context);
+    return FadlCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                allowed ? Icons.alarm_on_rounded : Icons.alarm_off_rounded,
+                color: allowed ? FadlColors.sage : FadlColors.gold,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  allowed ? l.exactAlarmAllowed : l.exactAlarmMissing,
+                  style: FadlFonts.ui(size: 14.5, weight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          if (!allowed) ...[
+            const SizedBox(height: 8),
+            Text(l.exactAlarmAdvice, style: FadlFonts.ui(size: 13)),
+            const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: onOpen,
+              icon: const Icon(Icons.alarm_add_rounded),
+              label: Text(l.openExactAlarmSettings),
+            ),
+          ],
         ],
       ),
     );

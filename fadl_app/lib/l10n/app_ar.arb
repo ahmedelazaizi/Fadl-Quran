@@ -678,8 +678,6 @@
   "@libraryAboutTitle": {"placeholders": {"title": {"type": "String"}}},
   "librarySourceLabel": "المصدر: {source}",
   "@librarySourceLabel": {"placeholders": {"source": {"type": "String"}}},
-  "libraryGradesLabel": "درجات الحديث: {url}",
-  "@libraryGradesLabel": {"placeholders": {"url": {"type": "String"}}},
   "libraryAbout": "حول",
   "libraryClose": "إغلاق",
   "libraryCancel": "إلغاء",
@@ -732,5 +730,12 @@
   "trackerNetAssets": "الصافي بعد خصم الديون",
   "trackerZakatNotice": "النصاب ٨٥ غراماً من الذهب الخالص أو ٥٩٥ غراماً من الفضة الخالصة، والزكاة ٢٫٥٪ من الصافي إذا حال عليه الحول الهجري. حُليّ الاستعمال لا زكاة فيه عند الجمهور (المالكية والشافعية والحنابلة) وتجب فيه عند الحنفية؛ فأدخله أو اتركه بحسب ما تأخذ به. وفي خصم الديون خلاف، والشافعية لا يخصمونها. راجع عالماً مؤهلاً في حالتك.",
   "trackerKarat": "عيار {karat}",
-  "@trackerKarat": {"placeholders": {"karat": {"type": "String"}}}
+  "@trackerKarat": {"placeholders": {"karat": {"type": "String"}}},
+  "exactAlarmTitle": "دقة توقيت الأذان",
+  "exactAlarmAllowed": "يمكن أن ينطلق الأذان في دقيقة دخول الوقت تماماً",
+  "exactAlarmMissing": "قد يتأخر الأذان عدة دقائق",
+  "exactAlarmAdvice": "يحتاج أندرويد إذنك (المنبّهات والتذكيرات) لينطلق الأذان عند دخول وقت الصلاة بالضبط.",
+  "openExactAlarmSettings": "السماح بالمنبّهات الدقيقة",
+  "libraryTranslationLabel": "الترجمة الإنجليزية: {url}",
+  "@libraryTranslationLabel": {"placeholders": {"url": {"type": "String"}}}
 }

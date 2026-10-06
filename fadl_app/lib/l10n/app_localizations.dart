@@ -4514,12 +4514,6 @@ abstract class AppLocalizations {
   /// **'Source: {source}'**
   String librarySourceLabel(String source);
 
-  /// No description provided for @libraryGradesLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Hadith grades: {url}'**
-  String libraryGradesLabel(String url);
-
   /// No description provided for @libraryAbout.
   ///
   /// In en, this message translates to:
@@ -4795,6 +4789,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{karat}k'**
   String trackerKarat(String karat);
+
+  /// No description provided for @exactAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact adhan timing'**
+  String get exactAlarmTitle;
+
+  /// No description provided for @exactAlarmAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan can sound at the exact minute of prayer'**
+  String get exactAlarmAllowed;
+
+  /// No description provided for @exactAlarmMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan may be delayed by several minutes'**
+  String get exactAlarmMissing;
+
+  /// No description provided for @exactAlarmAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Android needs your permission (Alarms & reminders) for the adhan to sound exactly when the prayer time begins.'**
+  String get exactAlarmAdvice;
+
+  /// No description provided for @openExactAlarmSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow exact alarms'**
+  String get openExactAlarmSettings;
+
+  /// No description provided for @libraryTranslationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'English translation: {url}'**
+  String libraryTranslationLabel(String url);
 }
 
 class _AppLocalizationsDelegate

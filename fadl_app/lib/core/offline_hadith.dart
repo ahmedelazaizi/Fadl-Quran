@@ -8,78 +8,81 @@ import 'package:path_provider/path_provider.dart';
 import 'api.dart';
 import 'download_updates.dart';
 
-// Paths and editions mirror backend/scripts/seed-data.ts. Source texts:
-// AhmedBaset/hadith-json; Sunan grades: fawazahmed0/hadith-api.
+// Public-domain source (Unlicense): fawazahmed0/hadith-api. Each Arabic
+// edition carries its own grades; the English edition shares its numbering.
+// Books with no redistributable source are not offered offline.
 class _PublicBook {
   const _PublicBook(
-    this.path,
-    this.group, {
-    this.gradeEdition,
+    this.edition,
+    this.group,
+    this.nameAr,
+    this.authorAr, {
     this.defaultSource,
   });
-  final String path;
+  final String edition;
   final String group;
-  final String? gradeEdition;
+  final String nameAr;
+  final String authorAr;
+
+  /// Collections whose every hadith is graded sahih by consensus.
   final String? defaultSource;
 }
 
 const _publicBooks = <String, _PublicBook>{
   'bukhari': _PublicBook(
-    'the_9_books/bukhari',
+    'bukhari',
     'nine',
+    'صحيح البخاري',
+    'محمد بن إسماعيل البخاري',
     defaultSource: 'صحيح البخاري',
   ),
   'muslim': _PublicBook(
-    'the_9_books/muslim',
+    'muslim',
     'nine',
+    'صحيح مسلم',
+    'مسلم بن الحجاج النيسابوري',
     defaultSource: 'صحيح مسلم',
   ),
   'abudawud': _PublicBook(
-    'the_9_books/abudawud',
+    'abudawud',
     'nine',
-    gradeEdition: 'ara-abudawud',
+    'سنن أبي داود',
+    'أبو داود سليمان بن الأشعث السجستاني',
   ),
   'tirmidhi': _PublicBook(
-    'the_9_books/tirmidhi',
+    'tirmidhi',
     'nine',
-    gradeEdition: 'ara-tirmidhi',
+    'جامع الترمذي',
+    'محمد بن عيسى الترمذي',
   ),
-  'nasai': _PublicBook('the_9_books/nasai', 'nine', gradeEdition: 'ara-nasai'),
+  'nasai': _PublicBook('nasai', 'nine', 'سنن النسائي', 'أحمد بن شعيب النسائي'),
   'ibnmajah': _PublicBook(
-    'the_9_books/ibnmajah',
+    'ibnmajah',
     'nine',
-    gradeEdition: 'ara-ibnmajah',
+    'سنن ابن ماجه',
+    'محمد بن يزيد ابن ماجه القزويني',
   ),
-  'malik': _PublicBook('the_9_books/malik', 'nine'),
-  'ahmed': _PublicBook('the_9_books/ahmed', 'nine'),
-  'darimi': _PublicBook('the_9_books/darimi', 'nine'),
-  'nawawi40': _PublicBook('forties/nawawi40', 'forties'),
-  'qudsi40': _PublicBook('forties/qudsi40', 'forties'),
-  'riyad': _PublicBook('other_books/riyad_assalihin', 'other'),
-  'bulugh': _PublicBook('other_books/bulugh_almaram', 'other'),
-  'adab': _PublicBook('other_books/aladab_almufrad', 'other'),
-  'shamail': _PublicBook('other_books/shamail_muhammadiyah', 'other'),
-  'mishkat': _PublicBook('other_books/mishkat_almasabih', 'other'),
+  'malik': _PublicBook('malik', 'nine', 'موطأ مالك', 'مالك بن أنس'),
+  'nawawi40': _PublicBook(
+    'nawawi',
+    'forties',
+    'الأربعون النووية',
+    'يحيى بن شرف النووي',
+  ),
+  'qudsi40': _PublicBook('qudsi', 'forties', 'الأربعون القدسية', ''),
 };
 
-// Approximate source transfer sizes in KiB; Sunan include their grade feeds.
+// Approximate transfer sizes in KiB: Arabic plus English edition.
 const hadithApproxDownloadBytes = <String, int>{
-  'bukhari': 12452 * 1024,
-  'muslim': 11185 * 1024,
-  'abudawud': (7692 + 7173) * 1024,
-  'tirmidhi': (7481 + 6954) * 1024,
-  'nasai': (7702 + 6985) * 1024,
-  'ibnmajah': (5590 + 5452) * 1024,
-  'malik': 3190 * 1024,
-  'ahmed': 2321 * 1024,
-  'darimi': 2983 * 1024,
-  'nawawi40': 70 * 1024,
-  'qudsi40': 81 * 1024,
-  'riyad': 2150 * 1024,
-  'bulugh': 2002 * 1024,
-  'adab': 1710 * 1024,
-  'shamail': 519 * 1024,
-  'mishkat': 5101 * 1024,
+  'bukhari': (9189 + 4708) * 1024,
+  'muslim': (8133 + 3847) * 1024,
+  'abudawud': (6467 + 3504) * 1024,
+  'tirmidhi': (6429 + 2527) * 1024,
+  'nasai': (6296 + 3250) * 1024,
+  'ibnmajah': (4855 + 2568) * 1024,
+  'malik': (1961 + 1438) * 1024,
+  'nawawi40': (46 + 33) * 1024,
+  'qudsi40': (52 + 38) * 1024,
 };
 
 const _gradeAr = <String, String>{
@@ -180,7 +183,7 @@ class OfflineHadith {
     for (final entry in _publicBooks.entries)
       {
         'slug': entry.key,
-        'nameAr': _books[entry.key]?['nameAr'] ?? entry.key,
+        'nameAr': _books[entry.key]?['nameAr'] ?? entry.value.nameAr,
         'group': entry.value.group,
         'groupAr': switch (entry.value.group) {
           'nine' => 'الكتب التسعة',
@@ -203,7 +206,7 @@ class OfflineHadith {
     if (await file.exists()) await file.delete();
     _books.remove(slug);
     await DownloadUpdates.instance.remove('hadith:$slug');
-    await DownloadUpdates.instance.remove('grade:$slug');
+    await DownloadUpdates.instance.remove('translation:$slug');
   }
 
   Future<Map<String, dynamic>> _get(
@@ -252,17 +255,19 @@ class OfflineHadith {
     });
   }
 
+  static String _editionUrl(String edition) =>
+      'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/$edition.min.json';
+
+  /// Arabic text with diacritics and grades.
   static String? sourceUrl(String slug) {
     final definition = _publicBooks[slug];
-    if (definition == null) return null;
-    return 'https://raw.githubusercontent.com/AhmedBaset/hadith-json/main/db/by_book/${definition.path}.json';
+    return definition == null ? null : _editionUrl('ara-${definition.edition}');
   }
 
-  static String? gradeSourceUrl(String slug) {
-    final edition = _publicBooks[slug]?.gradeEdition;
-    return edition == null
-        ? null
-        : 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/$edition.json';
+  /// English translation with the same hadith numbers.
+  static String? translationSourceUrl(String slug) {
+    final definition = _publicBooks[slug];
+    return definition == null ? null : _editionUrl('eng-${definition.edition}');
   }
 
   Future<({Map<String, dynamic> json, Map<String, String> headers})>
@@ -295,82 +300,63 @@ class OfflineHadith {
     return (json: decoded, headers: response.headers);
   }
 
-  static String _prefix(String text) {
-    final normalized = normalize(text).replaceAll(RegExp(r'\s'), '');
-    return normalized.substring(0, normalized.length.clamp(0, 120));
+  /// Arabic grade for [grades], preferring al-Albani's verdict.
+  static Map<String, String>? _grade(Object? grades) {
+    if (grades is! List || grades.isEmpty) return null;
+    if (grades.any(
+      (grade) =>
+          grade is! Map<String, dynamic> ||
+          grade['name'] is! String ||
+          grade['grade'] is! String,
+    )) {
+      throw const FormatException('Invalid grade schema');
+    }
+    bool albani(Map<String, dynamic> grade) => RegExp(
+      'albani',
+      caseSensitive: false,
+    ).hasMatch(grade['name'] as String);
+    final picked = grades.cast<Map<String, dynamic>>().firstWhere(
+      albani,
+      orElse: () => grades.first as Map<String, dynamic>,
+    );
+    final label = (picked['grade'] as String)
+        .toLowerCase()
+        .replaceAll(RegExp(r'\(.*?\)'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+    final arabic = _gradeAr[label];
+    if (arabic == null) return null;
+    return {
+      'grade': arabic,
+      'source': albani(picked) ? 'الألباني' : picked['name'] as String,
+    };
   }
 
-  Map<String, Map<String, String>> _grades(
-    List<dynamic> ownHadiths,
-    Map<String, dynamic> feed,
+  /// Validates an edition file: `{metadata: {name, sections}, hadiths}`.
+  static (Map<String, dynamic>, List<Map<String, dynamic>>) _edition(
+    Map<String, dynamic> json,
   ) {
-    final entries = feed['hadiths'];
-    if (entries is! List || entries.isEmpty || entries.length > 100000) {
-      throw const FormatException('Invalid grade feed');
+    final metadata = json['metadata'];
+    final hadiths = json['hadiths'];
+    if (metadata is! Map<String, dynamic> ||
+        metadata['name'] is! String ||
+        metadata['sections'] is! Map ||
+        (metadata['sections'] as Map).length > 10000 ||
+        hadiths is! List ||
+        hadiths.isEmpty ||
+        hadiths.length > 100000) {
+      throw const FormatException('Invalid hadith book schema');
     }
-    final byPrefix = <String, Map<String, dynamic>?>{};
-    for (final entry in entries) {
+    for (final entry in hadiths) {
       if (entry is! Map<String, dynamic> ||
+          entry['hadithnumber'] is! num ||
           entry['text'] is! String ||
-          entry['grades'] is! List) {
-        throw const FormatException('Invalid grade schema');
-      }
-      final key = _prefix(entry['text'] as String);
-      byPrefix[key] = byPrefix.containsKey(key) ? null : entry;
-    }
-    final counts = <String, int>{};
-    for (final entry in ownHadiths) {
-      if (entry is! Map<String, dynamic> || entry['arabic'] is! String) {
+          entry['reference'] is! Map ||
+          (entry['reference'] as Map)['book'] is! num) {
         throw const FormatException('Invalid hadith schema');
       }
-      final key = _prefix(entry['arabic'] as String);
-      counts[key] = (counts[key] ?? 0) + 1;
     }
-    final matched = <String, Map<String, String>>{};
-    for (final entry in ownHadiths.cast<Map<String, dynamic>>()) {
-      final key = _prefix(entry['arabic'] as String);
-      final candidates = byPrefix[key]?['grades'];
-      if (key.length < 60 ||
-          counts[key] != 1 ||
-          candidates is! List ||
-          candidates.isEmpty) {
-        continue;
-      }
-      if (candidates.any(
-        (grade) =>
-            grade is! Map<String, dynamic> ||
-            grade['name'] is! String ||
-            grade['grade'] is! String,
-      )) {
-        throw const FormatException('Invalid grade schema');
-      }
-      final picked = candidates.cast<Map<String, dynamic>>().firstWhere(
-        (grade) => RegExp(
-          'albani',
-          caseSensitive: false,
-        ).hasMatch(grade['name'] as String),
-        orElse: () => candidates.first as Map<String, dynamic>,
-      );
-      final label = (picked['grade'] as String)
-          .toLowerCase()
-          .replaceAll(RegExp(r'\(.*?\)'), '')
-          .replaceAll(RegExp(r'\s+'), ' ')
-          .trim();
-      final arabic = _gradeAr[label];
-      if (arabic != null) {
-        matched[key] = {
-          'grade': arabic,
-          'source':
-              RegExp(
-                'albani',
-                caseSensitive: false,
-              ).hasMatch(picked['name'] as String)
-              ? 'الألباني'
-              : picked['name'] as String,
-        };
-      }
-    }
-    return matched;
+    return (metadata, hadiths.cast<Map<String, dynamic>>());
   }
 
   Future<void> _downloadPublic(String slug) async {
@@ -386,83 +372,59 @@ class OfflineHadith {
         Uri.parse(sourceUrl(slug)!),
         20 * 1024 * 1024,
       );
-      final source = sourceResponse.json;
-      final metadata = source['metadata'];
-      final chapters = source['chapters'];
-      final hadiths = source['hadiths'];
-      if (metadata is! Map<String, dynamic> ||
-          metadata['arabic'] is! Map ||
-          metadata['english'] is! Map ||
-          chapters is! List ||
-          hadiths is! List ||
-          hadiths.isEmpty ||
-          hadiths.length > 100000 ||
-          chapters.length > 10000) {
-        throw const FormatException('Invalid hadith book schema');
-      }
-      final arabic = metadata['arabic'] as Map;
-      final english = metadata['english'] as Map;
-      if (arabic['title'] is! String ||
-          (arabic['title'] as String).trim().isEmpty ||
-          arabic['author'] is! String ||
-          english['title'] is! String) {
-        throw const FormatException('Invalid hadith metadata');
-      }
-      final gradeUrl = gradeSourceUrl(slug);
-      final gradeResponse = gradeUrl == null
-          ? null
-          : await _publicJson(client, Uri.parse(gradeUrl), 12 * 1024 * 1024);
-      final grades = gradeResponse == null
-          ? <String, Map<String, String>>{}
-          : _grades(hadiths, gradeResponse.json);
+      final translationResponse = await _publicJson(
+        client,
+        Uri.parse(translationSourceUrl(slug)!),
+        12 * 1024 * 1024,
+      );
+      final (metadata, hadiths) = _edition(sourceResponse.json);
+      final (_, translations) = _edition(translationResponse.json);
+      final english = <num, String>{
+        for (final entry in translations)
+          if ((entry['text'] as String).trim().isNotEmpty)
+            entry['hadithnumber'] as num: (entry['text'] as String).trim(),
+      };
+      // Section titles exist in English only; they double as Arabic labels.
       final chapterByNumber = <int, Map<String, dynamic>>{};
-      for (final entry in chapters) {
-        if (entry is! Map<String, dynamic> ||
-            entry['id'] is! int ||
-            entry['arabic'] is! String ||
-            entry['english'] != null && entry['english'] is! String) {
+      final sections = (metadata['sections'] as Map).entries.toList();
+      for (final entry in sections) {
+        final number = int.tryParse('${entry.key}');
+        final title = entry.value;
+        if (number == null || title is! String) {
           throw const FormatException('Invalid chapter schema');
         }
-        final title = (entry['arabic'] as String).trim();
-        if (title.isEmpty || chapterByNumber.containsKey(entry['id'])) continue;
-        chapterByNumber[entry['id'] as int] = {
+        if (title.trim().isEmpty) continue;
+        chapterByNumber[number] = {
           'id':
               _publicBooks.keys.toList().indexOf(slug) * 10000 +
               chapterByNumber.length +
               1,
-          'number': entry['id'],
-          'nameAr': title,
-          'nameEn': (entry['english'] as String?)?.trim().isNotEmpty == true
-              ? (entry['english'] as String).trim()
-              : null,
+          'number': number,
+          'nameAr': title.trim(),
+          'nameEn': title.trim(),
           'count': 0,
         };
       }
-      final name = (arabic['title'] as String).trim();
+      final name = definition.nameAr;
       final bookRef = {'slug': slug, 'nameAr': name};
       final bookRows = <Map<String, dynamic>>[];
-      final seen = <int>{};
+      final seen = <num>{};
       for (final entry in hadiths) {
-        if (entry is! Map<String, dynamic> ||
-            entry['idInBook'] is! int ||
-            entry['arabic'] is! String ||
-            entry['chapterId'] != null && entry['chapterId'] is! int ||
-            entry['english'] != null && entry['english'] is! Map) {
-          throw const FormatException('Invalid hadith schema');
-        }
-        final number = entry['idInBook'] as int;
-        final text = (entry['arabic'] as String).trim();
+        final number = entry['hadithnumber'] as num;
+        final text = (entry['text'] as String).trim();
+        // Empty texts are gaps in the source numbering.
         if (text.isEmpty || !seen.add(number)) continue;
-        final chapter = chapterByNumber[entry['chapterId']];
+        final chapter =
+            chapterByNumber[((entry['reference'] as Map)['book'] as num)
+                .toInt()];
         if (chapter != null) chapter['count'] = (chapter['count'] as int) + 1;
-        final translation = entry['english'] as Map?;
-        if (translation != null &&
-            (translation['text'] != null && translation['text'] is! String ||
-                translation['narrator'] != null &&
-                    translation['narrator'] is! String)) {
-          throw const FormatException('Invalid translation schema');
-        }
-        final grade = grades[_prefix(text)];
+        final grade = definition.defaultSource == null
+            ? _grade(entry['grades'])
+            : null;
+        // Sub-numbers such as 402.2 keep their exact label in the reference.
+        final label = number == number.toInt()
+            ? '${number.toInt()}'
+            : '$number';
         final normalized = normalize(text);
         const prophet = 'صلي الله عليه وسلم';
         final start = normalized.indexOf(prophet);
@@ -488,53 +450,42 @@ class OfflineHadith {
               _publicBooks.keys.toList().indexOf(slug) * 100000 +
               bookRows.length +
               1,
-          'number': number,
+          'number': number.toInt(),
           'book': bookRef,
           'chapterAr': chapter?['nameAr'],
           'textAr': text,
-          'textEn': (translation?['text'] as String?)?.trim().isNotEmpty == true
-              ? (translation!['text'] as String).trim()
-              : null,
-          'narratorEn':
-              (translation?['narrator'] as String?)?.trim().isNotEmpty == true
-              ? (translation!['narrator'] as String).trim()
-              : null,
+          'textEn': english[number],
+          'narratorEn': null,
           'grade': definition.defaultSource != null ? 'صحيح' : grade?['grade'],
           'gradeSource': definition.defaultSource ?? grade?['source'],
-          'reference': '$name ($number)',
+          'reference': '$name ($label)',
           'links': {
             'dorar': 'https://dorar.net/hadith/search?q=$query',
             'sunnah': 'https://sunnah.com/search?q=$query',
           },
         });
       }
-      if (bookRows.isEmpty ||
-          bookRows.length !=
-              hadiths
-                  .where(
-                    (entry) =>
-                        entry is Map &&
-                        entry['arabic'] is String &&
-                        (entry['arabic'] as String).trim().isNotEmpty,
-                  )
-                  .map((entry) => (entry as Map)['idInBook'])
-                  .toSet()
-                  .length) {
+      if (bookRows.isEmpty) {
         throw const FormatException('Incomplete hadith book');
       }
       final book = {
         'slug': slug,
         'nameAr': name,
-        'authorAr': (arabic['author'] as String).trim(),
+        'authorAr': definition.authorAr,
         'hadithCount': bookRows.length,
-        'chapters': chapterByNumber.values.toList()
-          ..sort((a, b) => (a['number'] as int).compareTo(b['number'] as int)),
+        'chapters':
+            chapterByNumber.values
+                .where((chapter) => (chapter['count'] as int) > 0)
+                .toList()
+              ..sort(
+                (a, b) => (a['number'] as int).compareTo(b['number'] as int),
+              ),
       };
       final catalog = {
         'slug': slug,
         'nameAr': name,
-        'nameEn': (english['title'] as String).trim(),
-        'authorAr': book['authorAr'],
+        'nameEn': (metadata['name'] as String).trim(),
+        'authorAr': definition.authorAr,
         'group': definition.group,
         'groupAr': switch (definition.group) {
           'nine' => 'الكتب التسعة',
@@ -561,13 +512,11 @@ class OfflineHadith {
         sourceUrl(slug)!,
         sourceResponse.headers,
       );
-      if (gradeResponse != null) {
-        await DownloadUpdates.instance.record(
-          'grade:$slug',
-          gradeUrl!,
-          gradeResponse.headers,
-        );
-      }
+      await DownloadUpdates.instance.record(
+        'translation:$slug',
+        translationSourceUrl(slug)!,
+        translationResponse.headers,
+      );
     } finally {
       if (sink != null) await sink.close();
       if (await part.exists()) await part.delete();

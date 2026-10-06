@@ -32,33 +32,16 @@ class _LibraryEntry {
     this.bytes,
     this.download,
     this.remove, {
-    this.gradeUrl,
+    this.secondaryUrl,
   });
   final String id, title, group, source, url, license;
   final int approxBytes, bytes;
   final bool installed;
   final Future<void> Function() download, remove;
-  final String? gradeUrl;
-}
 
-const _hadithTitles = <String, String>{
-  'bukhari': 'صحيح البخاري',
-  'muslim': 'صحيح مسلم',
-  'abudawud': 'سنن أبي داود',
-  'tirmidhi': 'جامع الترمذي',
-  'nasai': 'سنن النسائي',
-  'ibnmajah': 'سنن ابن ماجه',
-  'malik': 'موطأ مالك',
-  'ahmed': 'مسند أحمد',
-  'darimi': 'سنن الدارمي',
-  'nawawi40': 'الأربعون النووية',
-  'qudsi40': 'الأحاديث القدسية الأربعون',
-  'riyad': 'رياض الصالحين',
-  'bulugh': 'بلوغ المرام',
-  'adab': 'الأدب المفرد',
-  'shamail': 'الشمائل المحمدية',
-  'mishkat': 'مشكاة المصابيح',
-};
+  /// A second file the entry downloads (the hadith English translation).
+  final String? secondaryUrl;
+}
 
 class _LibraryScreenState extends State<LibraryScreen> {
   final _tafsir = OfflineTafsir.instance;
@@ -110,19 +93,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
       for (final book in _hadith.availableBooks)
         _LibraryEntry(
           'hadith:${book['slug']}',
-          _hadith.isDownloaded(book['slug'] as String)
-              ? book['nameAr'] as String
-              : _hadithTitles[book['slug']]!,
+          book['nameAr'] as String,
           'كتب الحديث',
-          'AhmedBaset/hadith-json',
+          'fawazahmed0/hadith-api',
           OfflineHadith.sourceUrl(book['slug'] as String)!,
-          'لم يُعثر على ملف ترخيص في AhmedBaset/hadith-json. ${OfflineHadith.gradeSourceUrl(book['slug'] as String) == null ? '' : 'درجات fawazahmed0/hadith-api ضمن الملكية العامة بحسب LICENSE.'}',
+          'النص العربي والدرجات والترجمة الإنجليزية من fawazahmed0/hadith-api، وهي ضمن الملكية العامة (Unlicense).',
           hadithApproxDownloadBytes[book['slug'] as String]!,
           _hadith.isDownloaded(book['slug'] as String),
           await _hadith.size(book['slug'] as String),
           () => _hadith.download(book['slug'] as String, book),
           () => _hadith.delete(book['slug'] as String),
-          gradeUrl: OfflineHadith.gradeSourceUrl(book['slug'] as String),
+          secondaryUrl: OfflineHadith.translationSourceUrl(
+            book['slug'] as String,
+          ),
         ),
     ];
     for (final entry in entries.where((entry) => entry.installed)) {
@@ -151,15 +134,15 @@ class _LibraryScreenState extends State<LibraryScreen> {
       for (final entry in entries.where((entry) => entry.installed)) {
         try {
           var status = await _updates.check(entry.id, entry.url);
-          if (entry.gradeUrl != null) {
-            final grade = await _updates.check(
-              'grade:${entry.id.substring(7)}',
-              entry.gradeUrl!,
+          if (entry.secondaryUrl != null) {
+            final secondary = await _updates.check(
+              'translation:${entry.id.substring(7)}',
+              entry.secondaryUrl!,
             );
-            if (grade == UpdateStatus.available) status = grade;
-            if (grade == UpdateStatus.unknown &&
+            if (secondary == UpdateStatus.available) status = secondary;
+            if (secondary == UpdateStatus.unknown &&
                 status != UpdateStatus.available) {
-              status = grade;
+              status = secondary;
             }
           }
           if (mounted) setState(() => _statuses[entry.id] = status);
@@ -233,7 +216,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       title: Text(prayerL(context).libraryAboutTitle(entry.title)),
       content: SelectableText(
         '${prayerL(context).librarySourceLabel(entry.source)}\n${entry.url}'
-        '${entry.gradeUrl == null ? '' : '\n${prayerL(context).libraryGradesLabel(entry.gradeUrl!)}'}\n${entry.license}',
+        '${entry.secondaryUrl == null ? '' : '\n${prayerL(context).libraryTranslationLabel(entry.secondaryUrl!)}'}\n${entry.license}',
       ),
       actions: [
         TextButton(

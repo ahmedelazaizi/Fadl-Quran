@@ -2512,11 +2512,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String libraryGradesLabel(String url) {
-    return 'Hadith grades: $url';
-  }
-
-  @override
   String get libraryAbout => 'About';
 
   @override
@@ -2677,5 +2672,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String trackerKarat(String karat) {
     return '${karat}k';
+  }
+
+  @override
+  String get exactAlarmTitle => 'Exact adhan timing';
+
+  @override
+  String get exactAlarmAllowed =>
+      'The adhan can sound at the exact minute of prayer';
+
+  @override
+  String get exactAlarmMissing => 'The adhan may be delayed by several minutes';
+
+  @override
+  String get exactAlarmAdvice =>
+      'Android needs your permission (Alarms & reminders) for the adhan to sound exactly when the prayer time begins.';
+
+  @override
+  String get openExactAlarmSettings => 'Allow exact alarms';
+
+  @override
+  String libraryTranslationLabel(String url) {
+    return 'English translation: $url';
   }
 }

@@ -678,8 +678,6 @@
   "@libraryAboutTitle": {"placeholders": {"title": {"type": "String"}}},
   "librarySourceLabel": "Source: {source}",
   "@librarySourceLabel": {"placeholders": {"source": {"type": "String"}}},
-  "libraryGradesLabel": "Hadith grades: {url}",
-  "@libraryGradesLabel": {"placeholders": {"url": {"type": "String"}}},
   "libraryAbout": "About",
   "libraryClose": "Close",
   "libraryCancel": "Cancel",
@@ -732,5 +730,12 @@
   "trackerNetAssets": "Net after debts",
   "trackerZakatNotice": "Nisab: 85 g of pure gold or 595 g of pure silver; zakat is 2.5% of the net once a full lunar year has passed on it. Jewelry worn for personal use is not zakatable according to the majority (Maliki, Shafi'i, Hanbali) but is according to the Hanafis; leave it out or include it accordingly. Scholars differ on deducting debts; the Shafi'is do not deduct them. Consult a qualified scholar for your situation.",
   "trackerKarat": "{karat}k",
-  "@trackerKarat": {"placeholders": {"karat": {"type": "String"}}}
+  "@trackerKarat": {"placeholders": {"karat": {"type": "String"}}},
+  "exactAlarmTitle": "Exact adhan timing",
+  "exactAlarmAllowed": "The adhan can sound at the exact minute of prayer",
+  "exactAlarmMissing": "The adhan may be delayed by several minutes",
+  "exactAlarmAdvice": "Android needs your permission (Alarms & reminders) for the adhan to sound exactly when the prayer time begins.",
+  "openExactAlarmSettings": "Allow exact alarms",
+  "libraryTranslationLabel": "English translation: {url}",
+  "@libraryTranslationLabel": {"placeholders": {"url": {"type": "String"}}}
 }

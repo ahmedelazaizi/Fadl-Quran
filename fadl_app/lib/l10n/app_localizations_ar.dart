@@ -2486,11 +2486,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String libraryGradesLabel(String url) {
-    return 'درجات الحديث: $url';
-  }
-
-  @override
   String get libraryAbout => 'حول';
 
   @override
@@ -2653,5 +2648,27 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String trackerKarat(String karat) {
     return 'عيار $karat';
+  }
+
+  @override
+  String get exactAlarmTitle => 'دقة توقيت الأذان';
+
+  @override
+  String get exactAlarmAllowed =>
+      'يمكن أن ينطلق الأذان في دقيقة دخول الوقت تماماً';
+
+  @override
+  String get exactAlarmMissing => 'قد يتأخر الأذان عدة دقائق';
+
+  @override
+  String get exactAlarmAdvice =>
+      'يحتاج أندرويد إذنك (المنبّهات والتذكيرات) لينطلق الأذان عند دخول وقت الصلاة بالضبط.';
+
+  @override
+  String get openExactAlarmSettings => 'السماح بالمنبّهات الدقيقة';
+
+  @override
+  String libraryTranslationLabel(String url) {
+    return 'الترجمة الإنجليزية: $url';
   }
 }

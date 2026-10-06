@@ -253,6 +253,18 @@ class AdhanService {
     if (supported) await channel.invokeMethod<void>('openBatterySettings');
   }
 
+  /// Whether alarms fire at the exact minute (Alarms & reminders access).
+  /// Null when unknown (non-Android).
+  Future<bool?> canScheduleExactAlarms() async {
+    if (!supported) return null;
+    return channel.invokeMethod<bool>('canScheduleExactAlarms');
+  }
+
+  /// Opens the system page where the user allows exact alarms.
+  Future<void> openExactAlarmSettings() async {
+    if (supported) await channel.invokeMethod<void>('openExactAlarmSettings');
+  }
+
   /// Null when unknown (non-Android).
   Future<bool?> isIgnoringBatteryOptimizations() async {
     if (!supported) return null;

@@ -61,14 +61,23 @@ class LocalNotifications {
         await android.createNotificationChannel(_adhanChannel);
         await android.createNotificationChannel(_remindersChannel);
         await android.requestNotificationsPermission();
-        // USE_EXACT_ALARM (manifest) grants exact alarms on Android 13+ without
-        // sending the user to a settings page; otherwise fall back to inexact.
-        _exactAllowed = await android.canScheduleExactNotifications() ?? false;
+        await _refreshExactAllowed();
       }
       _initialized = true;
     } catch (e) {
       debugPrint('LocalNotifications.init failed: $e');
     }
+  }
+
+  /// Exact alarms need the user's "Alarms & reminders" grant on Android 14+;
+  /// without it reminders are scheduled inexactly.
+  Future<void> _refreshExactAllowed() async {
+    final android = plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android == null) return;
+    _exactAllowed = await android.canScheduleExactNotifications() ?? false;
   }
 
   Future<void> _setLocalLocation() async {
@@ -97,6 +106,8 @@ class LocalNotifications {
     try {
       await init();
       if (!_initialized) return;
+      // The user may grant or revoke exact alarms at any time.
+      await _refreshExactAllowed();
       final now = DateTime.now().toUtc();
       List<Map<String, dynamic>>? items;
       if (Api.hasBackend) {

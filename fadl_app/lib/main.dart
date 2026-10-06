@@ -23,6 +23,20 @@ Future<void> main() async {
       final license = await rootBundle.loadString('assets/fonts/$file');
       yield LicenseEntryWithLineBreaks(fonts, license);
     }
+    // res/raw/adhan_default.ogg, unmodified (SHA-1 a1fa4fd9…6522).
+    yield const LicenseEntryWithLineBreaks(
+      ['Adhan recording'],
+      '"Beautiful adhan" by Adam-synagda, Wikimedia Commons\n'
+      'https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg\n'
+      'Dedicated to the public domain under CC0 1.0 Universal:\n'
+      'https://creativecommons.org/publicdomain/zero/1.0/',
+    );
+    yield const LicenseEntryWithLineBreaks(
+      ['Hadith texts'],
+      'Arabic hadith texts, grades and English translations from\n'
+      'https://github.com/fawazahmed0/hadith-api\n'
+      'released into the public domain under the Unlicense.',
+    );
   });
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
