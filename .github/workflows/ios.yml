@@ -36,6 +36,16 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter build ios --release --no-codesign
+      - name: Check the widget and adhan clips are in the app
+        run: |
+          app=build/ios/iphoneos/Runner.app
+          test -f "$app/PlugIns/PrayerWidgetExtension.appex/PrayerWidgetExtension"
+          plutil -extract NSExtension.NSExtensionPointIdentifier raw \
+            "$app/PlugIns/PrayerWidgetExtension.appex/Info.plist" | grep -qx com.apple.widgetkit-extension
+          for sound in adhan_default adhan_madinah adhan_makkah; do
+            test -f "$app/$sound.caf"
+          done
+          ls -la "$app/PlugIns"
       - name: Package unsigned app
         run: |
           mkdir -p build/ios/ipa/Payload
