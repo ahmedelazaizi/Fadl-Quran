@@ -152,7 +152,11 @@ class LocalNotifications {
         debugPrint('LocalNotifications: adhan alarms failed: $e');
         split = partitionAdhan(items, state.notifications, now, android: false);
       }
-      for (final n in split.plugin) {
+      // iOS drops every pending notification beyond the 64 soonest.
+      final pending = defaultTargetPlatform == TargetPlatform.iOS
+          ? capPending(split.plugin, iosPendingLimit)
+          : split.plugin;
+      for (final n in pending) {
         final fireAt = DateTime.tryParse('${n['fireAt']}')?.toUtc();
         if (fireAt == null || !fireAt.isAfter(now)) continue;
         final isAdhan = n['type'] == 'adhan';
@@ -193,6 +197,31 @@ class LocalNotifications {
     } catch (e) {
       debugPrint('LocalNotifications.reschedule failed: $e');
     }
+  }
+
+  /// Most notifications iOS keeps pending per app.
+  static const iosPendingLimit = 64;
+
+  /// At most [limit] items, soonest first, with every prayer kept ahead of
+  /// reminders so a busy dhikr schedule never pushes an adhan out.
+  @visibleForTesting
+  static List<Map<String, dynamic>> capPending(
+    List<Map<String, dynamic>> items,
+    int limit,
+  ) {
+    DateTime at(Map item) =>
+        DateTime.tryParse('${item['fireAt']}') ?? DateTime(9999);
+    final sorted = [...items]..sort((a, b) => at(a).compareTo(at(b)));
+    final prayers = [
+      for (final item in sorted)
+        if (item['type'] == 'adhan') item,
+    ];
+    final kept = {
+      ...prayers.take(limit),
+      for (final item in sorted)
+        if (item['type'] != 'adhan') item,
+    }.take(limit).toList();
+    return kept..sort((a, b) => at(a).compareTo(at(b)));
   }
 
   static Future<List<Map<String, dynamic>>> _reviewUpcoming(

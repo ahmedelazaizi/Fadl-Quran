@@ -81,6 +81,32 @@ void main() {
     );
   });
 
+  test('the iOS cap keeps every prayer and the soonest reminders', () {
+    final start = DateTime.utc(2026, 10, 6);
+    Map<String, dynamic> item(String type, int hours) => {
+      'key': '$type:$hours',
+      'type': type,
+      'fireAt': start.add(Duration(hours: hours)).toIso8601String(),
+    };
+    final items = [
+      for (var h = 1; h <= 47; h++) item('dhikr', h),
+      for (var h = 2; h <= 46; h += 4) item('adhan', h),
+    ];
+    final kept = LocalNotifications.capPending(items, 20);
+    expect(kept, hasLength(20));
+    expect(kept.where((i) => i['type'] == 'adhan'), hasLength(12));
+    // The eight reminders left are the soonest, and the list stays in order.
+    expect(kept.where((i) => i['type'] == 'dhikr').map((i) => i['key']), [
+      for (var h = 1; h <= 8; h++) 'dhikr:$h',
+    ]);
+    final times = kept.map((i) => i['fireAt'] as String).toList();
+    expect(times, [...times]..sort());
+    expect(
+      LocalNotifications.capPending(items.take(5).toList(), 64),
+      hasLength(5),
+    );
+  });
+
   test('reschedule posts dhikr reminders with expanded text', () async {
     SharedPreferences.setMockInitialValues({
       'fadl.notifications': jsonEncode({'dhikrReminderHours': 1}),

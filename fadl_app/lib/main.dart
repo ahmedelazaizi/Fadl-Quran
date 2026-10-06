@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:audio_session/audio_session.dart';
 import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -63,6 +64,16 @@ Future<void> main() async {
       'released into the public domain under the Unlicense.',
     );
   });
+  // Recitation keeps playing with the screen locked or the iOS silent switch
+  // on, and pauses for calls like any music player.
+  unawaited(
+    AudioSession.instance
+        .then(
+          (session) =>
+              session.configure(const AudioSessionConfiguration.music()),
+        )
+        .catchError((Object e) => debugPrint('Audio session setup failed: $e')),
+  );
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
   await state.load();
