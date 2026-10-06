@@ -365,11 +365,13 @@ class _DedicationHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                // Wraps the tagline below the name at large text sizes.
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text('فضل', style: FadlFonts.heading(size: 20)),
-                    ),
+                    Text('فضل', style: FadlFonts.heading(size: 20)),
                     Badge2(
                       (AppLocalizations.of(context) ??
                               lookupAppLocalizations(const Locale('ar')))

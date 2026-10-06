@@ -136,15 +136,19 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
                           ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${day.day}'),
-                      Text(
-                        '${hijri['day']} ${prayerL(context).trackerHijriShort}',
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                    ],
+                  // Grid cells have a fixed size; shrink large text to fit.
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('${day.day}'),
+                        Text(
+                          '${hijri['day']} ${prayerL(context).trackerHijriShort}',
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

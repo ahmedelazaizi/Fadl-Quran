@@ -21,4 +21,19 @@ void main() {
       expect(license, contains('SIL OPEN FONT LICENSE Version 1.1'));
     },
   );
+
+  test('every bundled font family ships its SIL Open Font License', () async {
+    for (final file in const [
+      'AmiriQuran-OFL.txt',
+      'Tajawal-OFL.txt',
+      'NotoNaskhArabic-OFL.txt',
+    ]) {
+      final license = await rootBundle.loadString('assets/fonts/$file');
+      expect(
+        license,
+        contains('SIL OPEN FONT LICENSE Version 1.1'),
+        reason: file,
+      );
+    }
+  });
 }

@@ -13,11 +13,16 @@ import 'screens/shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // The SIL Open Font License must accompany every bundled font.
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString(
-      'assets/fonts/AmiriQuran-OFL.txt',
-    );
-    yield LicenseEntryWithLineBreaks(['Amiri Quran'], license);
+    for (final (fonts, file) in const [
+      (['Amiri', 'Amiri Quran'], 'AmiriQuran-OFL.txt'),
+      (['Tajawal'], 'Tajawal-OFL.txt'),
+      (['Noto Naskh Arabic'], 'NotoNaskhArabic-OFL.txt'),
+    ]) {
+      final license = await rootBundle.loadString('assets/fonts/$file');
+      yield LicenseEntryWithLineBreaks(fonts, license);
+    }
   });
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));

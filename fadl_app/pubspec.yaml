@@ -41,6 +41,8 @@ flutter:
     - assets/quran/
     - assets/athkar/
     - assets/fonts/AmiriQuran-OFL.txt
+    - assets/fonts/Tajawal-OFL.txt
+    - assets/fonts/NotoNaskhArabic-OFL.txt
   fonts:
     - family: Tajawal
       fonts:

@@ -484,50 +484,59 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    prayerL(context).tasbeehCurrentCount,
-                    style: FadlFonts.ui(
-                      size: 13,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  Text(
-                    prayerNumber(context, display),
-                    style: FadlFonts.heading(
-                      size: 64,
-                      color: headingColor(context),
-                    ),
-                  ),
-                  Row(
+              // The circle has a fixed size; shrink large text to fit.
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        prayerL(context).tasbeehTap,
+                        prayerL(context).tasbeehCurrentCount,
                         style: FadlFonts.ui(
                           size: 13,
-                          color: FadlColors.sage,
-                          weight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.touch_app_outlined,
-                        size: 18,
-                        color: FadlColors.sage,
+                      Text(
+                        prayerNumber(context, display),
+                        style: FadlFonts.heading(
+                          size: 64,
+                          color: headingColor(context),
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            prayerL(context).tasbeehTap,
+                            style: FadlFonts.ui(
+                              size: 13,
+                              color: FadlColors.sage,
+                              weight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(
+                            Icons.touch_app_outlined,
+                            size: 18,
+                            color: FadlColors.sage,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        prayerL(
+                          context,
+                        ).tasbeehToday(prayerNumber(context, count)),
+                        style: FadlFonts.ui(
+                          size: 12,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                     ],
                   ),
-                  Text(
-                    prayerL(context).tasbeehToday(prayerNumber(context, count)),
-                    style: FadlFonts.ui(
-                      size: 12,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
