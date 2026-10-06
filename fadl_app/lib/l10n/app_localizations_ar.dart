@@ -2677,4 +2677,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adhanMakkah => 'أذان المسجد الحرام (تسجيل ٢٠١٣)';
+
+  @override
+  String get dhikrReminderTitle => 'ذكر الله';
+
+  @override
+  String get dhikrReminder => 'تذكير بالأذكار';
+
+  @override
+  String get dhikrReminderHint =>
+      'ذكر أو دعاء قصير بين الثامنة صباحًا والعاشرة مساءً';
+
+  @override
+  String dhikrEvery(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $number ساعة',
+      few: 'كل $number ساعات',
+      two: 'كل ساعتين',
+      one: 'كل ساعة',
+    );
+    return '$_temp0';
+  }
 }

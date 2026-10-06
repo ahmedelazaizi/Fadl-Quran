@@ -739,5 +739,10 @@
   "libraryTranslationLabel": "الترجمة الإنجليزية: {url}",
   "@libraryTranslationLabel": {"placeholders": {"url": {"type": "String"}}},
   "adhanMadinah": "أذان المسجد النبوي (تسجيل)",
-  "adhanMakkah": "أذان المسجد الحرام (تسجيل ٢٠١٣)"
+  "adhanMakkah": "أذان المسجد الحرام (تسجيل ٢٠١٣)",
+  "dhikrReminderTitle": "ذكر الله",
+  "dhikrReminder": "تذكير بالأذكار",
+  "dhikrReminderHint": "ذكر أو دعاء قصير بين الثامنة صباحًا والعاشرة مساءً",
+  "dhikrEvery": "{count, plural, =1{كل ساعة} =2{كل ساعتين} few{كل {number} ساعات} other{كل {number} ساعة}}",
+  "@dhikrEvery": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
 }

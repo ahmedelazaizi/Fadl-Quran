@@ -2701,4 +2701,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adhanMakkah => 'Masjid al-Haram, Makkah (2013 recording)';
+
+  @override
+  String get dhikrReminderTitle => 'Remember Allah';
+
+  @override
+  String get dhikrReminder => 'Dhikr reminders';
+
+  @override
+  String get dhikrReminderHint =>
+      'A short remembrance or supplication between 8 AM and 10 PM';
+
+  @override
+  String dhikrEvery(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $number hours',
+      one: 'Every hour',
+    );
+    return '$_temp0';
+  }
 }

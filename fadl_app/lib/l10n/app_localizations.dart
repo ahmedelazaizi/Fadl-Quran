@@ -4837,6 +4837,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Masjid al-Haram, Makkah (2013 recording)'**
   String get adhanMakkah;
+
+  /// No description provided for @dhikrReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember Allah'**
+  String get dhikrReminderTitle;
+
+  /// No description provided for @dhikrReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr reminders'**
+  String get dhikrReminder;
+
+  /// No description provided for @dhikrReminderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short remembrance or supplication between 8 AM and 10 PM'**
+  String get dhikrReminderHint;
+
+  /// No description provided for @dhikrEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Every hour} other{Every {number} hours}}'**
+  String dhikrEvery(int count, String number);
 }
 
 class _AppLocalizationsDelegate

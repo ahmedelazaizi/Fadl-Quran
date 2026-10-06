@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api.dart';
 import '../core/app_state.dart';
+import '../core/dhikr_reminders.dart';
 import '../core/format.dart';
 import '../core/local_notifications.dart';
 import '../core/local_user_data.dart';
@@ -418,6 +419,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'quranReviewTime',
                     n,
                     hint: l.quranReviewReminderHint,
+                  ),
+                  SettingRow(
+                    icon: Icons.favorite_border_rounded,
+                    title: l.dhikrReminder,
+                    subtitle: l.dhikrReminderHint,
+                    trailing: DropdownButton<int>(
+                      value:
+                          dhikrReminderIntervals.contains(
+                            n['dhikrReminderHours'],
+                          )
+                          ? n['dhikrReminderHours'] as int
+                          : 0,
+                      underline: const SizedBox.shrink(),
+                      borderRadius: BorderRadius.circular(12),
+                      items: [
+                        for (final hours in [0, ...dhikrReminderIntervals])
+                          DropdownMenuItem(
+                            value: hours,
+                            child: Text(
+                              hours == 0
+                                  ? l.off
+                                  : l.dhikrEvery(hours, _uiNum(context, hours)),
+                              style: FadlFonts.ui(size: 14),
+                            ),
+                          ),
+                      ],
+                      onChanged: (v) =>
+                          _notify({'dhikrReminderHours': v == 0 ? null : v}),
+                    ),
                   ),
                   const Divider(height: 8),
                   _switch(
