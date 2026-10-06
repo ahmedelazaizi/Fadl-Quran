@@ -48,7 +48,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   Future<_Summary> _summarize() async {
     await store.ready();
     final rows = <_ReciterRow>[];
-    for (final reciter in reciters) {
+    for (final reciter in allReciters) {
       final id = reciter['id'] as String;
       if (!store.downloadedReciters.contains(id)) continue;
       rows.add(

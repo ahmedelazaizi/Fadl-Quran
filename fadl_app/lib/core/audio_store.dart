@@ -167,7 +167,13 @@ class AudioStore extends ChangeNotifier {
       while (queue.isNotEmpty && failure == null && !task.cancelled) {
         final id = queue.removeAt(0);
         try {
-          if (!await _fetch(reciterId, id, task)) return;
+          final url = ayahAudioUrl(
+            reciterId,
+            id,
+            surah: surahId,
+            ayah: ids.indexOf(id) + 1,
+          );
+          if (!await _fetch(reciterId, id, url, task)) return;
         } catch (error) {
           failure ??= error;
           return;
@@ -198,10 +204,11 @@ class AudioStore extends ChangeNotifier {
   Future<bool> _fetch(
     String reciterId,
     int globalAyah,
+    String url,
     SurahDownload task,
   ) async {
     final response = await _client
-        .get(Uri.parse(ayahAudioUrl(reciterId, globalAyah)))
+        .get(Uri.parse(url))
         .timeout(const Duration(seconds: 60));
     if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
       throw HttpException('HTTP ${response.statusCode}');

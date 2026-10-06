@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import 'core/app_state.dart';
 import 'core/local_notifications.dart';
+import 'core/reciters.dart';
 import 'core/theme.dart';
 import 'screens/shell.dart';
 
@@ -65,6 +66,8 @@ Future<void> main() async {
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
   await state.load();
+  // Cached everyayah reciters are available at once; refreshed online.
+  unawaited(ReciterCatalog.instance.load());
   await LocalNotifications.instance.init();
   // Review reminders need no location; prayer items are skipped without one.
   unawaited(LocalNotifications.instance.reschedule(state));
