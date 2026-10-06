@@ -292,9 +292,11 @@ class AudioStore extends ChangeNotifier {
   }
 }
 
-/// 1536 → "١٫٥ ك.ب"
-String formatBytes(int bytes) {
-  const units = ['بايت', 'ك.ب', 'م.ب', 'ج.ب'];
+/// 1536 → "١٫٥ ك.ب", or "1.5 KB" when [english] is set.
+String formatBytes(int bytes, {bool english = false}) {
+  final units = english
+      ? const ['B', 'KB', 'MB', 'GB']
+      : const ['بايت', 'ك.ب', 'م.ب', 'ج.ب'];
   var value = bytes.toDouble();
   var unit = 0;
   while (value >= 1024 && unit < units.length - 1) {
@@ -303,6 +305,7 @@ String formatBytes(int bytes) {
   }
   final text = unit == 0 || value >= 100
       ? value.round().toString()
-      : value.toStringAsFixed(1).replaceAll('.', '٫');
-  return '${arNum(text)} ${units[unit]}';
+      : value.toStringAsFixed(1);
+  if (english) return '$text ${units[unit]}';
+  return '${arNum(text.replaceAll('.', '٫'))} ${units[unit]}';
 }

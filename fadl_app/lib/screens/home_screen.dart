@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/prayer_labels.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -93,10 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
           // The assistant search needs the backend.
           if (Api.hasBackend)
             IconButton(
+              tooltip: prayerL(context).a11ySearch,
               icon: const Icon(Icons.search_rounded),
               onPressed: () => _open(const AssistantScreen()),
             ),
           IconButton(
+            tooltip: prayerL(context).settings,
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => _open(const SettingsScreen()),
           ),
@@ -362,11 +365,13 @@ class _DedicationHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                // Wraps the tagline below the name at large text sizes.
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text('فضل', style: FadlFonts.heading(size: 20)),
-                    ),
+                    Text('فضل', style: FadlFonts.heading(size: 20)),
                     Badge2(
                       (AppLocalizations.of(context) ??
                               lookupAppLocalizations(const Locale('ar')))
@@ -810,7 +815,7 @@ class _NextPrayerCardState extends State<_NextPrayerCard> {
               TextButton.icon(
                 onPressed: () => AppShell.of(context)?.goTo(3),
                 icon: const Icon(
-                  Icons.arrow_back_rounded,
+                  Icons.arrow_forward_rounded,
                   size: 16,
                   color: Colors.white,
                 ),
@@ -862,7 +867,7 @@ class _SetLocationCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_left_rounded, color: Colors.white),
+          const Icon(Icons.chevron_right_rounded, color: Colors.white),
         ],
       ),
     );

@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_state.dart';
+import '../core/audio_store.dart';
 import '../core/format.dart';
 import 'app_localizations.dart';
 
 AppLocalizations prayerL(BuildContext context) =>
     AppLocalizations.of(context) ?? lookupAppLocalizations(const Locale('ar'));
 
+/// Matches [prayerL]: without localization delegates the UI falls back to
+/// Arabic, so numbers and sizes must too.
 bool englishPrayerUi(BuildContext context) =>
+    AppLocalizations.of(context) != null &&
     Localizations.localeOf(context).languageCode == 'en';
 
 String prayerNumber(BuildContext context, Object? value) =>
     englishPrayerUi(context) ? '$value' : arNum(value ?? '');
+
+String prayerBytes(BuildContext context, int bytes) =>
+    formatBytes(bytes, english: englishPrayerUi(context));
 
 String prayerTime(BuildContext context, String hm) {
   if (!englishPrayerUi(context)) return hm12(hm);

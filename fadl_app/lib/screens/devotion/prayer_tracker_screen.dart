@@ -114,19 +114,21 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
           Row(
             children: [
               IconButton(
+                tooltip: prayerL(context).a11yPreviousDay,
                 onPressed: () {
                   date = DateTime.utc(date.year, date.month, date.day - 1);
                   refresh();
                 },
-                icon: const Icon(Icons.chevron_right),
+                icon: const Icon(Icons.chevron_left),
               ),
               Expanded(child: Center(child: Text(key))),
               IconButton(
+                tooltip: prayerL(context).a11yNextDay,
                 onPressed: () {
                   date = DateTime.utc(date.year, date.month, date.day + 1);
                   refresh();
                 },
-                icon: const Icon(Icons.chevron_left),
+                icon: const Icon(Icons.chevron_right),
               ),
             ],
           ),

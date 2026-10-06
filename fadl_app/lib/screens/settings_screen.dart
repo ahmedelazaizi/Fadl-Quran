@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api.dart';
 import '../core/app_state.dart';
-import '../core/audio_store.dart' show formatBytes;
 import '../core/format.dart';
 import '../core/local_notifications.dart';
 import '../core/local_user_data.dart';
@@ -413,6 +412,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'sleepAthkarTime',
                     n,
                   ),
+                  _timeRow(
+                    Icons.auto_stories_outlined,
+                    l.quranReviewReminder,
+                    'quranReviewTime',
+                    n,
+                    hint: l.quranReviewReminderHint,
+                  ),
                   const Divider(height: 8),
                   _switch(
                     Icons.dark_mode_outlined,
@@ -521,13 +527,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     IconData icon,
     String title,
     String key,
-    Map<String, dynamic> n,
-  ) {
+    Map<String, dynamic> n, {
+    String? hint,
+  }) {
     final value = n[key] as String?;
+    final schedule = value == null ? l.off : l.dailyAt(_uiTime(context, value));
     return SettingRow(
       icon: icon,
       title: title,
-      subtitle: value == null ? l.off : l.dailyAt(_uiTime(context, value)),
+      subtitle: hint == null ? schedule : '$schedule\n$hint',
       onTap: () => _pickTime(key, value),
       trailing: Switch(
         value: value != null,
@@ -543,6 +551,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ? '17:00'
                     : key == 'sleepAthkarTime'
                     ? '22:00'
+                    : key == 'quranReviewTime'
+                    ? '20:00'
                     : '06:00'))
             .split(':');
     final picked = await showTimePicker(
@@ -616,7 +626,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isScrollControlled: true,
       builder: (_) => const SafeArea(child: _OfflineTafsirSheet()),
     );
-    if (mounted) setState(() => _tafsirs = _loadTafsirs());
+    if (mounted) {
+      setState(() {
+        _tafsirs = _loadTafsirs();
+      });
+    }
   }
 
   Future<void> _editDedicatee() async {
@@ -784,9 +798,9 @@ class _OfflineTajweedSheetState extends State<_OfflineTajweedSheet> {
         l.tajweedDetails(
           tajweedSource,
           tajweedSourceUrl,
-          formatBytes(tajweedApproxBytes),
-          formatBytes(tajweedMaxBytes),
-          formatBytes(_bytes),
+          prayerBytes(context, tajweedApproxBytes),
+          prayerBytes(context, tajweedMaxBytes),
+          prayerBytes(context, _bytes),
         ),
         style: FadlFonts.ui(size: 13, height: 1.7),
       ),
@@ -797,12 +811,12 @@ class _OfflineTajweedSheetState extends State<_OfflineTajweedSheet> {
               ? null
               : store.receivedBytes / store.expectedBytes!,
         ),
-        Text(l.downloadingSize(formatBytes(store.receivedBytes))),
+        Text(l.downloadingSize(prayerBytes(context, store.receivedBytes))),
       ] else
         ListTile(
           title: Text(
             store.isDownloaded
-                ? l.downloadedSize(formatBytes(_bytes))
+                ? l.downloadedSize(prayerBytes(context, _bytes))
                 : l.notDownloaded,
           ),
           trailing: IconButton(
@@ -902,7 +916,7 @@ class _OfflineTafsirSheetState extends State<_OfflineTafsirSheet> {
         Text(l.offlineTafsir, style: FadlFonts.heading(size: 20)),
         const SizedBox(height: 4),
         Text(
-          l.tafsirDownloadDescription(formatBytes(total)),
+          l.tafsirDownloadDescription(prayerBytes(context, total)),
           style: FadlFonts.ui(size: 13, height: 1.6),
         ),
         const SizedBox(height: 8),
@@ -920,8 +934,8 @@ class _OfflineTafsirSheetState extends State<_OfflineTafsirSheet> {
               store.isDownloading(e.slug)
                   ? l.downloading
                   : store.isDownloaded(e.slug)
-                  ? l.downloadedSize(formatBytes(_sizes[e.slug] ?? 0))
-                  : l.notDownloadedSize(formatBytes(e.approxBytes)),
+                  ? l.downloadedSize(prayerBytes(context, _sizes[e.slug] ?? 0))
+                  : l.notDownloadedSize(prayerBytes(context, e.approxBytes)),
               style: FadlFonts.ui(size: 12),
             ),
             trailing: store.isDownloading(e.slug)

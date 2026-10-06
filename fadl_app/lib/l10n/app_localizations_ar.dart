@@ -1723,7 +1723,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trackerGoldGrams => 'غرامات الذهب';
 
   @override
-  String get trackerGoldPrice => 'سعر غرام الذهب';
+  String get trackerGoldPrice => 'سعر غرام الذهب عيار ٢٤';
 
   @override
   String get trackerSilverGrams => 'غرامات الفضة';
@@ -2486,11 +2486,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String libraryGradesLabel(String url) {
-    return 'درجات الحديث: $url';
-  }
-
-  @override
   String get libraryAbout => 'حول';
 
   @override
@@ -2565,4 +2560,115 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get downloadsDeleteReciterTooltip => 'حذف تلاوات القارئ';
+
+  @override
+  String get quranReviewReminder => 'تذكير مراجعة الحفظ';
+
+  @override
+  String get quranReviewReminderHint =>
+      'فقط في الأيام التي تستحق فيها صفحات محفوظة المراجعة';
+
+  @override
+  String get quranReviewNotificationTitle => 'مراجعة الحفظ';
+
+  @override
+  String quranReviewNotificationBody(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$number صفحة محفوظة تستحق المراجعة اليوم',
+      few: '$number صفحات محفوظة تستحق المراجعة اليوم',
+      two: 'صفحتان محفوظتان تستحقان المراجعة اليوم',
+      one: 'صفحة محفوظة تستحق المراجعة اليوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get a11yPreviousDay => 'اليوم السابق';
+
+  @override
+  String get a11yNextDay => 'اليوم التالي';
+
+  @override
+  String get a11yPreviousMonth => 'الشهر السابق';
+
+  @override
+  String get a11yNextMonth => 'الشهر التالي';
+
+  @override
+  String get a11yQadaDecrease => 'إنقاص يوم قضاء';
+
+  @override
+  String get a11yQadaIncrease => 'زيادة يوم قضاء';
+
+  @override
+  String get a11ySearch => 'بحث';
+
+  @override
+  String get a11ySendQuestion => 'إرسال السؤال';
+
+  @override
+  String get a11yClear => 'مسح';
+
+  @override
+  String get searchNoResults => 'لا توجد نتائج';
+
+  @override
+  String get offlineFeatureMessage =>
+      'هذه الميزة تحتاج اتصالًا بخدمة فضل، وستتوفر قريبًا. المصحف والتلاوة والتحفيظ متاحة دون اتصال.';
+
+  @override
+  String get dedicateRewardAction => 'إهداء الثواب';
+
+  @override
+  String searchFailed(String error) {
+    return 'تعذّر البحث: $error';
+  }
+
+  @override
+  String get occasionTasua => 'تاسوعاء (٩ محرم)';
+
+  @override
+  String get occasionTashreeq => 'أيام التشريق (لا يُصام فيها)';
+
+  @override
+  String get trackerGoldKarat => 'عيار الذهب';
+
+  @override
+  String get trackerDebts => 'ديون حالّة عليك';
+
+  @override
+  String get trackerNetAssets => 'الصافي بعد خصم الديون';
+
+  @override
+  String get trackerZakatNotice =>
+      'النصاب ٨٥ غراماً من الذهب الخالص أو ٥٩٥ غراماً من الفضة الخالصة، والزكاة ٢٫٥٪ من الصافي إذا حال عليه الحول الهجري. حُليّ الاستعمال لا زكاة فيه عند الجمهور (المالكية والشافعية والحنابلة) وتجب فيه عند الحنفية؛ فأدخله أو اتركه بحسب ما تأخذ به. وفي خصم الديون خلاف، والشافعية لا يخصمونها. راجع عالماً مؤهلاً في حالتك.';
+
+  @override
+  String trackerKarat(String karat) {
+    return 'عيار $karat';
+  }
+
+  @override
+  String get exactAlarmTitle => 'دقة توقيت الأذان';
+
+  @override
+  String get exactAlarmAllowed =>
+      'يمكن أن ينطلق الأذان في دقيقة دخول الوقت تماماً';
+
+  @override
+  String get exactAlarmMissing => 'قد يتأخر الأذان عدة دقائق';
+
+  @override
+  String get exactAlarmAdvice =>
+      'يحتاج أندرويد إذنك (المنبّهات والتذكيرات) لينطلق الأذان عند دخول وقت الصلاة بالضبط.';
+
+  @override
+  String get openExactAlarmSettings => 'السماح بالمنبّهات الدقيقة';
+
+  @override
+  String libraryTranslationLabel(String url) {
+    return 'الترجمة الإنجليزية: $url';
+  }
 }

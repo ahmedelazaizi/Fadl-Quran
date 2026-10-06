@@ -171,7 +171,8 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
       ),
       leading: (fullSurahMode ? fullReciterId != null : selected != null)
           ? IconButton(
-              icon: const Icon(Icons.arrow_forward),
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => setState(() {
                 if (fullSurahMode) {
                   if (fullEdition != null) {
@@ -322,7 +323,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
                   ),
                   trailing: current
                       ? const Icon(Icons.check_circle, color: FadlColors.sage)
-                      : const Icon(Icons.chevron_left),
+                      : const Icon(Icons.chevron_right),
                   onTap: () => setState(() => selected = reciter),
                 );
               },

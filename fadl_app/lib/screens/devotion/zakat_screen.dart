@@ -21,6 +21,7 @@ class _ZakatScreenState extends State<ZakatScreen> {
       'silverPrice',
       'inventory',
       'receivables',
+      'debts',
     ])
       key: TextEditingController(),
   };
@@ -34,11 +35,13 @@ class _ZakatScreenState extends State<ZakatScreen> {
       'silverGrams' => l.trackerSilverGrams,
       'silverPrice' => l.trackerSilverPrice,
       'inventory' => l.trackerInventory,
-      _ => l.trackerReceivables,
+      'receivables' => l.trackerReceivables,
+      _ => l.trackerDebts,
     };
   }
 
   bool useGold = true;
+  int goldKarat = 24;
 
   @override
   void initState() {
@@ -51,6 +54,8 @@ class _ZakatScreenState extends State<ZakatScreen> {
         fields['silverPrice']!.text =
             prefs.getString('fadl.zakat.silverPrice') ?? '';
         useGold = prefs.getBool('fadl.zakat.goldNisab') ?? true;
+        final karat = prefs.getInt('fadl.zakat.goldKarat');
+        if (zakatGoldKarats.contains(karat)) goldKarat = karat!;
       });
     });
   }
@@ -80,6 +85,8 @@ class _ZakatScreenState extends State<ZakatScreen> {
       inventory: amount('inventory'),
       receivables: amount('receivables'),
       useGoldNisab: useGold,
+      goldKarat: goldKarat,
+      debts: amount('debts'),
     );
     return Scaffold(
       appBar: AppBar(title: Text(prayerL(context).trackerZakatTitle)),
@@ -112,6 +119,31 @@ class _ZakatScreenState extends State<ZakatScreen> {
                 },
               ),
             ),
+          DropdownButtonFormField<int>(
+            initialValue: goldKarat,
+            decoration: InputDecoration(
+              labelText: prayerL(context).trackerGoldKarat,
+              border: const OutlineInputBorder(),
+            ),
+            items: [
+              for (final karat in zakatGoldKarats)
+                DropdownMenuItem(
+                  value: karat,
+                  child: Text(
+                    prayerL(context).trackerKarat(prayerNumber(context, karat)),
+                  ),
+                ),
+            ],
+            onChanged: (karat) async {
+              if (karat == null) return;
+              setState(() => goldKarat = karat);
+              await (await SharedPreferences.getInstance()).setInt(
+                'fadl.zakat.goldKarat',
+                karat,
+              );
+            },
+          ),
+          const SizedBox(height: 10),
           Text(prayerL(context).trackerCurrencyHint),
           SegmentedButton<bool>(
             segments: [
@@ -146,6 +178,10 @@ class _ZakatScreenState extends State<ZakatScreen> {
             trailing: Text(breakdown.total.toStringAsFixed(2)),
           ),
           ListTile(
+            title: Text(prayerL(context).trackerNetAssets),
+            trailing: Text(breakdown.net.toStringAsFixed(2)),
+          ),
+          ListTile(
             title: Text(prayerL(context).trackerNisab),
             trailing: Text(breakdown.nisab.toStringAsFixed(2)),
           ),
@@ -153,9 +189,7 @@ class _ZakatScreenState extends State<ZakatScreen> {
             title: Text(prayerL(context).trackerEstimatedZakat),
             trailing: Text(breakdown.due.toStringAsFixed(2)),
           ),
-          const Text(
-            'مرجع شائع للنصاب: ٨٥ غراماً من الذهب أو ٥٩٥ غراماً من الفضة. تختلف أحكام النصاب والتقييم والحول والديون باختلاف الحال؛ راجع عالماً مؤهلاً قبل الاعتماد على النتيجة.',
-          ),
+          Text(prayerL(context).trackerZakatNotice),
         ],
       ),
     );

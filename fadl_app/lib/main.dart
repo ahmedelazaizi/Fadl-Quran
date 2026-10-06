@@ -13,19 +13,37 @@ import 'screens/shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // The SIL Open Font License must accompany every bundled font.
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString(
-      'assets/fonts/AmiriQuran-OFL.txt',
+    for (final (fonts, file) in const [
+      (['Amiri', 'Amiri Quran'], 'AmiriQuran-OFL.txt'),
+      (['Tajawal'], 'Tajawal-OFL.txt'),
+      (['Noto Naskh Arabic'], 'NotoNaskhArabic-OFL.txt'),
+    ]) {
+      final license = await rootBundle.loadString('assets/fonts/$file');
+      yield LicenseEntryWithLineBreaks(fonts, license);
+    }
+    // res/raw/adhan_default.ogg, unmodified (SHA-1 a1fa4fd9…6522).
+    yield const LicenseEntryWithLineBreaks(
+      ['Adhan recording'],
+      '"Beautiful adhan" by Adam-synagda, Wikimedia Commons\n'
+      'https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg\n'
+      'Dedicated to the public domain under CC0 1.0 Universal:\n'
+      'https://creativecommons.org/publicdomain/zero/1.0/',
     );
-    yield LicenseEntryWithLineBreaks(['Amiri Quran'], license);
+    yield const LicenseEntryWithLineBreaks(
+      ['Hadith texts'],
+      'Arabic hadith texts, grades and English translations from\n'
+      'https://github.com/fawazahmed0/hadith-api\n'
+      'released into the public domain under the Unlicense.',
+    );
   });
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
   await state.load();
   await LocalNotifications.instance.init();
-  if (state.hasLocation) {
-    unawaited(LocalNotifications.instance.reschedule(state));
-  }
+  // Review reminders need no location; prayer items are skipped without one.
+  unawaited(LocalNotifications.instance.reschedule(state));
 }
 
 class FadlApp extends StatelessWidget {

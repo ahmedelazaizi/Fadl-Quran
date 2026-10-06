@@ -1,6 +1,7 @@
 package com.fadl.fadl
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -96,6 +97,17 @@ class MainActivity : FlutterActivity() {
                         if (intent.resolveActivity(packageManager) != null) startActivity(intent)
                         else startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             Uri.fromParts("package", packageName, null)))
+                        result.success(null)
+                    }
+                    "canScheduleExactAlarms" -> {
+                        val alarm = getSystemService(ALARM_SERVICE) as AlarmManager
+                        result.success(Build.VERSION.SDK_INT < 31 || alarm.canScheduleExactAlarms())
+                    }
+                    "openExactAlarmSettings" -> {
+                        if (Build.VERSION.SDK_INT >= 31) {
+                            startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                                Uri.fromParts("package", packageName, null)))
+                        }
                         result.success(null)
                     }
                     "isIgnoringBatteryOptimizations" -> {

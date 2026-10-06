@@ -87,10 +87,15 @@ internal object AdhanScheduler {
 }
 
 /** Re-arms persisted adhan alarms; every listened action is a protected system broadcast. */
+// AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED (API 31).
+private const val EXACT_ALARM_PERMISSION_CHANGED =
+    "android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"
+
 class AdhanBootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action in setOf(Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED,
-                Intent.ACTION_TIME_CHANGED, Intent.ACTION_TIMEZONE_CHANGED)) {
+                Intent.ACTION_TIME_CHANGED, Intent.ACTION_TIMEZONE_CHANGED,
+                EXACT_ALARM_PERMISSION_CHANGED)) {
             AdhanScheduler.rearm(context)
         }
     }

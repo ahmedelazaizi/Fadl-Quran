@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/app_localizations.dart';
 import 'adhan_service.dart';
 import 'api.dart';
 import 'app_state.dart';
+import 'format.dart';
 import 'offline_prayer.dart';
+import 'quran_learning.dart';
 
 /// Schedules local adhan and reminder notifications, using the backend
 /// when configured and locally computed times otherwise.
@@ -57,14 +61,23 @@ class LocalNotifications {
         await android.createNotificationChannel(_adhanChannel);
         await android.createNotificationChannel(_remindersChannel);
         await android.requestNotificationsPermission();
-        // USE_EXACT_ALARM (manifest) grants exact alarms on Android 13+ without
-        // sending the user to a settings page; otherwise fall back to inexact.
-        _exactAllowed = await android.canScheduleExactNotifications() ?? false;
+        await _refreshExactAllowed();
       }
       _initialized = true;
     } catch (e) {
       debugPrint('LocalNotifications.init failed: $e');
     }
+  }
+
+  /// Exact alarms need the user's "Alarms & reminders" grant on Android 14+;
+  /// without it reminders are scheduled inexactly.
+  Future<void> _refreshExactAllowed() async {
+    final android = plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android == null) return;
+    _exactAllowed = await android.canScheduleExactNotifications() ?? false;
   }
 
   Future<void> _setLocalLocation() async {
@@ -93,19 +106,32 @@ class LocalNotifications {
     try {
       await init();
       if (!_initialized) return;
-      final List<Map<String, dynamic>> items;
-      if (Api.hasBackend) {
-        final res =
-            await Api.instance.get('/me/notifications/upcoming', {'hours': 48})
-                as Map<String, dynamic>;
-        items = (res['notifications'] as List? ?? const [])
-            .cast<Map<String, dynamic>>();
-      } else {
-        items = state.hasLocation
-            ? _offlineUpcoming(state, DateTime.now())
-            : [];
-      }
+      // The user may grant or revoke exact alarms at any time.
+      await _refreshExactAllowed();
       final now = DateTime.now().toUtc();
+      List<Map<String, dynamic>>? items;
+      if (Api.hasBackend) {
+        try {
+          final res =
+              await Api.instance.get('/me/notifications/upcoming', {
+                    'hours': 48,
+                  })
+                  as Map<String, dynamic>;
+          items = (res['notifications'] as List? ?? const [])
+              .cast<Map<String, dynamic>>()
+              .toList();
+        } catch (e) {
+          // Offline-first: fall back to locally computed times so device-only
+          // reminders still reflect the latest state.
+          debugPrint('LocalNotifications: backend schedule failed: $e');
+        }
+      }
+      items ??= state.hasLocation
+          ? offlineUpcoming(state, DateTime.now())
+          : <Map<String, dynamic>>[];
+      // Review progress lives only on this device, so these reminders are
+      // added locally whether or not a backend supplies the rest.
+      items.addAll(await _reviewUpcoming(state, now));
       // Adhan-mode prayers play the full adhan through native alarms on
       // Android and get no plugin notification; elsewhere they stay here.
       final adhan = AdhanService.instance;
@@ -163,7 +189,82 @@ class LocalNotifications {
     }
   }
 
-  static List<Map<String, dynamic>> _offlineUpcoming(
+  static Future<List<Map<String, dynamic>>> _reviewUpcoming(
+    AppState state,
+    DateTime now,
+  ) async {
+    final time = state.notifications['quranReviewTime'] as String?;
+    if (time == null || state.notifications['enabled'] == false) return [];
+    try {
+      final store = QuranReviewStore(await SharedPreferences.getInstance())
+        ..load();
+      return reviewReminders(
+        time: time,
+        location: OfflinePrayer.location(state.timezone),
+        now: now,
+        dueAt: store.dueCount,
+        l: lookupAppLocalizations(state.locale),
+      );
+    } catch (e) {
+      debugPrint('LocalNotifications: review reminders failed: $e');
+      return [];
+    }
+  }
+
+  /// Daily reminders at [time] ("HH:mm" in [location]) within 48 hours of
+  /// [now], skipping days when [dueAt] reports no memorized page due by the
+  /// end of that local day.
+  @visibleForTesting
+  static List<Map<String, dynamic>> reviewReminders({
+    required String time,
+    required tz.Location location,
+    required DateTime now,
+    required int Function(DateTime at) dueAt,
+    required AppLocalizations l,
+  }) {
+    final parts = time.split(':');
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+    final today = tz.TZDateTime.from(now, location);
+    final end = now.add(const Duration(hours: 48));
+    final reminders = <Map<String, dynamic>>[];
+    for (var offset = 0; offset <= 2; offset++) {
+      final at = tz.TZDateTime(
+        location,
+        today.year,
+        today.month,
+        today.day + offset,
+        hour,
+        minute,
+      );
+      if (!at.isAfter(now) || at.isAfter(end)) continue;
+      final endOfDay = tz.TZDateTime(
+        location,
+        at.year,
+        at.month,
+        at.day + 1,
+      ).subtract(const Duration(milliseconds: 1));
+      final due = dueAt(endOfDay);
+      if (due <= 0) continue;
+      final day =
+          '${at.year}-${'${at.month}'.padLeft(2, '0')}-${'${at.day}'.padLeft(2, '0')}';
+      reminders.add({
+        'key': 'quran_review:$day',
+        'type': 'quran_review',
+        'fireAt': at.toUtc().toIso8601String(),
+        'title': l.quranReviewNotificationTitle,
+        'body': l.quranReviewNotificationBody(
+          due,
+          l.localeName == 'ar' ? arNum(due) : '$due',
+        ),
+        'link': 'fadl://quran/review',
+      });
+    }
+    return reminders;
+  }
+
+  @visibleForTesting
+  static List<Map<String, dynamic>> offlineUpcoming(
     AppState state,
     DateTime now,
   ) {
@@ -222,7 +323,7 @@ class LocalNotifications {
             'pre_adhan:$name',
             time.subtract(Duration(minutes: preMinutes)),
             'اقترب وقت صلاة $nameAr',
-            'بقي $preMinutes دقيقة على الأذان',
+            'بقي ${arabicMinutes(preMinutes)} على الأذان',
             'fadl://prayer-times',
           );
         }
@@ -307,15 +408,19 @@ class LocalNotifications {
           'fadl://home',
         );
       }
+      // In Dhul-Hijjah the 13th is a day of tashreeq, when fasting is
+      // forbidden, so that month's white days start on the 14th.
+      final dhulHijjah = hijri['month'] == 12;
       if (state.notifications['whiteDaysFast'] == true &&
-          hijri['day'] == 12 &&
           hijri['month'] != 9 &&
-          hijri['month'] != 12) {
+          hijri['day'] == (dhulHijjah ? 13 : 12)) {
         add(
           'fast_white_days',
           prayerAt('isha'),
           'الأيام البيض',
-          'تبدأ غداً الأيام البيض (١٣، ١٤، ١٥ ${hijri['monthNameAr']})، صيامها كصيام الدهر',
+          dhulHijjah
+              ? 'يبدأ غداً صيام الأيام البيض (١٤، ١٥ ${hijri['monthNameAr']})؛ أما الثالث عشر فمن أيام التشريق فلا يُصام'
+              : 'تبدأ غداً الأيام البيض (١٣، ١٤، ١٥ ${hijri['monthNameAr']})، وصيامها كصيام الدهر',
           'fadl://home',
         );
       }
@@ -330,9 +435,14 @@ class LocalNotifications {
           );
         }
         if (state.notifications['fridayHour'] == true) {
+          // The last hour before maghrib, never before asr has begun.
+          final lastHour = prayerAt(
+            'maghrib',
+          ).subtract(const Duration(hours: 1));
+          final asr = prayerAt('asr');
           add(
             'friday_hour',
-            prayerAt('maghrib').subtract(const Duration(hours: 1)),
+            lastHour.isBefore(asr) ? asr : lastHour,
             'ساعة الإجابة يوم الجمعة',
             'آخر ساعة بعد العصر من يوم الجمعة، أكثر من الدعاء',
             'fadl://duas',
@@ -345,6 +455,15 @@ class LocalNotifications {
     );
     return upcoming;
   }
+
+  /// "٥ دقائق", "١٥ دقيقة": Arabic counted-noun agreement for [minutes].
+  @visibleForTesting
+  static String arabicMinutes(int minutes) => switch (minutes) {
+    1 => 'دقيقة واحدة',
+    2 => 'دقيقتان',
+    >= 3 && <= 10 => '${arNum(minutes)} دقائق',
+    _ => '${arNum(minutes)} دقيقة',
+  };
 
   /// FNV-1a hash of the notification key, kept within a positive 31-bit int.
   static int _stableId(String key) {

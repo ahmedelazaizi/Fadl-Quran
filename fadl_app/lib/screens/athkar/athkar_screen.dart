@@ -300,7 +300,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
                         prayerNumber(context, others[i]['count'] as int),
                         style: FadlFonts.ui(size: 12),
                       ),
-                      const Icon(Icons.chevron_left_rounded),
+                      const Icon(Icons.chevron_right_rounded),
                     ],
                   ),
                   onTap: () => _open(
@@ -380,7 +380,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
                       minimumSize: const Size(0, 40),
                     ),
                     onPressed: () => _open(target['slug'] as String, title),
-                    icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                     label: Text(
                       done == 0
                           ? prayerL(context).athkarStart
@@ -482,7 +482,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
               ],
             ),
           ),
-          const Icon(Icons.chevron_left_rounded),
+          const Icon(Icons.chevron_right_rounded),
         ],
       ),
     );

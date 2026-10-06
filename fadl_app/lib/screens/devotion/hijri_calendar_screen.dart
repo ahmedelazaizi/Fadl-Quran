@@ -13,7 +13,9 @@ String _occasionLabel(BuildContext context, String occasion) {
     'عيد الفطر' => l.occasionEidAlFitr,
     'يوم عرفة' => l.occasionArafah,
     'عيد الأضحى' => l.occasionEidAlAdha,
+    'تاسوعاء' => l.occasionTasua,
     'عاشوراء' => l.occasionAshura,
+    'أيام التشريق' => l.occasionTashreeq,
     'الأيام البيض' => l.occasionWhiteDays,
     'الاثنين' => l.occasionMonday,
     'الخميس' => l.occasionThursday,
@@ -64,10 +66,11 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
           Row(
             children: [
               IconButton(
+                tooltip: prayerL(context).a11yPreviousMonth,
                 onPressed: () => setState(
                   () => month = DateTime.utc(month.year, month.month - 1),
                 ),
-                icon: const Icon(Icons.chevron_right),
+                icon: const Icon(Icons.chevron_left),
               ),
               Expanded(
                 child: Center(
@@ -77,10 +80,11 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
                 ),
               ),
               IconButton(
+                tooltip: prayerL(context).a11yNextMonth,
                 onPressed: () => setState(
                   () => month = DateTime.utc(month.year, month.month + 1),
                 ),
-                icon: const Icon(Icons.chevron_left),
+                icon: const Icon(Icons.chevron_right),
               ),
             ],
           ),
@@ -134,15 +138,19 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
                           ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${day.day}'),
-                      Text(
-                        '${hijri['day']} ${prayerL(context).trackerHijriShort}',
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                    ],
+                  // Grid cells have a fixed size; shrink large text to fit.
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('${day.day}'),
+                        Text(
+                          '${hijri['day']} ${prayerL(context).trackerHijriShort}',
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

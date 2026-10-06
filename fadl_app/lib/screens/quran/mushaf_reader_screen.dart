@@ -725,7 +725,14 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
     ),
   );
 
-  Widget _quickActions(int page) => Row(
+  // Follows the always-RTL page flow so "previous" sits on the side earlier
+  // pages come from, in every UI language.
+  Widget _quickActions(int page) => Directionality(
+    textDirection: TextDirection.rtl,
+    child: _quickActionsRow(page),
+  );
+
+  Widget _quickActionsRow(int page) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       IconButton(
@@ -738,11 +745,7 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
                 curve: Curves.easeOut,
               )
             : null,
-        icon: Icon(
-          Directionality.of(context) == TextDirection.rtl
-              ? Icons.chevron_right_rounded
-              : Icons.chevron_left_rounded,
-        ),
+        icon: const Icon(Icons.chevron_left_rounded),
       ),
       _quickButton(
         _audio.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
@@ -784,11 +787,7 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
         onPressed: page < _totalPages
             ? () => _controller.nextPage(duration: _turn, curve: Curves.easeOut)
             : null,
-        icon: Icon(
-          Directionality.of(context) == TextDirection.rtl
-              ? Icons.chevron_left_rounded
-              : Icons.chevron_right_rounded,
-        ),
+        icon: const Icon(Icons.chevron_right_rounded),
       ),
     ],
   );

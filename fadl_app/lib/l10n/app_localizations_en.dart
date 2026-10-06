@@ -1744,7 +1744,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackerGoldGrams => 'Gold (grams)';
 
   @override
-  String get trackerGoldPrice => 'Gold price per gram';
+  String get trackerGoldPrice => 'Price per gram of pure (24k) gold';
 
   @override
   String get trackerSilverGrams => 'Silver (grams)';
@@ -2512,11 +2512,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String libraryGradesLabel(String url) {
-    return 'Hadith grades: $url';
-  }
-
-  @override
   String get libraryAbout => 'About';
 
   @override
@@ -2591,4 +2586,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloadsDeleteReciterTooltip => 'Delete reciter recordings';
+
+  @override
+  String get quranReviewReminder => 'Quran review reminder';
+
+  @override
+  String get quranReviewReminderHint =>
+      'Only on days with memorized pages due for review';
+
+  @override
+  String get quranReviewNotificationTitle => 'Quran review';
+
+  @override
+  String quranReviewNotificationBody(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$number memorized pages are due for review today',
+      one: '1 memorized page is due for review today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get a11yPreviousDay => 'Previous day';
+
+  @override
+  String get a11yNextDay => 'Next day';
+
+  @override
+  String get a11yPreviousMonth => 'Previous month';
+
+  @override
+  String get a11yNextMonth => 'Next month';
+
+  @override
+  String get a11yQadaDecrease => 'Remove one makeup day';
+
+  @override
+  String get a11yQadaIncrease => 'Add one makeup day';
+
+  @override
+  String get a11ySearch => 'Search';
+
+  @override
+  String get a11ySendQuestion => 'Send question';
+
+  @override
+  String get a11yClear => 'Clear';
+
+  @override
+  String get searchNoResults => 'No results';
+
+  @override
+  String get offlineFeatureMessage =>
+      'This feature needs a connection to the Fadl service and will be available soon. The mushaf, recitations and memorization work offline.';
+
+  @override
+  String get dedicateRewardAction => 'Dedicate the reward';
+
+  @override
+  String searchFailed(String error) {
+    return 'Search failed: $error';
+  }
+
+  @override
+  String get occasionTasua => 'Tasu\'a (9 Muharram)';
+
+  @override
+  String get occasionTashreeq => 'Days of Tashreeq (no fasting)';
+
+  @override
+  String get trackerGoldKarat => 'Gold karat';
+
+  @override
+  String get trackerDebts => 'Debts you must pay now';
+
+  @override
+  String get trackerNetAssets => 'Net after debts';
+
+  @override
+  String get trackerZakatNotice =>
+      'Nisab: 85 g of pure gold or 595 g of pure silver; zakat is 2.5% of the net once a full lunar year has passed on it. Jewelry worn for personal use is not zakatable according to the majority (Maliki, Shafi\'i, Hanbali) but is according to the Hanafis; leave it out or include it accordingly. Scholars differ on deducting debts; the Shafi\'is do not deduct them. Consult a qualified scholar for your situation.';
+
+  @override
+  String trackerKarat(String karat) {
+    return '${karat}k';
+  }
+
+  @override
+  String get exactAlarmTitle => 'Exact adhan timing';
+
+  @override
+  String get exactAlarmAllowed =>
+      'The adhan can sound at the exact minute of prayer';
+
+  @override
+  String get exactAlarmMissing => 'The adhan may be delayed by several minutes';
+
+  @override
+  String get exactAlarmAdvice =>
+      'Android needs your permission (Alarms & reminders) for the adhan to sound exactly when the prayer time begins.';
+
+  @override
+  String get openExactAlarmSettings => 'Allow exact alarms';
+
+  @override
+  String libraryTranslationLabel(String url) {
+    return 'English translation: $url';
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../core/audio_store.dart';
-import '../core/format.dart';
 import '../core/reciters.dart';
 import '../core/theme.dart';
 import '../l10n/prayer_labels.dart';
@@ -32,7 +31,11 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   }
 
   void _changed() {
-    if (mounted) setState(() => summary = _summarize());
+    if (mounted) {
+      setState(() {
+        summary = _summarize();
+      });
+    }
   }
 
   Future<_Summary> _summarize() async {
@@ -75,11 +78,16 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
 
   Future<void> _deleteReciter(_ReciterRow row) async {
     final name = row.reciter['nameAr'] as String;
-    if (!await _confirm(prayerL(context).downloadsDeleteTitle, prayerL(context).downloadsDeleteReciterConfirm(name))) {
+    if (!await _confirm(
+      prayerL(context).downloadsDeleteTitle,
+      prayerL(context).downloadsDeleteReciterConfirm(name),
+    )) {
       return;
     }
     await store.deleteReciter(row.reciter['id'] as String);
-    if (mounted) showToast(context, prayerL(context).downloadsDeletedReciter(name));
+    if (mounted) {
+      showToast(context, prayerL(context).downloadsDeletedReciter(name));
+    }
   }
 
   Future<void> _deleteAll() async {
@@ -102,7 +110,9 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         if (snapshot.hasError) {
           return ErrorCard(
             message: prayerL(context).downloadsReadError,
-            onRetry: () => setState(() => summary = _summarize()),
+            onRetry: () => setState(() {
+              summary = _summarize();
+            }),
           );
         }
         final data = snapshot.data;
@@ -138,7 +148,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                           style: FadlFonts.ui(size: 13),
                         ),
                         Text(
-                          formatBytes(data.totalBytes),
+                          prayerBytes(context, data.totalBytes),
                           style: FadlFonts.ui(
                             size: 18,
                             weight: FontWeight.w700,
@@ -186,7 +196,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                     style: FadlFonts.ui(size: 15, weight: FontWeight.w700),
                   ),
                   subtitle: Text(
-                    '${prayerL(context).downloadsCompleteSurahs(prayerNumber(context, row.completeSurahs))} • ${formatBytes(row.bytes)}',
+                    '${prayerL(context).downloadsCompleteSurahs(prayerNumber(context, row.completeSurahs))} • ${prayerBytes(context, row.bytes)}',
                   ),
                   trailing: IconButton(
                     tooltip: prayerL(context).downloadsDeleteReciterTooltip,

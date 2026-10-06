@@ -3233,7 +3233,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackerGoldPrice.
   ///
   /// In en, this message translates to:
-  /// **'Gold price per gram'**
+  /// **'Price per gram of pure (24k) gold'**
   String get trackerGoldPrice;
 
   /// No description provided for @trackerSilverGrams.
@@ -4514,12 +4514,6 @@ abstract class AppLocalizations {
   /// **'Source: {source}'**
   String librarySourceLabel(String source);
 
-  /// No description provided for @libraryGradesLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Hadith grades: {url}'**
-  String libraryGradesLabel(String url);
-
   /// No description provided for @libraryAbout.
   ///
   /// In en, this message translates to:
@@ -4651,6 +4645,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete reciter recordings'**
   String get downloadsDeleteReciterTooltip;
+
+  /// No description provided for @quranReviewReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran review reminder'**
+  String get quranReviewReminder;
+
+  /// No description provided for @quranReviewReminderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on days with memorized pages due for review'**
+  String get quranReviewReminderHint;
+
+  /// No description provided for @quranReviewNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran review'**
+  String get quranReviewNotificationTitle;
+
+  /// No description provided for @quranReviewNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 memorized page is due for review today} other{{number} memorized pages are due for review today}}'**
+  String quranReviewNotificationBody(int count, String number);
+
+  /// No description provided for @a11yPreviousDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get a11yPreviousDay;
+
+  /// No description provided for @a11yNextDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get a11yNextDay;
+
+  /// No description provided for @a11yPreviousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get a11yPreviousMonth;
+
+  /// No description provided for @a11yNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get a11yNextMonth;
+
+  /// No description provided for @a11yQadaDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove one makeup day'**
+  String get a11yQadaDecrease;
+
+  /// No description provided for @a11yQadaIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one makeup day'**
+  String get a11yQadaIncrease;
+
+  /// No description provided for @a11ySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get a11ySearch;
+
+  /// No description provided for @a11ySendQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Send question'**
+  String get a11ySendQuestion;
+
+  /// No description provided for @a11yClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get a11yClear;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get searchNoResults;
+
+  /// No description provided for @offlineFeatureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature needs a connection to the Fadl service and will be available soon. The mushaf, recitations and memorization work offline.'**
+  String get offlineFeatureMessage;
+
+  /// No description provided for @dedicateRewardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Dedicate the reward'**
+  String get dedicateRewardAction;
+
+  /// No description provided for @searchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed: {error}'**
+  String searchFailed(String error);
+
+  /// No description provided for @occasionTasua.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasu\'a (9 Muharram)'**
+  String get occasionTasua;
+
+  /// No description provided for @occasionTashreeq.
+  ///
+  /// In en, this message translates to:
+  /// **'Days of Tashreeq (no fasting)'**
+  String get occasionTashreeq;
+
+  /// No description provided for @trackerGoldKarat.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold karat'**
+  String get trackerGoldKarat;
+
+  /// No description provided for @trackerDebts.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts you must pay now'**
+  String get trackerDebts;
+
+  /// No description provided for @trackerNetAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Net after debts'**
+  String get trackerNetAssets;
+
+  /// No description provided for @trackerZakatNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Nisab: 85 g of pure gold or 595 g of pure silver; zakat is 2.5% of the net once a full lunar year has passed on it. Jewelry worn for personal use is not zakatable according to the majority (Maliki, Shafi\'i, Hanbali) but is according to the Hanafis; leave it out or include it accordingly. Scholars differ on deducting debts; the Shafi\'is do not deduct them. Consult a qualified scholar for your situation.'**
+  String get trackerZakatNotice;
+
+  /// No description provided for @trackerKarat.
+  ///
+  /// In en, this message translates to:
+  /// **'{karat}k'**
+  String trackerKarat(String karat);
+
+  /// No description provided for @exactAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact adhan timing'**
+  String get exactAlarmTitle;
+
+  /// No description provided for @exactAlarmAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan can sound at the exact minute of prayer'**
+  String get exactAlarmAllowed;
+
+  /// No description provided for @exactAlarmMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan may be delayed by several minutes'**
+  String get exactAlarmMissing;
+
+  /// No description provided for @exactAlarmAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Android needs your permission (Alarms & reminders) for the adhan to sound exactly when the prayer time begins.'**
+  String get exactAlarmAdvice;
+
+  /// No description provided for @openExactAlarmSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow exact alarms'**
+  String get openExactAlarmSettings;
+
+  /// No description provided for @libraryTranslationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'English translation: {url}'**
+  String libraryTranslationLabel(String url);
 }
 
 class _AppLocalizationsDelegate

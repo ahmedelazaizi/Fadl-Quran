@@ -211,7 +211,10 @@ class _HadithBookScreenState extends State<HadithBookScreen> {
                           color: FadlColors.gold,
                         ),
                         const SizedBox(width: 4),
-                        Icon(Icons.chevron_left_rounded, color: scheme.outline),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: scheme.outline,
+                        ),
                       ],
                     ),
                   ),

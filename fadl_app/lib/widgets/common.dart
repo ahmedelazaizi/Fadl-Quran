@@ -5,6 +5,7 @@ import '../core/api.dart';
 import '../core/app_state.dart';
 import '../core/offline_athkar.dart';
 import '../core/theme.dart';
+import '../l10n/prayer_labels.dart';
 
 /// Loads data with [load] and renders it with [builder]; shows a spinner,
 /// and an error card with retry on failure. Call `key.currentState.reload()`
@@ -70,10 +71,6 @@ class AsyncViewState<T> extends State<AsyncView<T>> {
   }
 }
 
-/// Friendly text shown instead of the "server not configured" error.
-const offlineFeatureMessage =
-    'هذه الميزة تحتاج اتصالًا بخدمة فضل، وستتوفر قريبًا. المصحف والتلاوة والتحفيظ متاحة دون اتصال.';
-
 class ErrorCard extends StatelessWidget {
   const ErrorCard({super.key, required this.message, this.error, this.onRetry});
   final String message;
@@ -95,7 +92,10 @@ class ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final offline = _backendMissing;
     final onRetry = offline ? null : this.onRetry;
-    final message = offline ? offlineFeatureMessage : this.message;
+    // Friendly text shown instead of the "server not configured" error.
+    final message = offline
+        ? prayerL(context).offlineFeatureMessage
+        : this.message;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -118,7 +118,7 @@ class ErrorCard extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('إعادة المحاولة'),
+                label: Text(prayerL(context).retry),
               ),
             ],
           ],
@@ -362,7 +362,9 @@ Future<void> dedicate(
     if (context.mounted) {
       showToast(
         context,
-        'تم تسجيل إهداء الثواب إلى ${context.read<AppState>().dedicatee} 🤍',
+        prayerL(
+          context,
+        ).athkarDedicationRecorded(context.read<AppState>().dedicatee),
       );
     }
   } on ApiException catch (e) {
@@ -372,13 +374,11 @@ Future<void> dedicate(
 
 /// Banner "صدقة جارية عن المرحوم ..." shown on devotional screens.
 class DedicationBanner extends StatelessWidget {
-  const DedicationBanner({
-    super.key,
-    required this.type,
-    this.label = 'إهداء الثواب',
-  });
+  const DedicationBanner({super.key, required this.type, this.label});
   final String type;
-  final String label;
+
+  /// Button text; defaults to the localized "Dedicate the reward".
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +402,7 @@ class DedicationBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'صدقة جارية عن المرحوم',
+                  prayerL(context).dedicationLabel,
                   style: FadlFonts.ui(size: 12, color: FadlColors.onEmerald),
                 ),
                 Text(
@@ -422,7 +422,7 @@ class DedicationBanner extends StatelessWidget {
             ),
             onPressed: () => dedicate(context, type),
             child: Text(
-              label,
+              label ?? prayerL(context).dedicateRewardAction,
               style: FadlFonts.ui(
                 size: 13,
                 weight: FontWeight.w700,

@@ -131,7 +131,9 @@ class _HadithBooksScreenState extends State<HadithBooksScreen> {
           if (snap.hasError) {
             return ErrorCard(
               message: '${snap.error}',
-              onRetry: () => setState(() => _home = _loadHome()),
+              onRetry: () => setState(() {
+                _home = _loadHome();
+              }),
             );
           }
           final books =
@@ -296,7 +298,9 @@ class _HadithBooksScreenState extends State<HadithBooksScreen> {
             padding: const EdgeInsets.only(bottom: 10),
             child: _BookTile(
               book: b,
-              onChanged: () => setState(() => _home = _loadHome()),
+              onChanged: () => setState(() {
+                _home = _loadHome();
+              }),
             ),
           ),
       ],
@@ -513,7 +517,7 @@ class _BookTileState extends State<_BookTile> {
                     downloaded ? Icons.delete_outline : Icons.download_rounded,
                   ),
                 ),
-          Icon(Icons.chevron_left_rounded, color: scheme.outline),
+          Icon(Icons.chevron_right_rounded, color: scheme.outline),
         ],
       ),
     );
