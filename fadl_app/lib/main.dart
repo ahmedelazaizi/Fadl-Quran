@@ -32,6 +32,14 @@ Future<void> main() async {
       'https://creativecommons.org/publicdomain/zero/1.0/',
     );
     yield const LicenseEntryWithLineBreaks(
+      ['Tajweed colors'],
+      'Tajweed annotations by Collin Fair, cpfair/quran-tajweed\n'
+      'https://github.com/cpfair/quran-tajweed\n'
+      'Licensed under CC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n'
+      'Re-anchored onto the mushaf text (tool/build_tajweed_asset.py).\n'
+      'Underlying Uthmani text: Tanzil Quran Text, https://tanzil.net',
+    );
+    yield const LicenseEntryWithLineBreaks(
       ['Hadith texts'],
       'Arabic hadith texts, grades and English translations from\n'
       'https://github.com/fawazahmed0/hadith-api\n'

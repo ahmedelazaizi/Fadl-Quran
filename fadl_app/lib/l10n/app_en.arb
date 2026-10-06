@@ -332,7 +332,9 @@
       }
     }
   },
-  "tajweedDetails": "Source: {source}\n{url}\nThe color-coded text is not bundled; download is optional when online. Source size about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.",
+  "tajweedDetails": "Source: {source}
+{url}
+The color-coded text ships with the app and works offline; installing it unpacks about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.",
   "@tajweedDetails": {
     "placeholders": {
       "source": {
