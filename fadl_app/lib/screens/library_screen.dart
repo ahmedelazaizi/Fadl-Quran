@@ -370,7 +370,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     context,
                   ).libraryUsedSpace(prayerBytes(context, snapshot.data ?? 0)),
                 ),
-                trailing: const Icon(Icons.chevron_left_rounded),
+                trailing: const Icon(Icons.chevron_right_rounded),
               ),
             ),
           ),
@@ -483,7 +483,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             subtitle: Text(
                               prayerL(context).libraryChooseReciter,
                             ),
-                            trailing: Icon(Icons.chevron_left_rounded),
+                            trailing: Icon(Icons.chevron_right_rounded),
                           ),
                         ),
                       ],

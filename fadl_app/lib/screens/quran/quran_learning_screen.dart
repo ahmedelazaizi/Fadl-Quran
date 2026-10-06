@@ -133,11 +133,7 @@ class _QuranLearningScreenState extends State<QuranLearningScreen> {
             IconButton(
               tooltip: l.previousPage,
               onPressed: _page > 1 ? () => _selectPage(_page - 1) : null,
-              icon: Icon(
-                Directionality.of(context) == TextDirection.rtl
-                    ? Icons.chevron_right
-                    : Icons.chevron_left,
-              ),
+              icon: const Icon(Icons.chevron_left),
             ),
             Expanded(
               child: TextField(
@@ -152,11 +148,7 @@ class _QuranLearningScreenState extends State<QuranLearningScreen> {
             IconButton(
               tooltip: l.nextPage,
               onPressed: _page < 604 ? () => _selectPage(_page + 1) : null,
-              icon: Icon(
-                Directionality.of(context) == TextDirection.rtl
-                    ? Icons.chevron_left
-                    : Icons.chevron_right,
-              ),
+              icon: const Icon(Icons.chevron_right),
             ),
           ],
         ),

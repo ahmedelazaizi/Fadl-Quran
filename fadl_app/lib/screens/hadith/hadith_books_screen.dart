@@ -517,7 +517,7 @@ class _BookTileState extends State<_BookTile> {
                     downloaded ? Icons.delete_outline : Icons.download_rounded,
                   ),
                 ),
-          Icon(Icons.chevron_left_rounded, color: scheme.outline),
+          Icon(Icons.chevron_right_rounded, color: scheme.outline),
         ],
       ),
     );

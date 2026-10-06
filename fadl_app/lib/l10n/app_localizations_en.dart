@@ -2612,4 +2612,46 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get a11yPreviousDay => 'Previous day';
+
+  @override
+  String get a11yNextDay => 'Next day';
+
+  @override
+  String get a11yPreviousMonth => 'Previous month';
+
+  @override
+  String get a11yNextMonth => 'Next month';
+
+  @override
+  String get a11yQadaDecrease => 'Remove one makeup day';
+
+  @override
+  String get a11yQadaIncrease => 'Add one makeup day';
+
+  @override
+  String get a11ySearch => 'Search';
+
+  @override
+  String get a11ySendQuestion => 'Send question';
+
+  @override
+  String get a11yClear => 'Clear';
+
+  @override
+  String get searchNoResults => 'No results';
+
+  @override
+  String get offlineFeatureMessage =>
+      'This feature needs a connection to the Fadl service and will be available soon. The mushaf, recitations and memorization work offline.';
+
+  @override
+  String get dedicateRewardAction => 'Dedicate the reward';
+
+  @override
+  String searchFailed(String error) {
+    return 'Search failed: $error';
+  }
 }

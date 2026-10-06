@@ -7,6 +7,7 @@ import '../core/format.dart';
 import '../core/offline_quran_search.dart';
 import '../core/theme.dart';
 import '../widgets/common.dart';
+import '../l10n/prayer_labels.dart';
 import '../widgets/live_search.dart';
 import 'hadith/hadith_card.dart';
 import 'quran/mushaf_reader_screen.dart';
@@ -315,6 +316,7 @@ class _AssistantScreenState extends State<AssistantScreen>
                 ),
                 const SizedBox(width: 8),
                 IconButton.filled(
+                  tooltip: prayerL(context).a11ySendQuestion,
                   style: IconButton.styleFrom(
                     backgroundColor: FadlColors.primary,
                     minimumSize: const Size(48, 48),
@@ -699,7 +701,7 @@ class _AssistantScreenState extends State<AssistantScreen>
                         color: scheme.onSurfaceVariant,
                       ),
                     ),
-                    Icon(Icons.chevron_left_rounded, color: scheme.outline),
+                    Icon(Icons.chevron_right_rounded, color: scheme.outline),
                   ],
                 ),
               ),

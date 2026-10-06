@@ -4,6 +4,7 @@ import 'package:fadl/core/quran_data.dart';
 import 'package:fadl/screens/home_screen.dart';
 import 'package:fadl/screens/shell.dart';
 import 'package:fadl/widgets/common.dart';
+import 'package:fadl/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -175,7 +176,12 @@ void main() {
       ),
     );
 
-    expect(find.text(offlineFeatureMessage), findsOneWidget);
+    expect(
+      find.text(
+        lookupAppLocalizations(const Locale('ar')).offlineFeatureMessage,
+      ),
+      findsOneWidget,
+    );
     expect(find.text('إعادة المحاولة'), findsNothing);
   });
 

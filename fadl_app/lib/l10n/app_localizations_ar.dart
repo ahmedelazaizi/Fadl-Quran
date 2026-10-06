@@ -2588,4 +2588,46 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get a11yPreviousDay => 'اليوم السابق';
+
+  @override
+  String get a11yNextDay => 'اليوم التالي';
+
+  @override
+  String get a11yPreviousMonth => 'الشهر السابق';
+
+  @override
+  String get a11yNextMonth => 'الشهر التالي';
+
+  @override
+  String get a11yQadaDecrease => 'إنقاص يوم قضاء';
+
+  @override
+  String get a11yQadaIncrease => 'زيادة يوم قضاء';
+
+  @override
+  String get a11ySearch => 'بحث';
+
+  @override
+  String get a11ySendQuestion => 'إرسال السؤال';
+
+  @override
+  String get a11yClear => 'مسح';
+
+  @override
+  String get searchNoResults => 'لا توجد نتائج';
+
+  @override
+  String get offlineFeatureMessage =>
+      'هذه الميزة تحتاج اتصالًا بخدمة فضل، وستتوفر قريبًا. المصحف والتلاوة والتحفيظ متاحة دون اتصال.';
+
+  @override
+  String get dedicateRewardAction => 'إهداء الثواب';
+
+  @override
+  String searchFailed(String error) {
+    return 'تعذّر البحث: $error';
+  }
 }

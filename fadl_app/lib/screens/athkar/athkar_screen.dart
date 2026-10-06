@@ -300,7 +300,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
                         prayerNumber(context, others[i]['count'] as int),
                         style: FadlFonts.ui(size: 12),
                       ),
-                      const Icon(Icons.chevron_left_rounded),
+                      const Icon(Icons.chevron_right_rounded),
                     ],
                   ),
                   onTap: () => _open(
@@ -482,7 +482,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
               ],
             ),
           ),
-          const Icon(Icons.chevron_left_rounded),
+          const Icon(Icons.chevron_right_rounded),
         ],
       ),
     );

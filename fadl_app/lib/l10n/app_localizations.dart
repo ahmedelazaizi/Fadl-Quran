@@ -4675,6 +4675,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 memorized page is due for review today} other{{number} memorized pages are due for review today}}'**
   String quranReviewNotificationBody(int count, String number);
+
+  /// No description provided for @a11yPreviousDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get a11yPreviousDay;
+
+  /// No description provided for @a11yNextDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get a11yNextDay;
+
+  /// No description provided for @a11yPreviousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get a11yPreviousMonth;
+
+  /// No description provided for @a11yNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get a11yNextMonth;
+
+  /// No description provided for @a11yQadaDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove one makeup day'**
+  String get a11yQadaDecrease;
+
+  /// No description provided for @a11yQadaIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one makeup day'**
+  String get a11yQadaIncrease;
+
+  /// No description provided for @a11ySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get a11ySearch;
+
+  /// No description provided for @a11ySendQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Send question'**
+  String get a11ySendQuestion;
+
+  /// No description provided for @a11yClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get a11yClear;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get searchNoResults;
+
+  /// No description provided for @offlineFeatureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature needs a connection to the Fadl service and will be available soon. The mushaf, recitations and memorization work offline.'**
+  String get offlineFeatureMessage;
+
+  /// No description provided for @dedicateRewardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Dedicate the reward'**
+  String get dedicateRewardAction;
+
+  /// No description provided for @searchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed: {error}'**
+  String searchFailed(String error);
 }
 
 class _AppLocalizationsDelegate

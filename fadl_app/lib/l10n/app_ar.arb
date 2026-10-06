@@ -710,5 +710,19 @@
   "quranReviewReminderHint": "فقط في الأيام التي تستحق فيها صفحات محفوظة المراجعة",
   "quranReviewNotificationTitle": "مراجعة الحفظ",
   "quranReviewNotificationBody": "{count, plural, =1{صفحة محفوظة تستحق المراجعة اليوم} =2{صفحتان محفوظتان تستحقان المراجعة اليوم} few{{number} صفحات محفوظة تستحق المراجعة اليوم} other{{number} صفحة محفوظة تستحق المراجعة اليوم}}",
-  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
+  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}},
+  "a11yPreviousDay": "اليوم السابق",
+  "a11yNextDay": "اليوم التالي",
+  "a11yPreviousMonth": "الشهر السابق",
+  "a11yNextMonth": "الشهر التالي",
+  "a11yQadaDecrease": "إنقاص يوم قضاء",
+  "a11yQadaIncrease": "زيادة يوم قضاء",
+  "a11ySearch": "بحث",
+  "a11ySendQuestion": "إرسال السؤال",
+  "a11yClear": "مسح",
+  "searchNoResults": "لا توجد نتائج",
+  "offlineFeatureMessage": "هذه الميزة تحتاج اتصالًا بخدمة فضل، وستتوفر قريبًا. المصحف والتلاوة والتحفيظ متاحة دون اتصال.",
+  "dedicateRewardAction": "إهداء الثواب",
+  "searchFailed": "تعذّر البحث: {error}",
+  "@searchFailed": {"placeholders": {"error": {"type": "String"}}}
 }

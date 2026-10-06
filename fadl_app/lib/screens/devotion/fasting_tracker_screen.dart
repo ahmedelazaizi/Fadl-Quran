@@ -113,19 +113,21 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
           Row(
             children: [
               IconButton(
+                tooltip: prayerL(context).a11yPreviousDay,
                 onPressed: () {
                   date = DateTime.utc(date.year, date.month, date.day - 1);
                   refresh();
                 },
-                icon: const Icon(Icons.chevron_right),
+                icon: const Icon(Icons.chevron_left),
               ),
               Expanded(child: Center(child: Text(key))),
               IconButton(
+                tooltip: prayerL(context).a11yNextDay,
                 onPressed: () {
                   date = DateTime.utc(date.year, date.month, date.day + 1);
                   refresh();
                 },
-                icon: const Icon(Icons.chevron_left),
+                icon: const Icon(Icons.chevron_right),
               ),
             ],
           ),
@@ -147,6 +149,7 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
             trailing: Wrap(
               children: [
                 IconButton(
+                  tooltip: prayerL(context).a11yQadaDecrease,
                   onPressed: () async {
                     await store.adjustRamadanQada(-1);
                     await refresh();
@@ -154,6 +157,7 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
                   icon: const Icon(Icons.remove_circle_outline),
                 ),
                 IconButton(
+                  tooltip: prayerL(context).a11yQadaIncrease,
                   onPressed: () async {
                     await store.adjustRamadanQada(1);
                     await refresh();

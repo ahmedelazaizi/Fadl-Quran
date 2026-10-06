@@ -89,9 +89,8 @@ class _MushafIndexScreenState extends State<MushafIndexScreen> {
                       ),
                     ),
                     Icon(
-                      Directionality.of(context) == TextDirection.rtl
-                          ? Icons.arrow_back_ios_new_rounded
-                          : Icons.arrow_forward_ios_rounded,
+                      // Mirrored automatically in RTL.
+                      Icons.arrow_forward_ios_rounded,
                       size: 18,
                     ),
                   ],
@@ -296,9 +295,8 @@ class _LastReadCard extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  Directionality.of(context) == TextDirection.rtl
-                      ? Icons.arrow_back_ios_new_rounded
-                      : Icons.arrow_forward_ios_rounded,
+                  // Mirrored automatically in RTL.
+                  Icons.arrow_forward_ios_rounded,
                   color: FadlColors.goldLight,
                   size: 18,
                 ),

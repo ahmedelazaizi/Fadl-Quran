@@ -214,7 +214,7 @@ class SettingRow extends StatelessWidget {
             if (trailing != null)
               trailing!
             else if (onTap != null)
-              Icon(Icons.chevron_left_rounded, color: scheme.outline),
+              Icon(Icons.chevron_right_rounded, color: scheme.outline),
           ],
         ),
       ),

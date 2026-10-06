@@ -64,10 +64,11 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
           Row(
             children: [
               IconButton(
+                tooltip: prayerL(context).a11yPreviousMonth,
                 onPressed: () => setState(
                   () => month = DateTime.utc(month.year, month.month - 1),
                 ),
-                icon: const Icon(Icons.chevron_right),
+                icon: const Icon(Icons.chevron_left),
               ),
               Expanded(
                 child: Center(
@@ -77,10 +78,11 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
                 ),
               ),
               IconButton(
+                tooltip: prayerL(context).a11yNextMonth,
                 onPressed: () => setState(
                   () => month = DateTime.utc(month.year, month.month + 1),
                 ),
-                icon: const Icon(Icons.chevron_left),
+                icon: const Icon(Icons.chevron_right),
               ),
             ],
           ),

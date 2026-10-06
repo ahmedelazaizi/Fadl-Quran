@@ -5,6 +5,7 @@ import '../core/api.dart';
 import '../core/format.dart';
 import '../core/local_user_data.dart';
 import '../core/theme.dart';
+import '../l10n/prayer_labels.dart';
 import '../widgets/common.dart';
 import 'devotion/devotion_widgets.dart';
 import 'quran/mushaf_reader_screen.dart';
@@ -754,7 +755,7 @@ class _KhatmaScreenState extends State<KhatmaScreen> {
                 color: FadlColors.sage,
               ),
               title: const Text('سجل القراءة'),
-              trailing: const Icon(Icons.chevron_left_rounded),
+              trailing: const Icon(Icons.chevron_right_rounded),
               onTap: _showLogs,
             ),
             ListTile(
@@ -769,14 +770,14 @@ class _KhatmaScreenState extends State<KhatmaScreen> {
                     ? 'متوقف'
                     : 'يومياً الساعة ${hm12(p['reminderTime'] as String)}',
               ),
-              trailing: const Icon(Icons.chevron_left_rounded),
+              trailing: const Icon(Icons.chevron_right_rounded),
               onTap: _editReminder,
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.tune_rounded, color: FadlColors.sage),
               title: const Text('تغيير الخطة'),
-              trailing: const Icon(Icons.chevron_left_rounded),
+              trailing: const Icon(Icons.chevron_right_rounded),
               onTap: _changePlan,
             ),
           ],
@@ -803,7 +804,10 @@ class _KhatmaScreenState extends State<KhatmaScreen> {
           ),
         )
       else
-        const DedicationBanner(type: 'READING', label: 'إهداء ثواب القراءة'),
+        DedicationBanner(
+          type: 'READING',
+          label: prayerL(context).dedicateReading,
+        ),
     ];
   }
 

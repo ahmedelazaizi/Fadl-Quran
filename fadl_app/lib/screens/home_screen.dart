@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/prayer_labels.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -93,10 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
           // The assistant search needs the backend.
           if (Api.hasBackend)
             IconButton(
+              tooltip: prayerL(context).a11ySearch,
               icon: const Icon(Icons.search_rounded),
               onPressed: () => _open(const AssistantScreen()),
             ),
           IconButton(
+            tooltip: prayerL(context).settings,
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => _open(const SettingsScreen()),
           ),
@@ -862,7 +865,7 @@ class _SetLocationCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_left_rounded, color: Colors.white),
+          const Icon(Icons.chevron_right_rounded, color: Colors.white),
         ],
       ),
     );

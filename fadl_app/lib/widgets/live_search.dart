@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/offline_athkar.dart' show normalizeArabic;
+import '../l10n/prayer_labels.dart';
 
 /// Matches Arabic names without tashkeel or spelling variants, and numbers.
 bool matchesLiveSearch(String text, String query) {
@@ -171,7 +172,7 @@ class _LiveSearchState<T> extends State<LiveSearch<T>> {
                   : text.isEmpty
                   ? null
                   : IconButton(
-                      tooltip: 'مسح',
+                      tooltip: prayerL(context).a11yClear,
                       icon: const Icon(Icons.close_rounded),
                       onPressed: () {
                         _controller.clear();
@@ -189,8 +190,8 @@ class _LiveSearchState<T> extends State<LiveSearch<T>> {
                   ? ListTile(
                       title: Text(
                         _error == null
-                            ? 'لا توجد نتائج'
-                            : 'تعذّر البحث: $_error',
+                            ? prayerL(context).searchNoResults
+                            : prayerL(context).searchFailed('$_error'),
                       ),
                     )
                   : Column(

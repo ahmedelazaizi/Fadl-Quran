@@ -710,5 +710,19 @@
   "quranReviewReminderHint": "Only on days with memorized pages due for review",
   "quranReviewNotificationTitle": "Quran review",
   "quranReviewNotificationBody": "{count, plural, =1{1 memorized page is due for review today} other{{number} memorized pages are due for review today}}",
-  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
+  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}},
+  "a11yPreviousDay": "Previous day",
+  "a11yNextDay": "Next day",
+  "a11yPreviousMonth": "Previous month",
+  "a11yNextMonth": "Next month",
+  "a11yQadaDecrease": "Remove one makeup day",
+  "a11yQadaIncrease": "Add one makeup day",
+  "a11ySearch": "Search",
+  "a11ySendQuestion": "Send question",
+  "a11yClear": "Clear",
+  "searchNoResults": "No results",
+  "offlineFeatureMessage": "This feature needs a connection to the Fadl service and will be available soon. The mushaf, recitations and memorization work offline.",
+  "dedicateRewardAction": "Dedicate the reward",
+  "searchFailed": "Search failed: {error}",
+  "@searchFailed": {"placeholders": {"error": {"type": "String"}}}
 }
