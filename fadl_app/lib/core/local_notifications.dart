@@ -160,6 +160,7 @@ class LocalNotifications {
         final fireAt = DateTime.tryParse('${n['fireAt']}')?.toUtc();
         if (fireAt == null || !fireAt.isAfter(now)) continue;
         final isAdhan = n['type'] == 'adhan';
+        final prayer = prayerFromNotification(n);
         final channel = isAdhan ? _adhanChannel : _remindersChannel;
         try {
           await plugin.zonedSchedule(
@@ -184,7 +185,11 @@ class LocalNotifications {
                     ? BigTextStyleInformation('${n['body']}')
                     : null,
               ),
-              iOS: const DarwinNotificationDetails(),
+              iOS: DarwinNotificationDetails(
+                sound: prayer == null
+                    ? null
+                    : iosAdhanClip(state.notifications, prayer),
+              ),
             ),
             androidScheduleMode: _exactAllowed
                 ? AndroidScheduleMode.exactAllowWhileIdle

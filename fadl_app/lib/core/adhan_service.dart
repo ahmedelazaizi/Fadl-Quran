@@ -74,6 +74,25 @@ String? soundForPrayer(Map notifications, String prayer) {
       : defaultAdhanSound;
 }
 
+/// Notification sound for [prayer] on iOS, where a 30-second clip of a
+/// bundled adhan (`ios/Runner/*.caf`) rings with the alert; null for the
+/// default alert sound. Fajr never gets one: no bundled adhan has the Fajr
+/// words, and imports (synced from Android) do not exist on iOS.
+String? iosAdhanClip(Map notifications, String prayer) {
+  if (prayer == 'fajr' ||
+      effectivePrayerMode(notifications, prayer) != 'adhan') {
+    return null;
+  }
+  return '${iosRegularAdhan(notifications)}.caf';
+}
+
+/// The bundled adhan iOS rings for dhuhr…isha: the chosen one, or the
+/// default in place of a sound imported on Android.
+String iosRegularAdhan(Map notifications) {
+  final sound = soundForPrayer(notifications, 'dhuhr')!;
+  return bundledAdhanSounds.contains(sound) ? sound : defaultAdhanSound;
+}
+
 class AdhanEvent {
   const AdhanEvent({
     required this.key,
@@ -207,6 +226,10 @@ class AdhanService {
   bool get supported =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
+  /// iOS rings a clip of a bundled adhan with the notification
+  /// ([iosAdhanClip]) and can preview those clips, but nothing else.
+  bool get clipsOnly => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
   /// Replaces every scheduled adhan alarm with [events].
   Future<void> schedule(List<AdhanEvent> events) async {
     if (!supported) return;
@@ -220,13 +243,15 @@ class AdhanService {
   }
 
   Future<void> preview(String soundId) async {
-    if (supported) {
+    if (supported || clipsOnly) {
       await channel.invokeMethod<void>('preview', {'soundId': soundId});
     }
   }
 
   Future<void> stopPreview() async {
-    if (supported) await channel.invokeMethod<void>('stopPreview');
+    if (supported || clipsOnly) {
+      await channel.invokeMethod<void>('stopPreview');
+    }
   }
 
   /// Opens the system audio picker and copies the file into app storage;

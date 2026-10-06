@@ -1263,6 +1263,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Full adhan is available on Android only; on this device, prayers set to Adhan receive a notification at prayer time.';
 
   @override
+  String get adhanIosClip =>
+      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification (Apple’s limit); Fajr is a short notification because the bundled adhans lack the Fajr phrase.';
+
+  @override
   String get adhanDisabled =>
       'Notifications are off in general settings. Enable them to hear the adhan.';
 

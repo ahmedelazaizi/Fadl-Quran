@@ -39,7 +39,8 @@ Future<void> main() async {
       'recorded by ejaz215 (Freesound), via Wikimedia Commons\n'
       'https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg\n'
       'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
-      'Modified: converted to mono Ogg Vorbis.',
+      'Modified: converted to mono Ogg Vorbis; on iOS, the first 29.5 s '
+      'with a fade-out as the notification sound.',
     );
     yield const LicenseEntryWithLineBreaks(
       ['Adhan recording: Masjid al-Haram'],
@@ -47,7 +48,8 @@ Future<void> main() async {
       'by Seyfula Islam, via Wikimedia Commons\n'
       'https://commons.wikimedia.org/wiki/File:Adhan,_Great_Mosque_of_Mecca_-_Jan_21,_2013.webm\n'
       'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
-      'Modified: audio extracted and converted to mono Ogg Vorbis.',
+      'Modified: audio extracted and converted to mono Ogg Vorbis; on iOS, '
+      'the first 29.5 s with a fade-out as the notification sound.',
     );
     yield const LicenseEntryWithLineBreaks(
       ['Tajweed colors'],

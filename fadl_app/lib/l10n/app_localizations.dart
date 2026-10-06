@@ -2378,6 +2378,12 @@ abstract class AppLocalizations {
   /// **'Full adhan is available on Android only; on this device, prayers set to Adhan receive a notification at prayer time.'**
   String get adhanAndroidOnly;
 
+  /// No description provided for @adhanIosClip.
+  ///
+  /// In en, this message translates to:
+  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification (Apple’s limit); Fajr is a short notification because the bundled adhans lack the Fajr phrase.'**
+  String get adhanIosClip;
+
   /// No description provided for @adhanDisabled.
   ///
   /// In en, this message translates to:

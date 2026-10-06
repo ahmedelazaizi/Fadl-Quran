@@ -79,4 +79,86 @@ void main() {
     expect(soundForPrayer(state.notifications, 'maghrib'), 'adhan_makkah');
     debugDefaultTargetPlatformOverride = null;
   });
+
+  test('iOS rings a bundled clip for dhuhr…isha only', () {
+    final base = {
+      'adhanModes': {'fajr': 'adhan', 'dhuhr': 'adhan', 'asr': 'notify'},
+    };
+    expect(iosAdhanClip(base, 'dhuhr'), 'adhan_default.caf');
+    expect(iosAdhanClip(base, 'asr'), isNull);
+    expect(iosAdhanClip(base, 'sunrise'), isNull);
+    // Even with a Fajr adhan imported on Android, no bundled clip fits Fajr.
+    expect(iosAdhanClip({...base, 'fajrSound': 'fajr_1'}, 'fajr'), isNull);
+    expect(
+      iosAdhanClip({...base, 'regularSound': 'adhan_makkah'}, 'dhuhr'),
+      'adhan_makkah.caf',
+    );
+    // A sound imported on Android does not exist on iOS.
+    expect(
+      iosAdhanClip({...base, 'regularSound': 'regular_7'}, 'dhuhr'),
+      'adhan_default.caf',
+    );
+    expect(iosAdhanClip({...base, 'enabled': false}, 'dhuhr'), isNull);
+  });
+
+  testWidgets('iOS offers the bundled muezzins without Android options', (
+    tester,
+  ) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    SharedPreferences.setMockInitialValues({});
+    final calls = <MethodCall>[];
+    messenger.setMockMethodCallHandler(AdhanService.channel, (call) async {
+      calls.add(call);
+      return null;
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(AdhanService.channel, null),
+    );
+    final state = AppState();
+    await tester.runAsync(state.load);
+    await state.setLanguage('en');
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: state,
+        child: MaterialApp(
+          locale: state.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: const AdhanSettingsScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.textContaining('first 30 seconds'), findsOneWidget);
+    final madinah = find.text("Prophet's Mosque, Madinah (recording)");
+    await tester.scrollUntilVisible(
+      madinah,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Import from phone'), findsNothing);
+    expect(find.text('Import Fajr adhan from phone'), findsNothing);
+    expect(find.text('Battery optimization'), findsNothing);
+
+    final preview = find.descendant(
+      of: find.ancestor(of: madinah, matching: find.byType(ListTile)),
+      matching: find.byTooltip('Preview'),
+    );
+    await tester.ensureVisible(preview);
+    await tester.pumpAndSettle();
+    await tester.tap(preview);
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 50)),
+    );
+    await tester.pump();
+    expect(
+      calls.map((c) => c.arguments),
+      contains(containsPair('soundId', 'adhan_madinah')),
+    );
+    // Only the clip channel is used: no alarms, imports or battery checks.
+    expect(calls.map((c) => c.method).toSet(), {'preview'});
+    await tester.pumpWidget(const SizedBox());
+    debugDefaultTargetPlatformOverride = null;
+  });
 }

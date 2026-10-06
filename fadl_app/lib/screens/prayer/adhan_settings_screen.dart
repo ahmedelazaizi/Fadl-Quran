@@ -207,6 +207,7 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
     final state = context.watch<AppState>();
     final notifications = state.notifications;
     final supported = _adhan.supported;
+    final clipsOnly = _adhan.clipsOnly;
     return Scaffold(
       appBar: AppBar(title: Text(prayerL(context).adhanSettings)),
       body: ListView(
@@ -215,7 +216,9 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
           if (!supported)
             _Note(
               icon: Icons.info_outline_rounded,
-              text: prayerL(context).adhanAndroidOnly,
+              text: clipsOnly
+                  ? prayerL(context).adhanIosClip
+                  : prayerL(context).adhanAndroidOnly,
             ),
           if (notifications['enabled'] == false)
             _Note(
@@ -238,9 +241,11 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               ],
             ),
           ),
-          if (supported) ...[
+          if (supported || clipsOnly) ...[
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).adhanSound),
+          ],
+          if (supported) ...[
             _SoundCard(
               title: prayerL(context).prayerFajr,
               kind: 'fajr',
@@ -263,10 +268,15 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               text: prayerL(context).fajrSoundNotice,
             ),
             const SizedBox(height: 8),
+          ],
+          if (supported || clipsOnly)
             _SoundCard(
               title: prayerL(context).otherPrayers,
               kind: 'regular',
-              selected: soundForPrayer(notifications, 'dhuhr'),
+              // iOS rings the default for sounds imported on Android.
+              selected: clipsOnly
+                  ? iosRegularAdhan(notifications)
+                  : soundForPrayer(notifications, 'dhuhr'),
               builtIn: bundledAdhanSounds,
               imported: [
                 for (final s in _imported)
@@ -276,9 +286,10 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               busy: _busy,
               onSelect: (id) => _update({'regularSound': id}),
               onPreview: _togglePreview,
-              onImport: () => _import('regular'),
+              onImport: supported ? () => _import('regular') : null,
               onDelete: _delete,
             ),
+          if (supported) ...[
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).adhanOptions),
             FadlCard(
@@ -460,7 +471,9 @@ class _SoundCard extends StatelessWidget {
   final bool busy;
   final ValueChanged<String?> onSelect;
   final ValueChanged<String> onPreview;
-  final VoidCallback onImport;
+
+  /// Null where importing is unavailable (iOS).
+  final VoidCallback? onImport;
   final ValueChanged<AdhanSound> onDelete;
 
   @override
@@ -481,18 +494,19 @@ class _SoundCard extends StatelessWidget {
             _option(context, id: id, name: _bundledName(context, id)),
           for (final sound in imported)
             _option(context, id: sound.id, name: sound.name, sound: sound),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton.icon(
-              onPressed: busy ? null : onImport,
-              icon: const Icon(Icons.file_upload_outlined),
-              label: Text(
-                kind == 'fajr'
-                    ? prayerL(context).importFajr
-                    : prayerL(context).importPhone,
+          if (onImport != null)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: busy ? null : onImport,
+                icon: const Icon(Icons.file_upload_outlined),
+                label: Text(
+                  kind == 'fajr'
+                      ? prayerL(context).importFajr
+                      : prayerL(context).importPhone,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
