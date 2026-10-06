@@ -8,7 +8,10 @@ import 'app_localizations.dart';
 AppLocalizations prayerL(BuildContext context) =>
     AppLocalizations.of(context) ?? lookupAppLocalizations(const Locale('ar'));
 
+/// Matches [prayerL]: without localization delegates the UI falls back to
+/// Arabic, so numbers and sizes must too.
 bool englishPrayerUi(BuildContext context) =>
+    AppLocalizations.of(context) != null &&
     Localizations.localeOf(context).languageCode == 'en';
 
 String prayerNumber(BuildContext context, Object? value) =>

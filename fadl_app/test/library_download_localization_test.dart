@@ -135,6 +135,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: DownloadsScreen()));
     await settleLoading(tester);
     expect(find.text('التنزيلات'), findsOneWidget);
+    expect(find.text('٠ بايت'), findsOneWidget);
     expect(find.textContaining('لا توجد تلاوات منزّلة بعد.'), findsOneWidget);
   });
 }

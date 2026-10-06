@@ -64,6 +64,14 @@ void main() {
     expect(items.single['body'], '1 memorized page is due for review today');
   });
 
+  test('counts pages that fall due later on the reminder day', () {
+    // A page rated at 21:00 Riyadh becomes due at 21:00 the next day; the
+    // 20:00 reminder that day should still include it.
+    final dueAt21 = DateTime.utc(2026, 10, 6, 18);
+    final items = reminders(dueAt: (at) => at.isBefore(dueAt21) ? 0 : 1);
+    expect(items.first['key'], 'quran_review:2026-10-06');
+  });
+
   test('Arabic text uses Arabic digits and plural forms', () {
     String body(int due) =>
         reminders(dueAt: (_) => due, l: ar).first['body'] as String;

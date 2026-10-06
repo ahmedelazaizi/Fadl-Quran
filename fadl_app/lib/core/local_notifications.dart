@@ -97,20 +97,27 @@ class LocalNotifications {
     try {
       await init();
       if (!_initialized) return;
-      final List<Map<String, dynamic>> items;
       final now = DateTime.now().toUtc();
+      List<Map<String, dynamic>>? items;
       if (Api.hasBackend) {
-        final res =
-            await Api.instance.get('/me/notifications/upcoming', {'hours': 48})
-                as Map<String, dynamic>;
-        items = (res['notifications'] as List? ?? const [])
-            .cast<Map<String, dynamic>>()
-            .toList();
-      } else {
-        items = state.hasLocation
-            ? _offlineUpcoming(state, DateTime.now())
-            : [];
+        try {
+          final res =
+              await Api.instance.get('/me/notifications/upcoming', {
+                    'hours': 48,
+                  })
+                  as Map<String, dynamic>;
+          items = (res['notifications'] as List? ?? const [])
+              .cast<Map<String, dynamic>>()
+              .toList();
+        } catch (e) {
+          // Offline-first: fall back to locally computed times so device-only
+          // reminders still reflect the latest state.
+          debugPrint('LocalNotifications: backend schedule failed: $e');
+        }
       }
+      items ??= state.hasLocation
+          ? _offlineUpcoming(state, DateTime.now())
+          : <Map<String, dynamic>>[];
       // Review progress lives only on this device, so these reminders are
       // added locally whether or not a backend supplies the rest.
       items.addAll(await _reviewUpcoming(state, now));
@@ -194,7 +201,8 @@ class LocalNotifications {
   }
 
   /// Daily reminders at [time] ("HH:mm" in [location]) within 48 hours of
-  /// [now], skipping days when [dueAt] reports no memorized page due.
+  /// [now], skipping days when [dueAt] reports no memorized page due by the
+  /// end of that local day.
   @visibleForTesting
   static List<Map<String, dynamic>> reviewReminders({
     required String time,
@@ -219,7 +227,13 @@ class LocalNotifications {
         minute,
       );
       if (!at.isAfter(now) || at.isAfter(end)) continue;
-      final due = dueAt(at);
+      final endOfDay = tz.TZDateTime(
+        location,
+        at.year,
+        at.month,
+        at.day + 1,
+      ).subtract(const Duration(milliseconds: 1));
+      final due = dueAt(endOfDay);
       if (due <= 0) continue;
       final day =
           '${at.year}-${'${at.month}'.padLeft(2, '0')}-${'${at.day}'.padLeft(2, '0')}';

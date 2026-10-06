@@ -815,7 +815,7 @@ class _NextPrayerCardState extends State<_NextPrayerCard> {
               TextButton.icon(
                 onPressed: () => AppShell.of(context)?.goTo(3),
                 icon: const Icon(
-                  Icons.arrow_back_rounded,
+                  Icons.arrow_forward_rounded,
                   size: 16,
                   color: Colors.white,
                 ),

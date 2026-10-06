@@ -725,7 +725,14 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
     ),
   );
 
-  Widget _quickActions(int page) => Row(
+  // Follows the always-RTL page flow so "previous" sits on the side earlier
+  // pages come from, in every UI language.
+  Widget _quickActions(int page) => Directionality(
+    textDirection: TextDirection.rtl,
+    child: _quickActionsRow(page),
+  );
+
+  Widget _quickActionsRow(int page) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       IconButton(

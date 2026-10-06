@@ -380,7 +380,7 @@ class _AthkarScreenState extends State<AthkarScreen> {
                       minimumSize: const Size(0, 40),
                     ),
                     onPressed: () => _open(target['slug'] as String, title),
-                    icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                     label: Text(
                       done == 0
                           ? prayerL(context).athkarStart
