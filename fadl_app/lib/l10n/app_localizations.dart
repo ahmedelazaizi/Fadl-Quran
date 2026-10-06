@@ -4651,6 +4651,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete reciter recordings'**
   String get downloadsDeleteReciterTooltip;
+
+  /// No description provided for @quranReviewReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran review reminder'**
+  String get quranReviewReminder;
+
+  /// No description provided for @quranReviewReminderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on days with memorized pages due for review'**
+  String get quranReviewReminderHint;
+
+  /// No description provided for @quranReviewNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran review'**
+  String get quranReviewNotificationTitle;
+
+  /// No description provided for @quranReviewNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 memorized page is due for review today} other{{number} memorized pages are due for review today}}'**
+  String quranReviewNotificationBody(int count, String number);
 }
 
 class _AppLocalizationsDelegate

@@ -705,5 +705,10 @@
   "downloadsDeletedAll": "حُذفت كل التنزيلات",
   "downloadsCompleteSurahs": "{count} سورة كاملة",
   "@downloadsCompleteSurahs": {"placeholders": {"count": {"type": "String"}}},
-  "downloadsDeleteReciterTooltip": "حذف تلاوات القارئ"
+  "downloadsDeleteReciterTooltip": "حذف تلاوات القارئ",
+  "quranReviewReminder": "تذكير مراجعة الحفظ",
+  "quranReviewReminderHint": "فقط في الأيام التي تستحق فيها صفحات محفوظة المراجعة",
+  "quranReviewNotificationTitle": "مراجعة الحفظ",
+  "quranReviewNotificationBody": "{count, plural, =1{صفحة محفوظة تستحق المراجعة اليوم} =2{صفحتان محفوظتان تستحقان المراجعة اليوم} few{{number} صفحات محفوظة تستحق المراجعة اليوم} other{{number} صفحة محفوظة تستحق المراجعة اليوم}}",
+  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
 }

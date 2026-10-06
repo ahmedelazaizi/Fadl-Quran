@@ -2591,4 +2591,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloadsDeleteReciterTooltip => 'Delete reciter recordings';
+
+  @override
+  String get quranReviewReminder => 'Quran review reminder';
+
+  @override
+  String get quranReviewReminderHint =>
+      'Only on days with memorized pages due for review';
+
+  @override
+  String get quranReviewNotificationTitle => 'Quran review';
+
+  @override
+  String quranReviewNotificationBody(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$number memorized pages are due for review today',
+      one: '1 memorized page is due for review today',
+    );
+    return '$_temp0';
+  }
 }

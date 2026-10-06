@@ -705,5 +705,10 @@
   "downloadsDeletedAll": "All downloads deleted",
   "downloadsCompleteSurahs": "{count} complete surahs",
   "@downloadsCompleteSurahs": {"placeholders": {"count": {"type": "String"}}},
-  "downloadsDeleteReciterTooltip": "Delete reciter recordings"
+  "downloadsDeleteReciterTooltip": "Delete reciter recordings",
+  "quranReviewReminder": "Quran review reminder",
+  "quranReviewReminderHint": "Only on days with memorized pages due for review",
+  "quranReviewNotificationTitle": "Quran review",
+  "quranReviewNotificationBody": "{count, plural, =1{1 memorized page is due for review today} other{{number} memorized pages are due for review today}}",
+  "@quranReviewNotificationBody": {"placeholders": {"count": {"type": "int"}, "number": {"type": "String"}}}
 }

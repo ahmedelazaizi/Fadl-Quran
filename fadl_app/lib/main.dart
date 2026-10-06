@@ -23,9 +23,8 @@ Future<void> main() async {
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
   await state.load();
   await LocalNotifications.instance.init();
-  if (state.hasLocation) {
-    unawaited(LocalNotifications.instance.reschedule(state));
-  }
+  // Review reminders need no location; prayer items are skipped without one.
+  unawaited(LocalNotifications.instance.reschedule(state));
 }
 
 class FadlApp extends StatelessWidget {

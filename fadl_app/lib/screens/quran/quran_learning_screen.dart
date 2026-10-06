@@ -1,10 +1,14 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/app_state.dart';
 import '../../core/format.dart';
+import '../../core/local_notifications.dart';
 import '../../core/quran_data.dart';
 import '../../core/quran_learning.dart';
 import '../../core/theme.dart';
@@ -60,9 +64,14 @@ class _QuranLearningScreenState extends State<QuranLearningScreen> {
   Future<void> _rate(int quality) async {
     if (_saving || _rated) return;
     final quiz = _quiz;
+    final state = context.read<AppState>();
     setState(() => _saving = true);
     try {
       await _store.record(_page, quality, DateTime.now());
+      // The new due date can add or drop an upcoming review reminder.
+      if (state.notifications['quranReviewTime'] != null) {
+        unawaited(LocalNotifications.instance.reschedule(state));
+      }
       if (mounted) {
         setState(() {
           _saving = false;

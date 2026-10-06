@@ -2565,4 +2565,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get downloadsDeleteReciterTooltip => 'حذف تلاوات القارئ';
+
+  @override
+  String get quranReviewReminder => 'تذكير مراجعة الحفظ';
+
+  @override
+  String get quranReviewReminderHint =>
+      'فقط في الأيام التي تستحق فيها صفحات محفوظة المراجعة';
+
+  @override
+  String get quranReviewNotificationTitle => 'مراجعة الحفظ';
+
+  @override
+  String quranReviewNotificationBody(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$number صفحة محفوظة تستحق المراجعة اليوم',
+      few: '$number صفحات محفوظة تستحق المراجعة اليوم',
+      two: 'صفحتان محفوظتان تستحقان المراجعة اليوم',
+      one: 'صفحة محفوظة تستحق المراجعة اليوم',
+    );
+    return '$_temp0';
+  }
 }

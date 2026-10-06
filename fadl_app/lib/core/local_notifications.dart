@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/app_localizations.dart';
 import 'adhan_service.dart';
 import 'api.dart';
 import 'app_state.dart';
+import 'format.dart';
 import 'offline_prayer.dart';
+import 'quran_learning.dart';
 
 /// Schedules local adhan and reminder notifications, using the backend
 /// when configured and locally computed times otherwise.
@@ -94,18 +98,22 @@ class LocalNotifications {
       await init();
       if (!_initialized) return;
       final List<Map<String, dynamic>> items;
+      final now = DateTime.now().toUtc();
       if (Api.hasBackend) {
         final res =
             await Api.instance.get('/me/notifications/upcoming', {'hours': 48})
                 as Map<String, dynamic>;
         items = (res['notifications'] as List? ?? const [])
-            .cast<Map<String, dynamic>>();
+            .cast<Map<String, dynamic>>()
+            .toList();
       } else {
         items = state.hasLocation
             ? _offlineUpcoming(state, DateTime.now())
             : [];
       }
-      final now = DateTime.now().toUtc();
+      // Review progress lives only on this device, so these reminders are
+      // added locally whether or not a backend supplies the rest.
+      items.addAll(await _reviewUpcoming(state, now));
       // Adhan-mode prayers play the full adhan through native alarms on
       // Android and get no plugin notification; elsewhere they stay here.
       final adhan = AdhanService.instance;
@@ -161,6 +169,73 @@ class LocalNotifications {
     } catch (e) {
       debugPrint('LocalNotifications.reschedule failed: $e');
     }
+  }
+
+  static Future<List<Map<String, dynamic>>> _reviewUpcoming(
+    AppState state,
+    DateTime now,
+  ) async {
+    final time = state.notifications['quranReviewTime'] as String?;
+    if (time == null || state.notifications['enabled'] == false) return [];
+    try {
+      final store = QuranReviewStore(await SharedPreferences.getInstance())
+        ..load();
+      return reviewReminders(
+        time: time,
+        location: OfflinePrayer.location(state.timezone),
+        now: now,
+        dueAt: store.dueCount,
+        l: lookupAppLocalizations(state.locale),
+      );
+    } catch (e) {
+      debugPrint('LocalNotifications: review reminders failed: $e');
+      return [];
+    }
+  }
+
+  /// Daily reminders at [time] ("HH:mm" in [location]) within 48 hours of
+  /// [now], skipping days when [dueAt] reports no memorized page due.
+  @visibleForTesting
+  static List<Map<String, dynamic>> reviewReminders({
+    required String time,
+    required tz.Location location,
+    required DateTime now,
+    required int Function(DateTime at) dueAt,
+    required AppLocalizations l,
+  }) {
+    final parts = time.split(':');
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+    final today = tz.TZDateTime.from(now, location);
+    final end = now.add(const Duration(hours: 48));
+    final reminders = <Map<String, dynamic>>[];
+    for (var offset = 0; offset <= 2; offset++) {
+      final at = tz.TZDateTime(
+        location,
+        today.year,
+        today.month,
+        today.day + offset,
+        hour,
+        minute,
+      );
+      if (!at.isAfter(now) || at.isAfter(end)) continue;
+      final due = dueAt(at);
+      if (due <= 0) continue;
+      final day =
+          '${at.year}-${'${at.month}'.padLeft(2, '0')}-${'${at.day}'.padLeft(2, '0')}';
+      reminders.add({
+        'key': 'quran_review:$day',
+        'type': 'quran_review',
+        'fireAt': at.toUtc().toIso8601String(),
+        'title': l.quranReviewNotificationTitle,
+        'body': l.quranReviewNotificationBody(
+          due,
+          l.localeName == 'ar' ? arNum(due) : '$due',
+        ),
+        'link': 'fadl://quran/review',
+      });
+    }
+    return reminders;
   }
 
   static List<Map<String, dynamic>> _offlineUpcoming(

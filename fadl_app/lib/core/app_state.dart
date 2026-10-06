@@ -138,6 +138,8 @@ class AppState extends ChangeNotifier {
       'morningAthkarTime': '06:00',
       'eveningAthkarTime': '17:00',
       'sleepAthkarTime': null,
+      // Device-only: memorization progress never leaves the device.
+      'quranReviewTime': null,
       'fridayKahf': true,
       'khatmaReminder': true,
       // Device-only adhan settings (see core/adhan_service.dart); absent
@@ -258,7 +260,8 @@ class AppState extends ChangeNotifier {
         ..remove('adhanModes')
         ..remove('regularSound')
         ..remove('fajrSound')
-        ..remove('respectSilent');
+        ..remove('respectSilent')
+        ..remove('quranReviewTime');
       if (backendPatch.isNotEmpty) {
         unawaited(_syncNotificationsPatch(backendPatch, revision));
       }
