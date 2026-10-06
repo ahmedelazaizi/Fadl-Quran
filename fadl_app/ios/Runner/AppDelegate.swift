@@ -2,6 +2,7 @@ import AVFoundation
 import Flutter
 import UIKit
 import UserNotifications
+import WidgetKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -25,6 +26,9 @@ import UserNotifications
     adhan.setMethodCallHandler { [weak self] call, result in
       self?.adhanPreview.handle(call, result: result)
     }
+    let widget = FlutterMethodChannel(
+      name: "fadl/prayer_widget", binaryMessenger: registrar.messenger())
+    widget.setMethodCallHandler(PrayerWidgetStore.handle)
   }
 }
 
@@ -56,5 +60,30 @@ final class AdhanPreview {
     default:
       result(FlutterMethodNotImplemented)
     }
+  }
+}
+
+/// Hands the offline prayer calendar to the home-screen widget through the
+/// shared App Group (ios/PrayerWidget/PrayerWidget.swift reads it).
+enum PrayerWidgetStore {
+  static let appGroup = "group.com.fadl.fadl"
+  static let scheduleKey = "fadl.prayer.schedule"
+
+  static func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    guard let defaults = UserDefaults(suiteName: appGroup) else {
+      result(FlutterError(code: "no_app_group", message: nil, details: nil))
+      return
+    }
+    switch call.method {
+    case "save":
+      defaults.set(call.arguments as? String, forKey: scheduleKey)
+    case "clear":
+      defaults.removeObject(forKey: scheduleKey)
+    default:
+      result(FlutterMethodNotImplemented)
+      return
+    }
+    WidgetCenter.shared.reloadAllTimelines()
+    result(nil)
   }
 }

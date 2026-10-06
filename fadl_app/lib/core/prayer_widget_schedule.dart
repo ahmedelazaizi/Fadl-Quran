@@ -6,12 +6,26 @@ import 'package:flutter/services.dart';
 import 'local_user_data.dart';
 import 'offline_prayer.dart';
 
-/// Android stores absolute instants; date labels use the selected city zone.
+/// Android and iOS widgets store absolute instants; date labels use the
+/// selected city zone.
 class PrayerWidgetSchedule {
   PrayerWidgetSchedule._();
 
   static const channel = MethodChannel('fadl/prayer_widget');
   static const horizonDays = 400;
+
+  /// The iOS widget re-reads the whole calendar on every refresh, so it
+  /// gets two months; opening the app extends it.
+  static const iosHorizonDays = 60;
+
+  /// Days of calendar this platform's widget keeps; null without a widget.
+  static int? get platformDays => kIsWeb
+      ? null
+      : switch (defaultTargetPlatform) {
+          TargetPlatform.android => horizonDays,
+          TargetPlatform.iOS => iosHorizonDays,
+          _ => null,
+        };
 
   static Map<String, dynamic> build(
     Map<String, dynamic> settings,
@@ -58,13 +72,15 @@ class PrayerWidgetSchedule {
   }
 
   static Future<void> update(Map<String, dynamic> settings) async {
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+    final days = platformDays;
+    if (days == null) return;
     final hasLocation =
         settings['latitude'] != null && settings['longitude'] != null;
     final schedule = hasLocation
         ? await compute(_buildWidgetPayload, (
             settings,
             DateTime.now().millisecondsSinceEpoch,
+            days,
           ))
         : null;
     try {
@@ -81,8 +97,10 @@ class PrayerWidgetSchedule {
   }
 }
 
-Map<String, dynamic> _buildWidgetPayload((Map<String, dynamic>, int) input) =>
-    PrayerWidgetSchedule.build(
-      input.$1,
-      DateTime.fromMillisecondsSinceEpoch(input.$2),
-    );
+Map<String, dynamic> _buildWidgetPayload(
+  (Map<String, dynamic>, int, int) input,
+) => PrayerWidgetSchedule.build(
+  input.$1,
+  DateTime.fromMillisecondsSinceEpoch(input.$2),
+  days: input.$3,
+);
