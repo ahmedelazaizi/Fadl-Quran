@@ -1744,7 +1744,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackerGoldGrams => 'Gold (grams)';
 
   @override
-  String get trackerGoldPrice => 'Gold price per gram';
+  String get trackerGoldPrice => 'Price per gram of pure (24k) gold';
 
   @override
   String get trackerSilverGrams => 'Silver (grams)';
@@ -2653,5 +2653,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String searchFailed(String error) {
     return 'Search failed: $error';
+  }
+
+  @override
+  String get occasionTasua => 'Tasu\'a (9 Muharram)';
+
+  @override
+  String get occasionTashreeq => 'Days of Tashreeq (no fasting)';
+
+  @override
+  String get trackerGoldKarat => 'Gold karat';
+
+  @override
+  String get trackerDebts => 'Debts you must pay now';
+
+  @override
+  String get trackerNetAssets => 'Net after debts';
+
+  @override
+  String get trackerZakatNotice =>
+      'Nisab: 85 g of pure gold or 595 g of pure silver; zakat is 2.5% of the net once a full lunar year has passed on it. Jewelry worn for personal use is not zakatable according to the majority (Maliki, Shafi\'i, Hanbali) but is according to the Hanafis; leave it out or include it accordingly. Scholars differ on deducting debts; the Shafi\'is do not deduct them. Consult a qualified scholar for your situation.';
+
+  @override
+  String trackerKarat(String karat) {
+    return '${karat}k';
   }
 }

@@ -85,7 +85,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Zakat calculator'), findsOneWidget);
     await tester.enterText(
-      find.widgetWithText(TextField, 'Gold price per gram'),
+      find.widgetWithText(TextField, 'Price per gram of pure (24k) gold'),
       '12',
     );
     await tester.pump();

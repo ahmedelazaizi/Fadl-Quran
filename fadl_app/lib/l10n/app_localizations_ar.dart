@@ -1723,7 +1723,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trackerGoldGrams => 'غرامات الذهب';
 
   @override
-  String get trackerGoldPrice => 'سعر غرام الذهب';
+  String get trackerGoldPrice => 'سعر غرام الذهب عيار ٢٤';
 
   @override
   String get trackerSilverGrams => 'غرامات الفضة';
@@ -2629,5 +2629,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String searchFailed(String error) {
     return 'تعذّر البحث: $error';
+  }
+
+  @override
+  String get occasionTasua => 'تاسوعاء (٩ محرم)';
+
+  @override
+  String get occasionTashreeq => 'أيام التشريق (لا يُصام فيها)';
+
+  @override
+  String get trackerGoldKarat => 'عيار الذهب';
+
+  @override
+  String get trackerDebts => 'ديون حالّة عليك';
+
+  @override
+  String get trackerNetAssets => 'الصافي بعد خصم الديون';
+
+  @override
+  String get trackerZakatNotice =>
+      'النصاب ٨٥ غراماً من الذهب الخالص أو ٥٩٥ غراماً من الفضة الخالصة، والزكاة ٢٫٥٪ من الصافي إذا حال عليه الحول الهجري. حُليّ الاستعمال لا زكاة فيه عند الجمهور (المالكية والشافعية والحنابلة) وتجب فيه عند الحنفية؛ فأدخله أو اتركه بحسب ما تأخذ به. وفي خصم الديون خلاف، والشافعية لا يخصمونها. راجع عالماً مؤهلاً في حالتك.';
+
+  @override
+  String trackerKarat(String karat) {
+    return 'عيار $karat';
   }
 }

@@ -116,7 +116,7 @@ class LocalNotifications {
         }
       }
       items ??= state.hasLocation
-          ? _offlineUpcoming(state, DateTime.now())
+          ? offlineUpcoming(state, DateTime.now())
           : <Map<String, dynamic>>[];
       // Review progress lives only on this device, so these reminders are
       // added locally whether or not a backend supplies the rest.
@@ -252,7 +252,8 @@ class LocalNotifications {
     return reminders;
   }
 
-  static List<Map<String, dynamic>> _offlineUpcoming(
+  @visibleForTesting
+  static List<Map<String, dynamic>> offlineUpcoming(
     AppState state,
     DateTime now,
   ) {
@@ -311,7 +312,7 @@ class LocalNotifications {
             'pre_adhan:$name',
             time.subtract(Duration(minutes: preMinutes)),
             'اقترب وقت صلاة $nameAr',
-            'بقي $preMinutes دقيقة على الأذان',
+            'بقي ${arabicMinutes(preMinutes)} على الأذان',
             'fadl://prayer-times',
           );
         }
@@ -396,15 +397,19 @@ class LocalNotifications {
           'fadl://home',
         );
       }
+      // In Dhul-Hijjah the 13th is a day of tashreeq, when fasting is
+      // forbidden, so that month's white days start on the 14th.
+      final dhulHijjah = hijri['month'] == 12;
       if (state.notifications['whiteDaysFast'] == true &&
-          hijri['day'] == 12 &&
           hijri['month'] != 9 &&
-          hijri['month'] != 12) {
+          hijri['day'] == (dhulHijjah ? 13 : 12)) {
         add(
           'fast_white_days',
           prayerAt('isha'),
           'الأيام البيض',
-          'تبدأ غداً الأيام البيض (١٣، ١٤، ١٥ ${hijri['monthNameAr']})، صيامها كصيام الدهر',
+          dhulHijjah
+              ? 'يبدأ غداً صيام الأيام البيض (١٤، ١٥ ${hijri['monthNameAr']})؛ أما الثالث عشر فمن أيام التشريق فلا يُصام'
+              : 'تبدأ غداً الأيام البيض (١٣، ١٤، ١٥ ${hijri['monthNameAr']})، وصيامها كصيام الدهر',
           'fadl://home',
         );
       }
@@ -419,9 +424,14 @@ class LocalNotifications {
           );
         }
         if (state.notifications['fridayHour'] == true) {
+          // The last hour before maghrib, never before asr has begun.
+          final lastHour = prayerAt(
+            'maghrib',
+          ).subtract(const Duration(hours: 1));
+          final asr = prayerAt('asr');
           add(
             'friday_hour',
-            prayerAt('maghrib').subtract(const Duration(hours: 1)),
+            lastHour.isBefore(asr) ? asr : lastHour,
             'ساعة الإجابة يوم الجمعة',
             'آخر ساعة بعد العصر من يوم الجمعة، أكثر من الدعاء',
             'fadl://duas',
@@ -434,6 +444,15 @@ class LocalNotifications {
     );
     return upcoming;
   }
+
+  /// "٥ دقائق", "١٥ دقيقة": Arabic counted-noun agreement for [minutes].
+  @visibleForTesting
+  static String arabicMinutes(int minutes) => switch (minutes) {
+    1 => 'دقيقة واحدة',
+    2 => 'دقيقتان',
+    >= 3 && <= 10 => '${arNum(minutes)} دقائق',
+    _ => '${arNum(minutes)} دقيقة',
+  };
 
   /// FNV-1a hash of the notification key, kept within a positive 31-bit int.
   static int _stableId(String key) {

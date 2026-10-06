@@ -29,7 +29,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.widgetWithText(TextField, 'النقد'), '8500');
     await tester.enterText(
-      find.widgetWithText(TextField, 'سعر غرام الذهب'),
+      find.widgetWithText(TextField, 'سعر غرام الذهب عيار ٢٤'),
       '100',
     );
     await tester.pump();

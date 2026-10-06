@@ -3233,7 +3233,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackerGoldPrice.
   ///
   /// In en, this message translates to:
-  /// **'Gold price per gram'**
+  /// **'Price per gram of pure (24k) gold'**
   String get trackerGoldPrice;
 
   /// No description provided for @trackerSilverGrams.
@@ -4753,6 +4753,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search failed: {error}'**
   String searchFailed(String error);
+
+  /// No description provided for @occasionTasua.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasu\'a (9 Muharram)'**
+  String get occasionTasua;
+
+  /// No description provided for @occasionTashreeq.
+  ///
+  /// In en, this message translates to:
+  /// **'Days of Tashreeq (no fasting)'**
+  String get occasionTashreeq;
+
+  /// No description provided for @trackerGoldKarat.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold karat'**
+  String get trackerGoldKarat;
+
+  /// No description provided for @trackerDebts.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts you must pay now'**
+  String get trackerDebts;
+
+  /// No description provided for @trackerNetAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Net after debts'**
+  String get trackerNetAssets;
+
+  /// No description provided for @trackerZakatNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Nisab: 85 g of pure gold or 595 g of pure silver; zakat is 2.5% of the net once a full lunar year has passed on it. Jewelry worn for personal use is not zakatable according to the majority (Maliki, Shafi\'i, Hanbali) but is according to the Hanafis; leave it out or include it accordingly. Scholars differ on deducting debts; the Shafi\'is do not deduct them. Consult a qualified scholar for your situation.'**
+  String get trackerZakatNotice;
+
+  /// No description provided for @trackerKarat.
+  ///
+  /// In en, this message translates to:
+  /// **'{karat}k'**
+  String trackerKarat(String karat);
 }
 
 class _AppLocalizationsDelegate
