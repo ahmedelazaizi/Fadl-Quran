@@ -2747,4 +2747,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fullSurahPlayingOffline => 'Playing from your device';
+
+  @override
+  String get recitationDownloadTab => 'Download recitations';
+
+  @override
+  String get recitationDownloadedTab => 'Downloaded recitations';
+
+  @override
+  String get recitationDownloadIntro =>
+      'Download recitations to play them without internet.';
+
+  @override
+  String get recitationFrom => 'From';
+
+  @override
+  String get recitationTo => 'To';
+
+  @override
+  String get recitationReciter => 'Reciter';
+
+  @override
+  String get recitationDownload => 'Download';
+
+  @override
+  String recitationDownloadingRange(String current, String total) {
+    return 'Downloading surah $current of $total…';
+  }
+
+  @override
+  String get recitationRangeDone => 'Recitations downloaded';
+
+  @override
+  String get recitationNoneDownloaded => 'No recitations downloaded yet.';
+
+  @override
+  String get chooseReciterTitle => 'Choose a reciter';
+
+  @override
+  String get reciterSearchHint => 'Search reciters';
+
+  @override
+  String get reciterFavorite => 'Add to favourites';
+
+  @override
+  String get reciterUnfavorite => 'Remove from favourites';
+
+  @override
+  String get reciterVerseSync => 'Highlights each ayah';
+
+  @override
+  String get recitationAutoDownload => 'Download the surah I listen to or read';
+
+  @override
+  String get recitationAutoDownloadHint =>
+      'Saves it automatically for the chosen reciter so it plays offline next time.';
+
+  @override
+  String get recitationsButton => 'Download recitations';
+
+  @override
+  String recitationCompleteSurahs(String count) {
+    return 'Complete surahs: $count';
+  }
 }

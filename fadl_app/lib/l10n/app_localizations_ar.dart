@@ -2725,4 +2725,67 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullSurahPlayingOffline => 'تُشغَّل من جهازك';
+
+  @override
+  String get recitationDownloadTab => 'تحميل التلاوات';
+
+  @override
+  String get recitationDownloadedTab => 'التلاوات المحملة';
+
+  @override
+  String get recitationDownloadIntro =>
+      'يمكنك تحميل التلاوات لتشغيلها بدون إنترنت.';
+
+  @override
+  String get recitationFrom => 'من';
+
+  @override
+  String get recitationTo => 'إلى';
+
+  @override
+  String get recitationReciter => 'القارئ';
+
+  @override
+  String get recitationDownload => 'تحميل';
+
+  @override
+  String recitationDownloadingRange(String current, String total) {
+    return 'جارٍ تحميل السورة $current من $total…';
+  }
+
+  @override
+  String get recitationRangeDone => 'اكتمل تحميل التلاوات';
+
+  @override
+  String get recitationNoneDownloaded => 'لا توجد تلاوات محملة بعد.';
+
+  @override
+  String get chooseReciterTitle => 'اختر القارئ';
+
+  @override
+  String get reciterSearchHint => 'ابحث عن قارئ';
+
+  @override
+  String get reciterFavorite => 'إضافة إلى المفضلة';
+
+  @override
+  String get reciterUnfavorite => 'إزالة من المفضلة';
+
+  @override
+  String get reciterVerseSync => 'يدعم تظليل الآية';
+
+  @override
+  String get recitationAutoDownload => 'حمّل السورة التي أستمع إليها أو أقرؤها';
+
+  @override
+  String get recitationAutoDownloadHint =>
+      'تُحفظ تلقائيًا بصوت القارئ المختار لتعمل دون إنترنت في المرة القادمة.';
+
+  @override
+  String get recitationsButton => 'تحميل التلاوات';
+
+  @override
+  String recitationCompleteSurahs(String count) {
+    return 'السور الكاملة: $count';
+  }
 }

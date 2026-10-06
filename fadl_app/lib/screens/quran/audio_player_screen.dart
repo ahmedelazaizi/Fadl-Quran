@@ -271,7 +271,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value:
-                                reciters.any((r) => r['id'] == audio.reciterId)
+                                allReciters.any(
+                                  (r) => r['id'] == audio.reciterId,
+                                )
                                 ? audio.reciterId
                                 : null,
                             hint: Text(
@@ -279,7 +281,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                             ),
                             isExpanded: true,
                             items: [
-                              for (final r in reciters)
+                              for (final r in allReciters)
                                 DropdownMenuItem(
                                   value: r['id'] as String,
                                   child: Text(

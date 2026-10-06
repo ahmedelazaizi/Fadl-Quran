@@ -46,7 +46,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       (AppLocalizations.of(context) ??
       lookupAppLocalizations(const Locale('ar')));
 
-  final Future<List<Map<String, dynamic>>> _reciters = Future.value(reciters);
+  final Future<List<Map<String, dynamic>>> _reciters = Future.value(
+    allReciters,
+  );
   late Future<List<Map<String, dynamic>>> _tafsirs = _loadTafsirs();
 
   /// Server editions, or the downloadable offline editions without a backend.

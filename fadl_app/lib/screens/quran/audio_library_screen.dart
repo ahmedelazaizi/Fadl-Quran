@@ -42,7 +42,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
   String fullQuery = '';
   List<FullSurahEdition>? matchingFull;
   String style = 'الكل';
-  List<Map<String, dynamic>> matchingReciters = reciters;
+  List<Map<String, dynamic>> matchingReciters = allReciters;
   String reciterQuery = '';
   Map<String, dynamic>? selected;
   String query = '';
@@ -185,7 +185,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
                   }
                 } else {
                   selected = null;
-                  matchingReciters = reciters;
+                  matchingReciters = allReciters;
                   reciterQuery = '';
                   query = '';
                 }
@@ -245,7 +245,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
               hintText: l.searchReciter,
               onChanged: (text) => reciterQuery = text,
               search: (text) async => [
-                for (final reciter in reciters)
+                for (final reciter in allReciters)
                   if (matchesReciterSearch(reciter, text))
                     LiveSearchSuggestion(
                       reciter,
@@ -258,7 +258,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
               ],
               onResults: (found) => setState(() {
                 matchingReciters = reciterQuery.isEmpty
-                    ? reciters
+                    ? allReciters
                     : [for (final suggestion in found) suggestion.value];
               }),
               onSelected: (reciter) => setState(() => selected = reciter),
@@ -274,7 +274,7 @@ class _AudioLibraryScreenState extends State<AudioLibraryScreen> {
                   'مرتل',
                   'مجود',
                   'معلم',
-                  ...reciters
+                  ...allReciters
                       .map((r) => r['style'] as String)
                       .where((s) => !['مرتل', 'مجود', 'معلم'].contains(s))
                       .toSet(),

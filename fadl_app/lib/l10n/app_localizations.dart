@@ -4903,6 +4903,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Playing from your device'**
   String get fullSurahPlayingOffline;
+
+  /// No description provided for @recitationDownloadTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations'**
+  String get recitationDownloadTab;
+
+  /// No description provided for @recitationDownloadedTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded recitations'**
+  String get recitationDownloadedTab;
+
+  /// No description provided for @recitationDownloadIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations to play them without internet.'**
+  String get recitationDownloadIntro;
+
+  /// No description provided for @recitationFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get recitationFrom;
+
+  /// No description provided for @recitationTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get recitationTo;
+
+  /// No description provided for @recitationReciter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reciter'**
+  String get recitationReciter;
+
+  /// No description provided for @recitationDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get recitationDownload;
+
+  /// No description provided for @recitationDownloadingRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading surah {current} of {total}…'**
+  String recitationDownloadingRange(String current, String total);
+
+  /// No description provided for @recitationRangeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitations downloaded'**
+  String get recitationRangeDone;
+
+  /// No description provided for @recitationNoneDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No recitations downloaded yet.'**
+  String get recitationNoneDownloaded;
+
+  /// No description provided for @chooseReciterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a reciter'**
+  String get chooseReciterTitle;
+
+  /// No description provided for @reciterSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search reciters'**
+  String get reciterSearchHint;
+
+  /// No description provided for @reciterFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourites'**
+  String get reciterFavorite;
+
+  /// No description provided for @reciterUnfavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get reciterUnfavorite;
+
+  /// No description provided for @reciterVerseSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlights each ayah'**
+  String get reciterVerseSync;
+
+  /// No description provided for @recitationAutoDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download the surah I listen to or read'**
+  String get recitationAutoDownload;
+
+  /// No description provided for @recitationAutoDownloadHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves it automatically for the chosen reciter so it plays offline next time.'**
+  String get recitationAutoDownloadHint;
+
+  /// No description provided for @recitationsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations'**
+  String get recitationsButton;
+
+  /// No description provided for @recitationCompleteSurahs.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete surahs: {count}'**
+  String recitationCompleteSurahs(String count);
 }
 
 class _AppLocalizationsDelegate
