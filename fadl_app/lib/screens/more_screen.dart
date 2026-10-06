@@ -11,6 +11,7 @@ import 'devotion/prayer_tracker_screen.dart';
 import 'devotion/zakat_screen.dart';
 import 'dua_screen.dart';
 import 'hadith/hadith_books_screen.dart';
+import 'hajj_umrah_screen.dart';
 import 'khatma_screen.dart';
 import 'library_screen.dart';
 import 'prayer/qibla_screen.dart';
@@ -49,6 +50,13 @@ class MoreScreen extends StatelessWidget {
         l.fastingTracker,
         l.fastingTrackerMore,
         const FastingTrackerScreen(),
+        false,
+      ),
+      (
+        Icons.mosque_outlined,
+        l.hajjUmrah,
+        l.hajjUmrahMore,
+        const HajjUmrahScreen(),
         false,
       ),
       (

@@ -2810,4 +2810,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String recitationCompleteSurahs(String count) {
     return 'Complete surahs: $count';
   }
+
+  @override
+  String get hajjUmrah => 'Hajj & Umrah';
+
+  @override
+  String get hajjUmrahMore =>
+      'The rites step by step, with supplications and counters';
+
+  @override
+  String get riteStart => 'Start';
+
+  @override
+  String get riteContinue => 'Continue';
+
+  @override
+  String get riteRestart => 'Start over';
+
+  @override
+  String riteStepOf(String current, String total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get ritePrevious => 'Previous';
+
+  @override
+  String get riteNext => 'Next';
+
+  @override
+  String get riteDone => 'Done — may Allah accept it';
+
+  @override
+  String riteRound(String unit, String current, String total) {
+    return '$unit $current of $total';
+  }
+
+  @override
+  String get riteTapToCount => 'Tap after each one';
+
+  @override
+  String get riteUndo => 'Undo';
+
+  @override
+  String get riteReset => 'Reset';
+
+  @override
+  String get riteCounterComplete => 'Complete';
+
+  @override
+  String get riteSupplications => 'Supplications';
+
+  @override
+  String get riteSteps => 'Steps';
+
+  @override
+  String get riteDisclaimer =>
+      'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.';
 }

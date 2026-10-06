@@ -2788,4 +2788,60 @@ class AppLocalizationsAr extends AppLocalizations {
   String recitationCompleteSurahs(String count) {
     return 'السور الكاملة: $count';
   }
+
+  @override
+  String get hajjUmrah => 'الحج والعمرة';
+
+  @override
+  String get hajjUmrahMore => 'المناسك خطوة بخطوة مع الأدعية وعدّاد الأشواط';
+
+  @override
+  String get riteStart => 'ابدأ';
+
+  @override
+  String get riteContinue => 'متابعة';
+
+  @override
+  String get riteRestart => 'البدء من جديد';
+
+  @override
+  String riteStepOf(String current, String total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get ritePrevious => 'السابق';
+
+  @override
+  String get riteNext => 'التالي';
+
+  @override
+  String get riteDone => 'تمّت المناسك — تقبّل الله منك';
+
+  @override
+  String riteRound(String unit, String current, String total) {
+    return '$unit $current من $total';
+  }
+
+  @override
+  String get riteTapToCount => 'اضغط بعد كل واحد';
+
+  @override
+  String get riteUndo => 'تراجع';
+
+  @override
+  String get riteReset => 'تصفير';
+
+  @override
+  String get riteCounterComplete => 'اكتمل';
+
+  @override
+  String get riteSupplications => 'الأدعية';
+
+  @override
+  String get riteSteps => 'الخطوات';
+
+  @override
+  String get riteDisclaimer =>
+      'خلاصة ما اتفق عليه العلماء. وللحالات الخاصة (المرأة، والمريض، والقِران والإفراد) يُرجع إلى مرشد الحملة أو أهل العلم.';
 }

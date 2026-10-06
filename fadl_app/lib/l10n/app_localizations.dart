@@ -5017,6 +5017,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete surahs: {count}'**
   String recitationCompleteSurahs(String count);
+
+  /// No description provided for @hajjUmrah.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj & Umrah'**
+  String get hajjUmrah;
+
+  /// No description provided for @hajjUmrahMore.
+  ///
+  /// In en, this message translates to:
+  /// **'The rites step by step, with supplications and counters'**
+  String get hajjUmrahMore;
+
+  /// No description provided for @riteStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get riteStart;
+
+  /// No description provided for @riteContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get riteContinue;
+
+  /// No description provided for @riteRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get riteRestart;
+
+  /// No description provided for @riteStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String riteStepOf(String current, String total);
+
+  /// No description provided for @ritePrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get ritePrevious;
+
+  /// No description provided for @riteNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get riteNext;
+
+  /// No description provided for @riteDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done — may Allah accept it'**
+  String get riteDone;
+
+  /// No description provided for @riteRound.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit} {current} of {total}'**
+  String riteRound(String unit, String current, String total);
+
+  /// No description provided for @riteTapToCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap after each one'**
+  String get riteTapToCount;
+
+  /// No description provided for @riteUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get riteUndo;
+
+  /// No description provided for @riteReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get riteReset;
+
+  /// No description provided for @riteCounterComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get riteCounterComplete;
+
+  /// No description provided for @riteSupplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplications'**
+  String get riteSupplications;
+
+  /// No description provided for @riteSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get riteSteps;
+
+  /// No description provided for @riteDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.'**
+  String get riteDisclaimer;
 }
 
 class _AppLocalizationsDelegate
