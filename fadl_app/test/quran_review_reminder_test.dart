@@ -124,9 +124,12 @@ void main() {
       expect(state.hasLocation, isFalse);
       await LocalNotifications.instance.reschedule(state);
 
+      // Dhikr reminders (on by default) are scheduled alongside.
       final scheduled = [
         for (final call in calls)
-          if (call.method == 'zonedSchedule') call.arguments as Map,
+          if (call.method == 'zonedSchedule' &&
+              (call.arguments as Map)['title'] != 'Remember Allah')
+            call.arguments as Map,
       ];
       expect(scheduled, isNotEmpty);
       expect(scheduled.map((c) => c['title']), everyElement('Quran review'));

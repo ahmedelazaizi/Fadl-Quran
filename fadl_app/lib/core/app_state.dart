@@ -140,7 +140,8 @@ class AppState extends ChangeNotifier {
       'sleepAthkarTime': null,
       // Device-only: memorization progress never leaves the device.
       'quranReviewTime': null,
-      // Device-only: hours between dhikr reminders, or null when off.
+      // Device-only: hours between dhikr reminders; 0 is off and null the
+      // default (see dhikrReminderHours in core/dhikr_reminders.dart).
       'dhikrReminderHours': null,
       'fridayKahf': true,
       'khatmaReminder': true,

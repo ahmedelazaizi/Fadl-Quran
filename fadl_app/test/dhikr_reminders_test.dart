@@ -33,7 +33,7 @@ void main() {
     }
   });
 
-  test('reminders fire every interval between 8:00 and 22:00 only', () {
+  test('one daily slot per interval between 8:00 and 22:00', () {
     // 13:00 in Riyadh.
     final now = DateTime.utc(2026, 10, 6, 10);
     final items = LocalNotifications.dhikrReminderItems(
@@ -46,39 +46,48 @@ void main() {
       for (final item in items)
         DateTime.parse(item['fireAt'] as String).add(const Duration(hours: 3)),
     ];
-    // Today 14, 17, 20; tomorrow 8…20; then 8 and 11 before 13:00.
+    // 8 and 11 already passed today, so their first time is tomorrow.
     expect(local.map((t) => '${t.day}/${t.hour}'), [
+      '7/8',
+      '7/11',
       '6/14',
       '6/17',
       '6/20',
-      '7/8',
-      '7/11',
-      '7/14',
-      '7/17',
-      '7/20',
-      '8/8',
-      '8/11',
     ]);
-    expect(items.map((i) => i['key']).toSet(), hasLength(items.length));
+    expect(items.map((i) => i['repeat']), everyElement('daily'));
+    expect(items.map((i) => i['key']), [
+      'dhikr:8',
+      'dhikr:11',
+      'dhikr:14',
+      'dhikr:17',
+      'dhikr:20',
+    ]);
     expect(items.first['title'], 'ذكر الله');
-    for (var i = 1; i < items.length; i++) {
-      expect(items[i]['body'], isNot(items[i - 1]['body']));
-    }
+    expect(items.map((i) => i['body']).toSet(), hasLength(items.length));
     final body = items.first['body'] as String;
     expect(dhikrReminders.any((d) => body == '${d.text}\n${d.source}'), isTrue);
   });
 
-  test('hourly reminders rotate through the whole list', () {
+  test('hourly reminders use every text', () {
     final items = LocalNotifications.dhikrReminderItems(
       intervalHours: 1,
       location: riyadh,
       now: DateTime.utc(2026, 10, 6, 3),
       l: ar,
     );
+    expect(items, hasLength(14));
     expect(
       items.map((i) => i['body']).toSet(),
       hasLength(dhikrReminders.length),
     );
+  });
+
+  test('reminders are on by default and stay off once turned off', () {
+    expect(dhikrReminderHours({}), defaultDhikrReminderHours);
+    expect(dhikrReminderHours({'dhikrReminderHours': null}), 2);
+    expect(dhikrReminderHours({'dhikrReminderHours': 4}), 4);
+    expect(dhikrReminderHours({'dhikrReminderHours': 0}), isNull);
+    expect(dhikrReminderHours({'enabled': false}), isNull);
   });
 
   test('the iOS cap keeps every prayer and the soonest reminders', () {
@@ -107,9 +116,9 @@ void main() {
     );
   });
 
-  test('reschedule posts dhikr reminders with expanded text', () async {
+  test('reschedule posts default dhikr reminders with expanded text', () async {
     SharedPreferences.setMockInitialValues({
-      'fadl.notifications': jsonEncode({'dhikrReminderHours': 1}),
+      // Nothing stored: reminders are on by default.
       'fadl.uiLanguage': 'en',
     });
     final messenger =
@@ -144,5 +153,7 @@ void main() {
       jsonEncode(scheduled.first['platformSpecifics']),
       contains('bigText'),
     );
+    // Daily repeats keep reminding without the app being opened.
+    expect(scheduled.map((c) => c['matchDateTimeComponents']), everyElement(0));
   });
 }

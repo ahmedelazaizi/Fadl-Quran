@@ -63,6 +63,20 @@ const dhikrReminders = <DhikrReminder>[
 /// Reminder intervals offered in settings, in hours.
 const dhikrReminderIntervals = [1, 2, 3, 4, 6];
 
+/// Reminders are on unless the user turns them off.
+const defaultDhikrReminderHours = 2;
+
+/// Hours between reminders, or null when they are off. The setting stores 0
+/// for "off"; null (never chosen, including data saved before reminders
+/// were on by default) means the default.
+int? dhikrReminderHours(Map notifications) {
+  if (notifications['enabled'] == false) return null;
+  final value = notifications['dhikrReminderHours'];
+  if (value == null) return defaultDhikrReminderHours;
+  final hours = (value as num).toInt();
+  return dhikrReminderIntervals.contains(hours) ? hours : null;
+}
+
 /// Local hours (inclusive start, exclusive end) when reminders may fire, so
 /// they never wake anyone at night.
 const dhikrReminderStartHour = 8;

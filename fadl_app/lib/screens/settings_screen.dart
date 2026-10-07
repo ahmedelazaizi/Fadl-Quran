@@ -427,12 +427,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: l.dhikrReminder,
                     subtitle: l.dhikrReminderHint,
                     trailing: DropdownButton<int>(
-                      value:
-                          dhikrReminderIntervals.contains(
-                            n['dhikrReminderHours'],
-                          )
-                          ? n['dhikrReminderHours'] as int
-                          : 0,
+                      value: dhikrReminderHours({...n, 'enabled': true}) ?? 0,
                       underline: const SizedBox.shrink(),
                       borderRadius: BorderRadius.circular(12),
                       items: [
@@ -447,8 +442,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           ),
                       ],
-                      onChanged: (v) =>
-                          _notify({'dhikrReminderHours': v == 0 ? null : v}),
+                      onChanged: (v) => _notify({'dhikrReminderHours': v}),
                     ),
                   ),
                   const Divider(height: 8),

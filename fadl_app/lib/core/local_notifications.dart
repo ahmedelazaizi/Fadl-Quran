@@ -161,6 +161,7 @@ class LocalNotifications {
         if (fireAt == null || !fireAt.isAfter(now)) continue;
         final isAdhan = n['type'] == 'adhan';
         final prayer = prayerFromNotification(n);
+        final daily = n['repeat'] == 'daily';
         final channel = isAdhan ? _adhanChannel : _remindersChannel;
         try {
           await plugin.zonedSchedule(
@@ -168,8 +169,14 @@ class LocalNotifications {
             title: n['title'] as String?,
             body: n['body'] as String?,
             payload: n['link'] as String?,
-            // fireAt is an absolute instant, so UTC is exact regardless of the device zone.
-            scheduledDate: tz.TZDateTime.from(fireAt, tz.UTC),
+            // fireAt is an absolute instant, so UTC is exact regardless of
+            // the device zone. Daily repeats follow local wall-clock time
+            // so they stay at the same hour across DST changes.
+            scheduledDate: tz.TZDateTime.from(
+              fireAt,
+              daily ? tz.local : tz.UTC,
+            ),
+            matchDateTimeComponents: daily ? DateTimeComponents.time : null,
             notificationDetails: NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
@@ -255,12 +262,8 @@ class LocalNotifications {
     AppState state,
     DateTime now,
   ) {
-    final hours = (state.notifications['dhikrReminderHours'] as num?)?.toInt();
-    if (hours == null ||
-        !dhikrReminderIntervals.contains(hours) ||
-        state.notifications['enabled'] == false) {
-      return [];
-    }
+    final hours = dhikrReminderHours(state.notifications);
+    if (hours == null) return [];
     try {
       return dhikrReminderItems(
         intervalHours: hours,
@@ -274,9 +277,10 @@ class LocalNotifications {
     }
   }
 
-  /// A dhikr every [intervalHours] from 08:00 until before 22:00 local time
-  /// within 48 hours of [now]. Texts rotate through [dhikrReminders] by
-  /// slot, so consecutive reminders differ and reschedules stay stable.
+  /// A dhikr every [intervalHours] from 08:00 until before 22:00 local time,
+  /// each slot repeating daily at its next occurrence after [now], so the
+  /// reminders keep coming even when the app is not opened. Each slot has
+  /// its own text, so consecutive reminders differ.
   @visibleForTesting
   static List<Map<String, dynamic>> dhikrReminderItems({
     required int intervalHours,
@@ -285,40 +289,39 @@ class LocalNotifications {
     required AppLocalizations l,
   }) {
     final today = tz.TZDateTime.from(now, location);
-    final end = now.add(const Duration(hours: 48));
     final items = <Map<String, dynamic>>[];
-    for (var offset = 0; offset <= 2; offset++) {
-      for (
-        var hour = dhikrReminderStartHour;
-        hour < dhikrReminderEndHour;
-        hour += intervalHours
-      ) {
-        final at = tz.TZDateTime(
+    var slot = 0;
+    for (
+      var hour = dhikrReminderStartHour;
+      hour < dhikrReminderEndHour;
+      hour += intervalHours
+    ) {
+      var at = tz.TZDateTime(
+        location,
+        today.year,
+        today.month,
+        today.day,
+        hour,
+      );
+      if (!at.isAfter(now)) {
+        at = tz.TZDateTime(
           location,
           today.year,
           today.month,
-          today.day + offset,
+          today.day + 1,
           hour,
         );
-        if (!at.isAfter(now) || at.isAfter(end)) continue;
-        // Days since the epoch keep the rotation moving from day to day.
-        final day = DateTime.utc(
-          at.year,
-          at.month,
-          at.day,
-        ).difference(DateTime.utc(1970)).inDays;
-        final dhikr = dhikrReminders[(day * 24 + hour) % dhikrReminders.length];
-        final date =
-            '${at.year}-${'${at.month}'.padLeft(2, '0')}-${'${at.day}'.padLeft(2, '0')}';
-        items.add({
-          'key': 'dhikr:$date:$hour',
-          'type': 'dhikr',
-          'fireAt': at.toUtc().toIso8601String(),
-          'title': l.dhikrReminderTitle,
-          'body': '${dhikr.text}\n${dhikr.source}',
-          'link': 'fadl://athkar',
-        });
       }
+      final dhikr = dhikrReminders[slot++ % dhikrReminders.length];
+      items.add({
+        'key': 'dhikr:$hour',
+        'type': 'dhikr',
+        'repeat': 'daily',
+        'fireAt': at.toUtc().toIso8601String(),
+        'title': l.dhikrReminderTitle,
+        'body': '${dhikr.text}\n${dhikr.source}',
+        'link': 'fadl://athkar',
+      });
     }
     return items;
   }
