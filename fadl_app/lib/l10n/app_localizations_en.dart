@@ -1307,7 +1307,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get batteryAdvice =>
-      'Some phones stop alarms from closed apps to save battery. Open settings, select All apps, then Fadl, and set it to Unrestricted or Not optimized. On some devices, also enable Autostart.';
+      'Some phones stop alarms from closed apps to save battery. Tap \"Open battery settings\" to open Fadl\'s app page, then choose Battery and set it to Unrestricted. On Xiaomi, Oppo and Vivo phones, also enable Autostart on the same page.';
 
   @override
   String get openBatterySettings => 'Open battery settings';
