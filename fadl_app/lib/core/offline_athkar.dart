@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'athkar_repeats.dart';
 import 'quran_data.dart';
 
 /// Hisn al-Muslim category name → stable slug and order; mirrors
@@ -152,7 +153,9 @@ class OfflineAthkar {
         'categoryId': cat.id,
         'text': text.trim(),
         'virtue': _nonBlank(row[description]),
-        'repeat': repeat is int && repeat > 0 ? repeat : 1,
+        'repeat': repeat is int && repeat > 0
+            ? repeat
+            : statedAthkarRepeat(text) ?? 1,
         'reference': _nonBlank(row[reference]),
         'amenKey': 'dhikr:$id',
       };
