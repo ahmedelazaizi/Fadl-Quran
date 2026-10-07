@@ -2381,7 +2381,7 @@ abstract class AppLocalizations {
   /// No description provided for @adhanIosClip.
   ///
   /// In en, this message translates to:
-  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification (Apple’s limit); Fajr is a short notification because the bundled adhans lack the Fajr phrase.'**
+  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows. You can import any adhan from your phone, including one for Fajr.'**
   String get adhanIosClip;
 
   /// No description provided for @adhanDisabled.
@@ -5107,6 +5107,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.'**
   String get riteDisclaimer;
+
+  /// No description provided for @moreAdhansTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More adhans by renowned muezzins'**
+  String get moreAdhansTitle;
+
+  /// No description provided for @moreAdhansHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.'**
+  String get moreAdhansHint;
+
+  /// No description provided for @moreAdhansOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Islamweb adhan library'**
+  String get moreAdhansOpen;
+
+  /// No description provided for @moreAdhansOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the website'**
+  String get moreAdhansOpenError;
 }
 
 class _AppLocalizationsDelegate

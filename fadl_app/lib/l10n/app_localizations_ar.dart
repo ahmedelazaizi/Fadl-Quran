@@ -1247,7 +1247,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adhanIosClip =>
-      'على الآيفون يُرفع أول ٣٠ ثانية من الأذان مع إشعار دخول الوقت (أقصى مدة تسمح بها آبل)، والفجر إشعار قصير لأن الأذانات المرفقة لا تتضمن «الصلاة خير من النوم».';
+      'على الآيفون يُرفع أول ٣٠ ثانية من الأذان مع إشعار دخول الوقت، وهي أقصى مدة تسمح بها آبل. ويمكنك استيراد أي أذان من هاتفك، ومنه أذان للفجر.';
 
   @override
   String get adhanDisabled =>
@@ -2839,4 +2839,17 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get riteDisclaimer =>
       'خلاصة ما اتفق عليه العلماء. وللحالات الخاصة (المرأة، والمريض، والقِران والإفراد) يُرجع إلى مرشد الحملة أو أهل العلم.';
+
+  @override
+  String get moreAdhansTitle => 'أذانات أكثر بأصوات كبار المؤذنين';
+
+  @override
+  String get moreAdhansHint =>
+      'مكتبة الأذان في موقع «إسلام ويب» فيها مئات الأذانات (منها أذانات الفجر). نزّل الأذان الذي يعجبك من الموقع إلى هاتفك، ثم اختره من «استيراد من الهاتف» بالأعلى. الأذانات ملك موقع إسلام ويب، وتحميلها للاستخدام الشخصي.';
+
+  @override
+  String get moreAdhansOpen => 'فتح مكتبة الأذان في إسلام ويب';
+
+  @override
+  String get moreAdhansOpenError => 'تعذّر فتح الموقع';
 }

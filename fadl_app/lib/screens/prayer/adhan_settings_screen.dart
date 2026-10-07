@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/adhan_catalog.dart';
 import '../../core/adhan_service.dart';
@@ -242,19 +243,13 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               ],
             ),
           ),
-          if (supported || clipsOnly) ...[
+          if (_adhan.importSupported) ...[
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).adhanSound),
-          ],
-          // iOS can only ring bundled adhans, so Fajr needs a bundled one.
-          if (supported ||
-              (clipsOnly && bundledFajrAdhanSounds.isNotEmpty)) ...[
             _SoundCard(
               title: prayerL(context).prayerFajr,
               kind: 'fajr',
-              selected: clipsOnly
-                  ? iosFajrAdhan(notifications)
-                  : soundForPrayer(notifications, 'fajr'),
+              selected: soundForPrayer(notifications, 'fajr'),
               builtIn: bundledFajrAdhanSounds,
               imported: [
                 for (final s in _imported)
@@ -264,25 +259,19 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               busy: _busy,
               onSelect: (id) => _update({'fajrSound': id}),
               onPreview: _togglePreview,
-              onImport: supported ? () => _import('fajr') : null,
+              onImport: () => _import('fajr'),
               onDelete: _delete,
             ),
             const SizedBox(height: 8),
-            if (supported)
-              _Note(
-                icon: Icons.nights_stay_outlined,
-                text: prayerL(context).fajrSoundNotice,
-              ),
+            _Note(
+              icon: Icons.nights_stay_outlined,
+              text: prayerL(context).fajrSoundNotice,
+            ),
             const SizedBox(height: 8),
-          ],
-          if (supported || clipsOnly)
             _SoundCard(
               title: prayerL(context).otherPrayers,
               kind: 'regular',
-              // iOS rings the default for sounds imported on Android.
-              selected: clipsOnly
-                  ? iosRegularAdhan(notifications)
-                  : soundForPrayer(notifications, 'dhuhr'),
+              selected: soundForPrayer(notifications, 'dhuhr'),
               builtIn: bundledAdhanSounds,
               imported: [
                 for (final s in _imported)
@@ -292,9 +281,12 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               busy: _busy,
               onSelect: (id) => _update({'regularSound': id}),
               onPreview: _togglePreview,
-              onImport: supported ? () => _import('regular') : null,
+              onImport: () => _import('regular'),
               onDelete: _delete,
             ),
+            const SizedBox(height: 8),
+            const _MoreAdhans(),
+          ],
           if (supported) ...[
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).adhanOptions),
@@ -478,8 +470,7 @@ class _SoundCard extends StatelessWidget {
   final ValueChanged<String?> onSelect;
   final ValueChanged<String> onPreview;
 
-  /// Null where importing is unavailable (iOS).
-  final VoidCallback? onImport;
+  final VoidCallback onImport;
   final ValueChanged<AdhanSound> onDelete;
 
   @override
@@ -500,19 +491,18 @@ class _SoundCard extends StatelessWidget {
             _option(context, id: id, name: _bundledName(context, id)),
           for (final sound in imported)
             _option(context, id: sound.id, name: sound.name, sound: sound),
-          if (onImport != null)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TextButton.icon(
-                onPressed: busy ? null : onImport,
-                icon: const Icon(Icons.file_upload_outlined),
-                label: Text(
-                  kind == 'fajr'
-                      ? prayerL(context).importFajr
-                      : prayerL(context).importPhone,
-                ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: busy ? null : onImport,
+              icon: const Icon(Icons.file_upload_outlined),
+              label: Text(
+                kind == 'fajr'
+                    ? prayerL(context).importFajr
+                    : prayerL(context).importPhone,
               ),
             ),
+          ),
         ],
       ),
     );
@@ -565,6 +555,57 @@ class _SoundCard extends StatelessWidget {
               onPressed: () => onDelete(sound),
               icon: const Icon(Icons.delete_outline_rounded),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Points to Islamweb's adhan library: the user downloads a recording there
+/// for personal use and adds it with "import from phone". Their recordings
+/// are not redistributed by the app.
+class _MoreAdhans extends StatelessWidget {
+  const _MoreAdhans();
+
+  static final library = Uri.parse(
+    'https://audio.islamweb.net/audio/index.php?page=AudioGroup&Gtype=1',
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final l = prayerL(context);
+    return FadlCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.library_music_outlined, color: FadlColors.gold),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  l.moreAdhansTitle,
+                  style: FadlFonts.ui(size: 15, weight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(l.moreAdhansHint, style: FadlFonts.ui(size: 13)),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () async {
+              final opened = await launchUrl(
+                library,
+                mode: LaunchMode.externalApplication,
+              );
+              if (!opened && context.mounted) {
+                showToast(context, l.moreAdhansOpenError);
+              }
+            },
+            icon: const Icon(Icons.open_in_new_rounded),
+            label: Text(l.moreAdhansOpen),
+          ),
         ],
       ),
     );

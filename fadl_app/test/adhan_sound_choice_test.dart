@@ -80,28 +80,33 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  test('iOS rings a bundled clip for dhuhr…isha only', () {
+  test('iOS rings the chosen clip, bundled or imported', () {
     final base = {
       'adhanModes': {'fajr': 'adhan', 'dhuhr': 'adhan', 'asr': 'notify'},
     };
     expect(iosAdhanClip(base, 'dhuhr'), 'adhan_default.caf');
     expect(iosAdhanClip(base, 'asr'), isNull);
     expect(iosAdhanClip(base, 'sunrise'), isNull);
-    // Even with a Fajr adhan imported on Android, no bundled clip fits Fajr.
-    expect(iosAdhanClip({...base, 'fajrSound': 'fajr_1'}, 'fajr'), isNull);
+    // Fajr has no bundled clip with the Fajr words: a short alert unless a
+    // Fajr adhan was imported.
+    expect(iosAdhanClip(base, 'fajr'), isNull);
+    expect(
+      iosAdhanClip({...base, 'fajrSound': 'fajr_1'}, 'fajr'),
+      'fajr_1.caf',
+    );
     expect(
       iosAdhanClip({...base, 'regularSound': 'adhan_makkah'}, 'dhuhr'),
       'adhan_makkah.caf',
     );
-    // A sound imported on Android does not exist on iOS.
+    // Imports live in Library/Sounds under the same ids as on Android.
     expect(
       iosAdhanClip({...base, 'regularSound': 'regular_7'}, 'dhuhr'),
-      'adhan_default.caf',
+      'regular_7.caf',
     );
     expect(iosAdhanClip({...base, 'enabled': false}, 'dhuhr'), isNull);
   });
 
-  testWidgets('iOS offers the bundled muezzins without Android options', (
+  testWidgets('iOS offers muezzins and imports without Android options', (
     tester,
   ) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
@@ -109,7 +114,12 @@ void main() {
     final calls = <MethodCall>[];
     messenger.setMockMethodCallHandler(AdhanService.channel, (call) async {
       calls.add(call);
-      return null;
+      return switch (call.method) {
+        'listImported' => [
+          {'id': 'fajr_1700000000000', 'name': 'Fajr Alafasy', 'kind': 'fajr'},
+        ],
+        _ => null,
+      };
     });
     addTearDown(
       () => messenger.setMockMethodCallHandler(AdhanService.channel, null),
@@ -128,17 +138,35 @@ void main() {
         ),
       ),
     );
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 50)),
+    );
     await tester.pump();
 
     expect(find.textContaining('first 30 seconds'), findsOneWidget);
+    // A Fajr adhan imported on this iPhone is offered for Fajr.
+    await tester.scrollUntilVisible(
+      find.text('Fajr Alafasy'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Fajr Alafasy'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Import Fajr adhan from phone'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     final madinah = find.text("Prophet's Mosque, Madinah (recording)");
     await tester.scrollUntilVisible(
       madinah,
       300,
       scrollable: find.byType(Scrollable).first,
     );
-    expect(find.text('Import from phone'), findsNothing);
-    expect(find.text('Import Fajr adhan from phone'), findsNothing);
+    await tester.scrollUntilVisible(
+      find.text('Import from phone'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('Battery optimization'), findsNothing);
 
     final preview = find.descendant(
@@ -153,11 +181,19 @@ void main() {
     );
     await tester.pump();
     expect(
-      calls.map((c) => c.arguments),
+      calls.where((c) => c.method == 'preview').map((c) => c.arguments),
       contains(containsPair('soundId', 'adhan_madinah')),
     );
-    // Only the clip channel is used: no alarms, imports or battery checks.
-    expect(calls.map((c) => c.method).toSet(), {'preview'});
+    // Clips and imports only: no alarm or battery calls.
+    expect(calls.map((c) => c.method).toSet(), {'listImported', 'preview'});
+
+    final more = find.text('Open the Islamweb adhan library');
+    await tester.scrollUntilVisible(
+      more,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(more, findsOneWidget);
     await tester.pumpWidget(const SizedBox());
     debugDefaultTargetPlatformOverride = null;
   });

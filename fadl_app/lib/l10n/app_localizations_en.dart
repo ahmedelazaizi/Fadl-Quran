@@ -1264,7 +1264,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adhanIosClip =>
-      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification (Apple’s limit); Fajr is a short notification because the bundled adhans lack the Fajr phrase.';
+      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows. You can import any adhan from your phone, including one for Fajr.';
 
   @override
   String get adhanDisabled =>
@@ -2862,4 +2862,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get riteDisclaimer =>
       'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.';
+
+  @override
+  String get moreAdhansTitle => 'More adhans by renowned muezzins';
+
+  @override
+  String get moreAdhansHint =>
+      'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.';
+
+  @override
+  String get moreAdhansOpen => 'Open the Islamweb adhan library';
+
+  @override
+  String get moreAdhansOpenError => 'Could not open the website';
 }
