@@ -201,14 +201,18 @@ class AdhanService : Service() {
     private fun resolveSource(event: JSONObject): Any? {
         val sound = event.optString("sound")
         val fajr = event.optString("prayer") == "fajr"
-        // Bundled adhans lack the Fajr-specific words: never use them for Fajr.
-        val bundled = when (sound) {
-            "adhan_default" -> R.raw.adhan_default
-            "adhan_madinah" -> R.raw.adhan_madinah
-            "adhan_makkah" -> R.raw.adhan_makkah
-            else -> null
+        // Bundled adhans (lib/core/adhan_catalog.dart) are res/raw/adhan_*.
+        // Only those named adhan_fajr_* carry the Fajr words, and they are
+        // for Fajr only.
+        val bundled = if (sound.startsWith("adhan_")) {
+            resources.getIdentifier(sound, "raw", packageName).takeIf { it != 0 }
+        } else {
+            null
         }
-        if (bundled != null) return if (fajr) null else bundled
+        if (bundled != null) {
+            val preview = event.optBoolean("preview")
+            return if (preview || fajr == sound.startsWith("adhan_fajr_")) bundled else null
+        }
         val dir = File(filesDir, "adhan").canonicalFile
         val file = File(dir, sound).canonicalFile
         val usable = sound.isNotEmpty() && file.isFile && file.parentFile == dir &&

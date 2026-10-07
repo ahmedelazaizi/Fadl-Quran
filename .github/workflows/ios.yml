@@ -42,8 +42,8 @@ jobs:
           test -f "$app/PlugIns/PrayerWidgetExtension.appex/PrayerWidgetExtension"
           plutil -extract NSExtension.NSExtensionPointIdentifier raw \
             "$app/PlugIns/PrayerWidgetExtension.appex/Info.plist" | grep -qx com.apple.widgetkit-extension
-          for sound in adhan_default adhan_madinah adhan_makkah; do
-            test -f "$app/$sound.caf"
+          for raw in android/app/src/main/res/raw/adhan_*.ogg; do
+            test -f "$app/$(basename "$raw" .ogg).caf"
           done
           ls -la "$app/PlugIns"
       - name: Package unsigned app

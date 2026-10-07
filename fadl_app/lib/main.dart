@@ -7,6 +7,7 @@ import 'package:audio_session/audio_session.dart';
 import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'core/adhan_catalog.dart';
 import 'core/app_state.dart';
 import 'core/local_notifications.dart';
 import 'core/reciters.dart';
@@ -26,32 +27,11 @@ Future<void> main() async {
       final license = await rootBundle.loadString('assets/fonts/$file');
       yield LicenseEntryWithLineBreaks(fonts, license);
     }
-    // res/raw/adhan_default.ogg, unmodified (SHA-1 a1fa4fd9…6522).
-    yield const LicenseEntryWithLineBreaks(
-      ['Adhan recording'],
-      '"Beautiful adhan" by Adam-synagda, Wikimedia Commons\n'
-      'https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg\n'
-      'Dedicated to the public domain under CC0 1.0 Universal:\n'
-      'https://creativecommons.org/publicdomain/zero/1.0/',
-    );
-    yield const LicenseEntryWithLineBreaks(
-      ['Adhan recording: Prophet\'s Mosque'],
-      'res/raw/adhan_madinah.ogg: "Call to prayer from the Prophet\'s Mosque" '
-      'recorded by ejaz215 (Freesound), via Wikimedia Commons\n'
-      'https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg\n'
-      'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
-      'Modified: converted to mono Ogg Vorbis; on iOS, the first 29.5 s '
-      'with a fade-out as the notification sound.',
-    );
-    yield const LicenseEntryWithLineBreaks(
-      ['Adhan recording: Masjid al-Haram'],
-      'res/raw/adhan_makkah.ogg: "Adhan, Great Mosque of Mecca - Jan 21, 2013" '
-      'by Seyfula Islam, via Wikimedia Commons\n'
-      'https://commons.wikimedia.org/wiki/File:Adhan,_Great_Mosque_of_Mecca_-_Jan_21,_2013.webm\n'
-      'Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/\n'
-      'Modified: audio extracted and converted to mono Ogg Vorbis; on iOS, '
-      'the first 29.5 s with a fade-out as the notification sound.',
-    );
+    for (final adhan in bundledAdhans) {
+      yield LicenseEntryWithLineBreaks([
+        'Adhan recording: ${adhan.nameEn}',
+      ], adhan.credit);
+    }
     yield const LicenseEntryWithLineBreaks(
       ['Tajweed colors'],
       'Tajweed annotations by Collin Fair, cpfair/quran-tajweed\n'

@@ -2462,12 +2462,6 @@ abstract class AppLocalizations {
   /// **'Open battery settings'**
   String get openBatterySettings;
 
-  /// No description provided for @bundledAdhan.
-  ///
-  /// In en, this message translates to:
-  /// **'Default adhan (calm)'**
-  String get bundledAdhan;
-
   /// No description provided for @noFajrAdhan.
   ///
   /// In en, this message translates to:
@@ -4831,18 +4825,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English translation: {url}'**
   String libraryTranslationLabel(String url);
-
-  /// No description provided for @adhanMadinah.
-  ///
-  /// In en, this message translates to:
-  /// **'Prophet\'s Mosque, Madinah (recording)'**
-  String get adhanMadinah;
-
-  /// No description provided for @adhanMakkah.
-  ///
-  /// In en, this message translates to:
-  /// **'Masjid al-Haram, Makkah (2013 recording)'**
-  String get adhanMakkah;
 
   /// No description provided for @dhikrReminderTitle.
   ///

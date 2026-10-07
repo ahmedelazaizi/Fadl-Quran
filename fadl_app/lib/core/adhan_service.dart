@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'adhan_catalog.dart';
 import 'offline_athkar.dart';
 
 /// Full-length adhan at prayer times (Android): pure scheduling rules plus a
@@ -28,9 +29,17 @@ const adhanModeValues = ['adhan', 'notify', 'silent'];
 /// Bundled raw resource; it lacks the Fajr-specific words, so never Fajr.
 const defaultAdhanSound = 'adhan_default';
 
-/// Every bundled adhan (Android raw resources, see the licenses page). None
-/// carries the Fajr-specific words, so they serve dhuhr…isha only.
-const bundledAdhanSounds = [defaultAdhanSound, 'adhan_madinah', 'adhan_makkah'];
+/// Bundled adhans for dhuhr…isha (see core/adhan_catalog.dart).
+final bundledAdhanSounds = [
+  for (final adhan in bundledAdhans)
+    if (!adhan.fajr) adhan.id,
+];
+
+/// Bundled adhans with «الصلاة خير من النوم», offered for Fajr only.
+final bundledFajrAdhanSounds = [
+  for (final adhan in bundledAdhans)
+    if (adhan.fajr) adhan.id,
+];
 
 /// Window of native alarms; matches the 48h of plugin notifications.
 const adhanScheduleWindow = Duration(hours: 48);
@@ -59,13 +68,18 @@ String effectivePrayerMode(Map notifications, String prayer) {
   return mode;
 }
 
-/// Sound id for [prayer]; null when no adhan may be played (Fajr without an
-/// imported Fajr adhan, sunrise). Never [defaultAdhanSound] for Fajr.
+/// Sound id for [prayer]; null when no adhan may be played (Fajr without a
+/// Fajr adhan chosen, sunrise). Fajr only ever gets a Fajr adhan: an
+/// imported one or a bundled one with the Fajr words.
 String? soundForPrayer(Map notifications, String prayer) {
   if (prayer == 'sunrise') return null;
   if (prayer == 'fajr') {
     final value = notifications['fajrSound'];
-    return value is String && value.startsWith('fajr_') ? value : null;
+    return value is String &&
+            (value.startsWith('fajr_') ||
+                bundledFajrAdhanSounds.contains(value))
+        ? value
+        : null;
   }
   final value = notifications['regularSound'];
   return value is String &&
@@ -76,14 +90,22 @@ String? soundForPrayer(Map notifications, String prayer) {
 
 /// Notification sound for [prayer] on iOS, where a 30-second clip of a
 /// bundled adhan (`ios/Runner/*.caf`) rings with the alert; null for the
-/// default alert sound. Fajr never gets one: no bundled adhan has the Fajr
-/// words, and imports (synced from Android) do not exist on iOS.
+/// default alert sound. Fajr gets one only when a bundled Fajr adhan is
+/// chosen: imports (synced from Android) do not exist on iOS.
 String? iosAdhanClip(Map notifications, String prayer) {
-  if (prayer == 'fajr' ||
-      effectivePrayerMode(notifications, prayer) != 'adhan') {
-    return null;
+  if (effectivePrayerMode(notifications, prayer) != 'adhan') return null;
+  if (prayer == 'fajr') {
+    final sound = iosFajrAdhan(notifications);
+    return sound == null ? null : '$sound.caf';
   }
   return '${iosRegularAdhan(notifications)}.caf';
+}
+
+/// The bundled Fajr adhan iOS rings, or null (a short alert) when none is
+/// chosen or the choice is a Fajr adhan imported on Android.
+String? iosFajrAdhan(Map notifications) {
+  final sound = soundForPrayer(notifications, 'fajr');
+  return bundledFajrAdhanSounds.contains(sound) ? sound : null;
 }
 
 /// The bundled adhan iOS rings for dhuhr…isha: the chosen one, or the

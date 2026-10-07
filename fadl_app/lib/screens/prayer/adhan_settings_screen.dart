@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/adhan_catalog.dart';
 import '../../core/adhan_service.dart';
 import '../../core/app_state.dart';
 import '../../core/local_notifications.dart';
@@ -245,12 +246,16 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
             const SizedBox(height: 8),
             SectionTitle(prayerL(context).adhanSound),
           ],
-          if (supported) ...[
+          // iOS can only ring bundled adhans, so Fajr needs a bundled one.
+          if (supported ||
+              (clipsOnly && bundledFajrAdhanSounds.isNotEmpty)) ...[
             _SoundCard(
               title: prayerL(context).prayerFajr,
               kind: 'fajr',
-              selected: soundForPrayer(notifications, 'fajr'),
-              builtIn: const [],
+              selected: clipsOnly
+                  ? iosFajrAdhan(notifications)
+                  : soundForPrayer(notifications, 'fajr'),
+              builtIn: bundledFajrAdhanSounds,
               imported: [
                 for (final s in _imported)
                   if (s.kind == 'fajr') s,
@@ -259,14 +264,15 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               busy: _busy,
               onSelect: (id) => _update({'fajrSound': id}),
               onPreview: _togglePreview,
-              onImport: () => _import('fajr'),
+              onImport: supported ? () => _import('fajr') : null,
               onDelete: _delete,
             ),
             const SizedBox(height: 8),
-            _Note(
-              icon: Icons.nights_stay_outlined,
-              text: prayerL(context).fajrSoundNotice,
-            ),
+            if (supported)
+              _Note(
+                icon: Icons.nights_stay_outlined,
+                text: prayerL(context).fajrSoundNotice,
+              ),
             const SizedBox(height: 8),
           ],
           if (supported || clipsOnly)
@@ -488,7 +494,7 @@ class _SoundCard extends StatelessWidget {
             child: Text(title, style: FadlFonts.heading(size: 17)),
           ),
           const SizedBox(height: 4),
-          if (builtIn.isEmpty)
+          if (kind == 'fajr')
             _option(context, id: null, name: prayerL(context).noFajrAdhan),
           for (final id in builtIn)
             _option(context, id: id, name: _bundledName(context, id)),
@@ -512,11 +518,8 @@ class _SoundCard extends StatelessWidget {
     );
   }
 
-  static String _bundledName(BuildContext context, String id) => switch (id) {
-    'adhan_madinah' => prayerL(context).adhanMadinah,
-    'adhan_makkah' => prayerL(context).adhanMakkah,
-    _ => prayerL(context).bundledAdhan,
-  };
+  static String _bundledName(BuildContext context, String id) =>
+      bundledAdhan(id)?.name(prayerL(context).localeName) ?? id;
 
   Widget _option(
     BuildContext context, {

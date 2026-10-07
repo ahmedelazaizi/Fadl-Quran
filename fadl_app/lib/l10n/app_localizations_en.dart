@@ -1313,9 +1313,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openBatterySettings => 'Open battery settings';
 
   @override
-  String get bundledAdhan => 'Default adhan (calm)';
-
-  @override
   String get noFajrAdhan => 'No adhan (short notification)';
 
   @override
@@ -2699,12 +2696,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'English translation: $url';
   }
-
-  @override
-  String get adhanMadinah => 'Prophet\'s Mosque, Madinah (recording)';
-
-  @override
-  String get adhanMakkah => 'Masjid al-Haram, Makkah (2013 recording)';
 
   @override
   String get dhikrReminderTitle => 'Remember Allah';

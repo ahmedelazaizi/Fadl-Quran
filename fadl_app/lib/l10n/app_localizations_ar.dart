@@ -1294,9 +1294,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openBatterySettings => 'فتح إعدادات البطارية';
 
   @override
-  String get bundledAdhan => 'الأذان الأساسي (هادئ)';
-
-  @override
   String get noFajrAdhan => 'بدون أذان (إشعار قصير)';
 
   @override
@@ -2675,12 +2672,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'الترجمة الإنجليزية: $url';
   }
-
-  @override
-  String get adhanMadinah => 'أذان المسجد النبوي (تسجيل)';
-
-  @override
-  String get adhanMakkah => 'أذان المسجد الحرام (تسجيل ٢٠١٣)';
 
   @override
   String get dhikrReminderTitle => 'ذكر الله';
