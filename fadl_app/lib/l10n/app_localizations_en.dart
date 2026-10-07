@@ -1247,7 +1247,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fajrSoundFallback =>
-      'No Fajr adhan has been imported; you will receive a short notification.';
+      'No Fajr adhan is chosen; you will receive a short notification.';
 
   @override
   String get perPrayerAlert => 'Alert for each prayer';
@@ -1264,7 +1264,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adhanIosClip =>
-      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows. You can import any adhan from your phone, including one for Fajr.';
+      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows.';
 
   @override
   String get adhanDisabled =>
@@ -1272,11 +1272,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fajrSoundNotice =>
-      'The bundled adhan does not include the Fajr phrase ‘prayer is better than sleep’, so it is not used for Fajr. Import a Fajr adhan from your phone or receive a short notification.';
+      'Fajr has its own adhan with «prayer is better than sleep», so only Fajr adhans are listed here. You can also import another Fajr adhan from your phone.';
 
   @override
   String get fajrImportHint =>
-      'No Fajr adhan imported yet; you will receive a short notification.';
+      'No Fajr adhan is chosen; you will receive a short notification.';
 
   @override
   String get adhanOptions => 'Options';

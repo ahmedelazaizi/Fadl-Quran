@@ -49,7 +49,7 @@ def build_android(source, target, start, end):
     length = (end if end is not None else duration(source)) - start
     filters = ",".join([
         "highpass=f=70",  # wind and traffic rumble below the voice
-        "loudnorm=I=-16:TP=-1.5:LRA=11",  # the same loudness for every muezzin
+        "loudnorm=I=-12:TP=-1:LRA=11",  # loud and even across muezzins (an alarm)
         "afade=t=in:d=0.3",
         f"afade=t=out:st={max(length - 2, 0):.2f}:d=2",
     ])

@@ -60,6 +60,8 @@ void main() {
       of: find.ancestor(of: makkah, matching: find.byType(ListTile)),
       matching: find.byTooltip('Preview'),
     );
+    await tester.ensureVisible(preview);
+    await tester.pumpAndSettle();
     await tester.tap(preview);
     await tester.runAsync(
       () => Future<void>.delayed(const Duration(milliseconds: 50)),
@@ -84,7 +86,7 @@ void main() {
     final base = {
       'adhanModes': {'fajr': 'adhan', 'dhuhr': 'adhan', 'asr': 'notify'},
     };
-    expect(iosAdhanClip(base, 'dhuhr'), 'adhan_default.caf');
+    expect(iosAdhanClip(base, 'dhuhr'), '$defaultAdhanSound.caf');
     expect(iosAdhanClip(base, 'asr'), isNull);
     expect(iosAdhanClip(base, 'sunrise'), isNull);
     // Fajr has no bundled clip with the Fajr words: a short alert unless a

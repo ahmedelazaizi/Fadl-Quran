@@ -35,7 +35,7 @@ void main() {
       expect(adhan.credit, contains('https://'), reason: adhan.id);
       expect(
         adhan.credit,
-        matches(RegExp('CC0|CC BY|[Pp]ublic domain')),
+        matches(RegExp('CC0|CC BY|public domain', caseSensitive: false)),
         reason: adhan.id,
       );
     }
@@ -52,6 +52,12 @@ void main() {
 
   test('Fajr adhans serve Fajr only and the others never serve Fajr', () {
     expect(bundledAdhanSounds, contains(defaultAdhanSound));
+    // A fresh install rings a real Fajr adhan at Fajr.
+    expect(bundledFajrAdhanSounds, contains(defaultFajrAdhanSound));
+    expect(
+      soundForPrayer({'fajrSound': defaultFajrAdhanSound}, 'fajr'),
+      defaultFajrAdhanSound,
+    );
     for (final id in bundledAdhanSounds) {
       expect(soundForPrayer({'fajrSound': id}, 'fajr'), isNull, reason: id);
     }

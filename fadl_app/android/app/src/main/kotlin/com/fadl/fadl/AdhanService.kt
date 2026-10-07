@@ -220,7 +220,9 @@ class AdhanService : Service() {
         return when {
             usable -> file
             fajr -> null
-            else -> R.raw.adhan_default // A deleted regular import falls back to the bundled adhan.
+            // A deleted regular import falls back to the default adhan
+            // (defaultAdhanSound in lib/core/adhan_service.dart).
+            else -> R.raw.adhan_imadi
         }
     }
 

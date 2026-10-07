@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A0C511D87A6E6C9BD62B4671 /* adhan_hadj_slimane.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6F8D0E07DB122C35668B3856 /* adhan_hadj_slimane.caf */; };
+		7907097CBBAEFCE42A97CBD7 /* adhan_hamathani.caf in Resources */ = {isa = PBXBuildFile; fileRef = E102CE301F93DB77F4AED289 /* adhan_hamathani.caf */; };
+		FFBCA485317406E57ABC13FD /* adhan_imadi.caf in Resources */ = {isa = PBXBuildFile; fileRef = A2FE7B8317BDB3489DA4B2EB /* adhan_imadi.caf */; };
+		B5952B325191E1FE42451341 /* adhan_fajr_alafasy.caf in Resources */ = {isa = PBXBuildFile; fileRef = 9102B26B15C4288C81A79FE6 /* adhan_fajr_alafasy.caf */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -65,6 +69,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6F8D0E07DB122C35668B3856 /* adhan_hadj_slimane.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_hadj_slimane.caf; sourceTree = "<group>"; };
+		E102CE301F93DB77F4AED289 /* adhan_hamathani.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_hamathani.caf; sourceTree = "<group>"; };
+		A2FE7B8317BDB3489DA4B2EB /* adhan_imadi.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_imadi.caf; sourceTree = "<group>"; };
+		9102B26B15C4288C81A79FE6 /* adhan_fajr_alafasy.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_fajr_alafasy.caf; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
@@ -156,6 +164,10 @@
 			children = (
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
+				6F8D0E07DB122C35668B3856 /* adhan_hadj_slimane.caf */,
+				E102CE301F93DB77F4AED289 /* adhan_hamathani.caf */,
+				A2FE7B8317BDB3489DA4B2EB /* adhan_imadi.caf */,
+				9102B26B15C4288C81A79FE6 /* adhan_fajr_alafasy.caf */,
 				F0AD0000000000000000A001 /* adhan_default.caf */,
 				F0AD0000000000000000A002 /* adhan_madinah.caf */,
 				F0AD0000000000000000A003 /* adhan_makkah.caf */,
@@ -300,6 +312,10 @@
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				A0C511D87A6E6C9BD62B4671 /* adhan_hadj_slimane.caf in Resources */,
+				7907097CBBAEFCE42A97CBD7 /* adhan_hamathani.caf in Resources */,
+				FFBCA485317406E57ABC13FD /* adhan_imadi.caf in Resources */,
+				B5952B325191E1FE42451341 /* adhan_fajr_alafasy.caf in Resources */,
 				F0AD0000000000000000B001 /* adhan_default.caf in Resources */,
 				F0AD0000000000000000B002 /* adhan_madinah.caf in Resources */,
 				F0AD0000000000000000B003 /* adhan_makkah.caf in Resources */,

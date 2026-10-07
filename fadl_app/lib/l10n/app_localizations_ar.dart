@@ -1230,7 +1230,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get modeSilent => 'صامت';
 
   @override
-  String get fajrSoundFallback => 'لا يوجد أذان فجر مستورد، سيصلك إشعار قصير';
+  String get fajrSoundFallback => 'لم تختر أذانًا للفجر، فسيصلك إشعار قصير';
 
   @override
   String get perPrayerAlert => 'التنبيه لكل صلاة';
@@ -1247,7 +1247,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adhanIosClip =>
-      'على الآيفون يُرفع أول ٣٠ ثانية من الأذان مع إشعار دخول الوقت، وهي أقصى مدة تسمح بها آبل. ويمكنك استيراد أي أذان من هاتفك، ومنه أذان للفجر.';
+      'على الآيفون يُرفع أول ٣٠ ثانية من الأذان مع إشعار دخول الوقت، وهي أقصى مدة تسمح بها آبل.';
 
   @override
   String get adhanDisabled =>
@@ -1255,10 +1255,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fajrSoundNotice =>
-      'الأذان المرفق لا يتضمن «الصلاة خير من النوم»، لذلك لا يُستخدم لصلاة الفجر. استورد أذان فجر من هاتفك، وإلا يصلك إشعار قصير بصوت التنبيه.';
+      'لصلاة الفجر أذان خاص فيه «الصلاة خير من النوم»، لذلك تظهر هنا أذانات الفجر فقط. ويمكنك استيراد أذان فجر آخر من هاتفك.';
 
   @override
-  String get fajrImportHint => 'لم تستورد أذان فجر بعد، فسيصلك إشعار قصير.';
+  String get fajrImportHint => 'لم تختر أذانًا للفجر، فسيصلك إشعار قصير.';
 
   @override
   String get adhanOptions => 'خيارات';

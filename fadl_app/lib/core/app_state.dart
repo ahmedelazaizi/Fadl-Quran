@@ -6,6 +6,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'adhan_service.dart';
 import 'api.dart';
 import 'prayer_widget_schedule.dart';
 
@@ -148,8 +149,8 @@ class AppState extends ChangeNotifier {
       // Device-only adhan settings (see core/adhan_service.dart); absent
       // per-prayer modes are derived from the legacy `adhan` bool map.
       'adhanModes': <String, String>{},
-      'fajrSound': null,
-      'regularSound': 'adhan_default',
+      'fajrSound': defaultFajrAdhanSound,
+      'regularSound': defaultAdhanSound,
       'respectSilent': false,
       ...storedNotifications,
       'adhan': {

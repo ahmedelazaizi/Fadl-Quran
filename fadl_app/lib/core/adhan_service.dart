@@ -26,8 +26,12 @@ const prayerNames = <String, String>{
 
 const adhanModeValues = ['adhan', 'notify', 'silent'];
 
-/// Bundled raw resource; it lacks the Fajr-specific words, so never Fajr.
-const defaultAdhanSound = 'adhan_default';
+/// The adhan for dhuhr…isha on a fresh install, and the fallback when a
+/// chosen sound is gone. Not a Fajr adhan, so never used for Fajr.
+const defaultAdhanSound = 'adhan_imadi';
+
+/// The Fajr adhan on a fresh install (it has «الصلاة خير من النوم»).
+const defaultFajrAdhanSound = 'adhan_fajr_alafasy';
 
 /// Bundled adhans for dhuhr…isha (see core/adhan_catalog.dart).
 final bundledAdhanSounds = [
@@ -46,15 +50,14 @@ const adhanScheduleWindow = Duration(hours: 48);
 
 /// Mode chosen for [prayer], migrating the legacy bool map:
 /// `false` → silent; `true` (or unset, except sunrise) → the explicit mode
-/// if any, else `adhan` for dhuhr/asr/maghrib/isha and `notify` for
-/// fajr/sunrise.
+/// if any, else `adhan` for the five prayers and `notify` for sunrise.
 String prayerMode(Map notifications, String prayer) {
   final legacy = notifications['adhan'] as Map? ?? const {};
   final enabled = legacy[prayer] ?? prayer != 'sunrise';
   if (enabled != true) return 'silent';
   final explicit = (notifications['adhanModes'] as Map?)?[prayer];
   if (explicit == 'adhan' || explicit == 'notify') return explicit as String;
-  return prayer == 'fajr' || prayer == 'sunrise' ? 'notify' : 'adhan';
+  return prayer == 'sunrise' ? 'notify' : 'adhan';
 }
 
 /// What actually happens at [prayer] time: the master switch silences all,

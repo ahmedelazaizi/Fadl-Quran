@@ -52,7 +52,7 @@ void main() {
   );
 
   group('legacy migration', () {
-    test('legacy true maps to adhan for dhuhr…isha, notify for fajr and '
+    test('legacy true maps to adhan for the five prayers, notify for '
         'sunrise; false maps to silent', () {
       final legacy = {
         'adhan': {
@@ -64,9 +64,8 @@ void main() {
           'isha': true,
         },
       };
-      expect(prayerMode(legacy, 'fajr'), 'notify');
       expect(prayerMode(legacy, 'sunrise'), 'notify');
-      for (final p in ['dhuhr', 'asr', 'maghrib', 'isha']) {
+      for (final p in ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']) {
         expect(prayerMode(legacy, p), 'adhan');
       }
       final off = {
@@ -102,9 +101,9 @@ void main() {
         final state = AppState();
         await state.load();
         expect(state.notifications['regularSound'], defaultAdhanSound);
-        expect(state.notifications['fajrSound'], isNull);
+        expect(state.notifications['fajrSound'], defaultFajrAdhanSound);
         expect(state.notifications['respectSilent'], isFalse);
-        expect(prayerMode(state.notifications, 'fajr'), 'notify');
+        expect(prayerMode(state.notifications, 'fajr'), 'adhan');
         expect(prayerMode(state.notifications, 'asr'), 'silent');
         expect(prayerMode(state.notifications, 'dhuhr'), 'adhan');
 
@@ -309,12 +308,16 @@ void main() {
     final events = ((schedule.arguments as Map)['events'] as List).cast<Map>();
     expect(events, isNotEmpty);
     final prayers = events.map((e) => e['prayer']).toSet();
-    expect(prayers, everyElement(isIn(['dhuhr', 'maghrib', 'isha'])));
+    expect(prayers, everyElement(isIn(['fajr', 'dhuhr', 'maghrib', 'isha'])));
     for (final e in events) {
       final at = DateTime.fromMillisecondsSinceEpoch(e['at'] as int);
       expect(at.isAfter(before), isTrue);
       expect(at.difference(before), lessThanOrEqualTo(adhanScheduleWindow));
-      expect(e['sound'], defaultAdhanSound);
+      // Fajr rings its own adhan, with «الصلاة خير من النوم».
+      expect(
+        e['sound'],
+        e['prayer'] == 'fajr' ? defaultFajrAdhanSound : defaultAdhanSound,
+      );
     }
 
     final scheduled = pluginCalls.where((c) => c.method == 'zonedSchedule');

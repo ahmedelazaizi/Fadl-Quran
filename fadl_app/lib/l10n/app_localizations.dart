@@ -2351,7 +2351,7 @@ abstract class AppLocalizations {
   /// No description provided for @fajrSoundFallback.
   ///
   /// In en, this message translates to:
-  /// **'No Fajr adhan has been imported; you will receive a short notification.'**
+  /// **'No Fajr adhan is chosen; you will receive a short notification.'**
   String get fajrSoundFallback;
 
   /// No description provided for @perPrayerAlert.
@@ -2381,7 +2381,7 @@ abstract class AppLocalizations {
   /// No description provided for @adhanIosClip.
   ///
   /// In en, this message translates to:
-  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows. You can import any adhan from your phone, including one for Fajr.'**
+  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows.'**
   String get adhanIosClip;
 
   /// No description provided for @adhanDisabled.
@@ -2393,13 +2393,13 @@ abstract class AppLocalizations {
   /// No description provided for @fajrSoundNotice.
   ///
   /// In en, this message translates to:
-  /// **'The bundled adhan does not include the Fajr phrase ‘prayer is better than sleep’, so it is not used for Fajr. Import a Fajr adhan from your phone or receive a short notification.'**
+  /// **'Fajr has its own adhan with «prayer is better than sleep», so only Fajr adhans are listed here. You can also import another Fajr adhan from your phone.'**
   String get fajrSoundNotice;
 
   /// No description provided for @fajrImportHint.
   ///
   /// In en, this message translates to:
-  /// **'No Fajr adhan imported yet; you will receive a short notification.'**
+  /// **'No Fajr adhan is chosen; you will receive a short notification.'**
   String get fajrImportHint;
 
   /// No description provided for @adhanOptions.

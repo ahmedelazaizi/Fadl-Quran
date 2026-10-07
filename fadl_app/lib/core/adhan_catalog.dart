@@ -29,6 +29,54 @@ class BundledAdhan {
 
 const bundledAdhans = <BundledAdhan>[
   BundledAdhan(
+    id: 'adhan_imadi',
+    nameAr: 'أحمد العمادي',
+    nameEn: 'Ahmed al-Imadi',
+    credit:
+        'Adhan Notifications collection, uploaded to the Internet Archive by '
+        'abd.al.rahman and marked by the uploader with the Public Domain '
+        'Mark 1.0 (https://creativecommons.org/publicdomain/mark/1.0/)\n'
+        'https://archive.org/details/adhan.notifications (Ahmed_al_Imadi_Adhan.mp3)\n'
+        'Modified: loudness levelled; on iOS, the first 29.5 s with a '
+        'fade-out.',
+  ),
+  BundledAdhan(
+    id: 'adhan_hamathani',
+    nameAr: 'ماجد الحمذاني',
+    nameEn: 'Majed al-Hamathani',
+    credit:
+        'Adhan Notifications collection, uploaded to the Internet Archive by '
+        'abd.al.rahman and marked by the uploader with the Public Domain '
+        'Mark 1.0 (https://creativecommons.org/publicdomain/mark/1.0/)\n'
+        'https://archive.org/details/adhan.notifications (Majed_al_Hamathani_Adhan.mp3)\n'
+        'Modified: loudness levelled; on iOS, the first 29.5 s with a '
+        'fade-out.',
+  ),
+  BundledAdhan(
+    id: 'adhan_hadj_slimane',
+    nameAr: 'مختار حاج سليمان',
+    nameEn: 'Mokhtar Hadj Slimane',
+    credit:
+        'Adhan Notifications collection, uploaded to the Internet Archive by '
+        'abd.al.rahman and marked by the uploader with the Public Domain '
+        'Mark 1.0 (https://creativecommons.org/publicdomain/mark/1.0/)\n'
+        'https://archive.org/details/adhan.notifications (Mokhtar_Hadj_Slimane_Adhan.mp3)\n'
+        'Modified: loudness levelled; on iOS, the first 29.5 s with a '
+        'fade-out.',
+  ),
+  BundledAdhan(
+    id: 'adhan_fajr_alafasy',
+    nameAr: 'مشاري راشد العفاسي (أذان الفجر)',
+    nameEn: 'Mishary Rashid Alafasy (Fajr adhan)',
+    credit:
+        'Adhan Notifications collection, uploaded to the Internet Archive by '
+        'abd.al.rahman and marked by the uploader with the Public Domain '
+        'Mark 1.0 (https://creativecommons.org/publicdomain/mark/1.0/)\n'
+        'https://archive.org/details/adhan.notifications (Mishary_Rashid_al_Afasy_Fajr_Adhan.mp3)\n'
+        'Modified: loudness levelled, trailing silence removed; on iOS, the first 29.5 s with a '
+        'fade-out.',
+  ),
+  BundledAdhan(
     id: 'adhan_default',
     nameAr: 'الأذان الأساسي (هادئ)',
     nameEn: 'Default adhan (calm)',
