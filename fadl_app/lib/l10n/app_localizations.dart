@@ -851,7 +851,7 @@ abstract class AppLocalizations {
   /// No description provided for @streamingNotice.
   ///
   /// In en, this message translates to:
-  /// **'Streaming only; permission to listen does not grant redistribution rights.'**
+  /// **'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.'**
   String get streamingNotice;
 
   /// No description provided for @chooseEdition.
@@ -1157,7 +1157,7 @@ abstract class AppLocalizations {
   /// No description provided for @tajweedDetails.
   ///
   /// In en, this message translates to:
-  /// **'Source: {source}\n{url}\nThe color-coded text is not bundled; download is optional when online. Source size about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.'**
+  /// **'Source: {source}\n{url}\nThe color-coded text ships with the app and works offline; installing it unpacks about {approx} (safety limit {limit}). Space used: {used}. Colors are a visual aid, not a religious ruling.'**
   String tajweedDetails(
     String source,
     String url,
@@ -1823,7 +1823,7 @@ abstract class AppLocalizations {
   /// No description provided for @fullSurahOnlineNotice.
   ///
   /// In en, this message translates to:
-  /// **'Online streaming only; permission to listen does not grant redistribution rights.'**
+  /// **'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.'**
   String get fullSurahOnlineNotice;
 
   /// No description provided for @fullSurahPlayError.
@@ -2351,7 +2351,7 @@ abstract class AppLocalizations {
   /// No description provided for @fajrSoundFallback.
   ///
   /// In en, this message translates to:
-  /// **'No Fajr adhan has been imported; you will receive a short notification.'**
+  /// **'No Fajr adhan is chosen; you will receive a short notification.'**
   String get fajrSoundFallback;
 
   /// No description provided for @perPrayerAlert.
@@ -2378,6 +2378,12 @@ abstract class AppLocalizations {
   /// **'Full adhan is available on Android only; on this device, prayers set to Adhan receive a notification at prayer time.'**
   String get adhanAndroidOnly;
 
+  /// No description provided for @adhanIosClip.
+  ///
+  /// In en, this message translates to:
+  /// **'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows.'**
+  String get adhanIosClip;
+
   /// No description provided for @adhanDisabled.
   ///
   /// In en, this message translates to:
@@ -2387,13 +2393,13 @@ abstract class AppLocalizations {
   /// No description provided for @fajrSoundNotice.
   ///
   /// In en, this message translates to:
-  /// **'The bundled adhan does not include the Fajr phrase ‘prayer is better than sleep’, so it is not used for Fajr. Import a Fajr adhan from your phone or receive a short notification.'**
+  /// **'Fajr has its own adhan with «prayer is better than sleep», so only Fajr adhans are listed here. You can also import another Fajr adhan from your phone.'**
   String get fajrSoundNotice;
 
   /// No description provided for @fajrImportHint.
   ///
   /// In en, this message translates to:
-  /// **'No Fajr adhan imported yet; you will receive a short notification.'**
+  /// **'No Fajr adhan is chosen; you will receive a short notification.'**
   String get fajrImportHint;
 
   /// No description provided for @adhanOptions.
@@ -2447,7 +2453,7 @@ abstract class AppLocalizations {
   /// No description provided for @batteryAdvice.
   ///
   /// In en, this message translates to:
-  /// **'Some phones stop alarms from closed apps to save battery. Open settings, select All apps, then Fadl, and set it to Unrestricted or Not optimized. On some devices, also enable Autostart.'**
+  /// **'Some phones stop alarms from closed apps to save battery. Tap \"Open battery settings\" to open Fadl\'s app page, then choose Battery and set it to Unrestricted. On Xiaomi, Oppo and Vivo phones, also enable Autostart on the same page.'**
   String get batteryAdvice;
 
   /// No description provided for @openBatterySettings.
@@ -2455,12 +2461,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open battery settings'**
   String get openBatterySettings;
-
-  /// No description provided for @bundledAdhan.
-  ///
-  /// In en, this message translates to:
-  /// **'Bundled adhan'**
-  String get bundledAdhan;
 
   /// No description provided for @noFajrAdhan.
   ///
@@ -4825,6 +4825,348 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English translation: {url}'**
   String libraryTranslationLabel(String url);
+
+  /// No description provided for @dhikrReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember Allah'**
+  String get dhikrReminderTitle;
+
+  /// No description provided for @dhikrReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr reminders'**
+  String get dhikrReminder;
+
+  /// No description provided for @dhikrReminderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short remembrance or supplication between 8 AM and 10 PM'**
+  String get dhikrReminderHint;
+
+  /// No description provided for @dhikrEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Every hour} other{Every {number} hours}}'**
+  String dhikrEvery(int count, String number);
+
+  /// No description provided for @fullSurahSaveWhileListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Save surahs I listen to'**
+  String get fullSurahSaveWhileListening;
+
+  /// No description provided for @fullSurahSaveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A surah is kept for offline listening once it has fully loaded while playing.'**
+  String get fullSurahSaveHint;
+
+  /// No description provided for @fullSurahDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the surah. Check your connection and try again.'**
+  String get fullSurahDownloadFailed;
+
+  /// No description provided for @fullSurahDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-surah recitations'**
+  String get fullSurahDownloads;
+
+  /// No description provided for @fullSurahSavedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved surahs: {count} • {size}'**
+  String fullSurahSavedCount(String count, String size);
+
+  /// No description provided for @fullSurahDeleteEdition.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this reciter\'s saved surahs?'**
+  String get fullSurahDeleteEdition;
+
+  /// No description provided for @fullSurahPlayingOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing from your device'**
+  String get fullSurahPlayingOffline;
+
+  /// No description provided for @recitationDownloadTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations'**
+  String get recitationDownloadTab;
+
+  /// No description provided for @recitationDownloadedTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded recitations'**
+  String get recitationDownloadedTab;
+
+  /// No description provided for @recitationDownloadIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations to play them without internet.'**
+  String get recitationDownloadIntro;
+
+  /// No description provided for @recitationFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get recitationFrom;
+
+  /// No description provided for @recitationTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get recitationTo;
+
+  /// No description provided for @recitationReciter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reciter'**
+  String get recitationReciter;
+
+  /// No description provided for @recitationDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get recitationDownload;
+
+  /// No description provided for @recitationDownloadingRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading surah {current} of {total}…'**
+  String recitationDownloadingRange(String current, String total);
+
+  /// No description provided for @recitationRangeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitations downloaded'**
+  String get recitationRangeDone;
+
+  /// No description provided for @recitationNoneDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No recitations downloaded yet.'**
+  String get recitationNoneDownloaded;
+
+  /// No description provided for @chooseReciterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a reciter'**
+  String get chooseReciterTitle;
+
+  /// No description provided for @reciterSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search reciters'**
+  String get reciterSearchHint;
+
+  /// No description provided for @reciterFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourites'**
+  String get reciterFavorite;
+
+  /// No description provided for @reciterUnfavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get reciterUnfavorite;
+
+  /// No description provided for @reciterVerseSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlights each ayah'**
+  String get reciterVerseSync;
+
+  /// No description provided for @recitationAutoDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download the surah I listen to or read'**
+  String get recitationAutoDownload;
+
+  /// No description provided for @recitationAutoDownloadHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves it automatically for the chosen reciter so it plays offline next time.'**
+  String get recitationAutoDownloadHint;
+
+  /// No description provided for @recitationsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Download recitations'**
+  String get recitationsButton;
+
+  /// No description provided for @recitationCompleteSurahs.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete surahs: {count}'**
+  String recitationCompleteSurahs(String count);
+
+  /// No description provided for @hajjUmrah.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj & Umrah'**
+  String get hajjUmrah;
+
+  /// No description provided for @hajjUmrahMore.
+  ///
+  /// In en, this message translates to:
+  /// **'The rites step by step, with supplications and counters'**
+  String get hajjUmrahMore;
+
+  /// No description provided for @riteStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get riteStart;
+
+  /// No description provided for @riteContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get riteContinue;
+
+  /// No description provided for @riteRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get riteRestart;
+
+  /// No description provided for @riteStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String riteStepOf(String current, String total);
+
+  /// No description provided for @ritePrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get ritePrevious;
+
+  /// No description provided for @riteNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get riteNext;
+
+  /// No description provided for @riteDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done — may Allah accept it'**
+  String get riteDone;
+
+  /// No description provided for @riteRound.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit} {current} of {total}'**
+  String riteRound(String unit, String current, String total);
+
+  /// No description provided for @riteTapToCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap after each one'**
+  String get riteTapToCount;
+
+  /// No description provided for @riteUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get riteUndo;
+
+  /// No description provided for @riteReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get riteReset;
+
+  /// No description provided for @riteCounterComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get riteCounterComplete;
+
+  /// No description provided for @riteSupplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplications'**
+  String get riteSupplications;
+
+  /// No description provided for @riteSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get riteSteps;
+
+  /// No description provided for @riteDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.'**
+  String get riteDisclaimer;
+
+  /// No description provided for @moreAdhansTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More adhans by renowned muezzins'**
+  String get moreAdhansTitle;
+
+  /// No description provided for @moreAdhansHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.'**
+  String get moreAdhansHint;
+
+  /// No description provided for @moreAdhansOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Islamweb adhan library'**
+  String get moreAdhansOpen;
+
+  /// No description provided for @moreAdhansOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the website'**
+  String get moreAdhansOpenError;
+
+  /// No description provided for @manualAdjustments.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust times manually'**
+  String get manualAdjustments;
+
+  /// No description provided for @manualAdjustmentsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move any prayer earlier or later by minutes'**
+  String get manualAdjustmentsSubtitle;
+
+  /// No description provided for @manualAdjustmentsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If the adhan differs from your mosque or the official calendar, move the prayer earlier or later by minutes. The adhan and alerts update at once.'**
+  String get manualAdjustmentsHint;
+
+  /// No description provided for @minuteEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute earlier'**
+  String get minuteEarlier;
+
+  /// No description provided for @minuteLater.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute later'**
+  String get minuteLater;
+
+  /// No description provided for @resetAdjustments.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get resetAdjustments;
 }
 
 class _AppLocalizationsDelegate

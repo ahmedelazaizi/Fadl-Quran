@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:audio_session/audio_session.dart';
 import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'core/adhan_catalog.dart';
 import 'core/app_state.dart';
 import 'core/local_notifications.dart';
+import 'core/reciters.dart';
 import 'core/theme.dart';
 import 'screens/shell.dart';
+import 'widgets/adaptive_layout.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +27,18 @@ Future<void> main() async {
       final license = await rootBundle.loadString('assets/fonts/$file');
       yield LicenseEntryWithLineBreaks(fonts, license);
     }
-    // res/raw/adhan_default.ogg, unmodified (SHA-1 a1fa4fd9…6522).
+    for (final adhan in bundledAdhans) {
+      yield LicenseEntryWithLineBreaks([
+        'Adhan recording: ${adhan.nameEn}',
+      ], adhan.credit);
+    }
     yield const LicenseEntryWithLineBreaks(
-      ['Adhan recording'],
-      '"Beautiful adhan" by Adam-synagda, Wikimedia Commons\n'
-      'https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg\n'
-      'Dedicated to the public domain under CC0 1.0 Universal:\n'
-      'https://creativecommons.org/publicdomain/zero/1.0/',
+      ['Tajweed colors'],
+      'Tajweed annotations by Collin Fair, cpfair/quran-tajweed\n'
+      'https://github.com/cpfair/quran-tajweed\n'
+      'Licensed under CC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n'
+      'Re-anchored onto the mushaf text (tool/build_tajweed_asset.py).\n'
+      'Underlying Uthmani text: Tanzil Quran Text, https://tanzil.net',
     );
     yield const LicenseEntryWithLineBreaks(
       ['Hadith texts'],
@@ -38,9 +47,21 @@ Future<void> main() async {
       'released into the public domain under the Unlicense.',
     );
   });
+  // Recitation keeps playing with the screen locked or the iOS silent switch
+  // on, and pauses for calls like any music player.
+  unawaited(
+    AudioSession.instance
+        .then(
+          (session) =>
+              session.configure(const AudioSessionConfiguration.music()),
+        )
+        .catchError((Object e) => debugPrint('Audio session setup failed: $e')),
+  );
   final state = AppState();
   runApp(ChangeNotifierProvider.value(value: state, child: const FadlApp()));
   await state.load();
+  // Cached everyayah reciters are available at once; refreshed online.
+  unawaited(ReciterCatalog.instance.load());
   await LocalNotifications.instance.init();
   // Review reminders need no location; prayer items are skipped without one.
   unawaited(LocalNotifications.instance.reschedule(state));
@@ -61,6 +82,8 @@ class FadlApp extends StatelessWidget {
       theme: buildTheme(Brightness.light),
       darkTheme: buildTheme(Brightness.dark),
       themeMode: state.themeMode,
+      // Tablets: a centred frame instead of stretching across the screen.
+      builder: (context, child) => TabletFrame(child: child!),
       home: const AppGate(),
     );
   }

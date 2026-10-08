@@ -392,7 +392,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get streamingNotice =>
-      'بث مباشر فقط؛ إتاحة الاستماع لا تعني إذن إعادة توزيع التسجيلات.';
+      'تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.';
 
   @override
   String get chooseEdition => 'اختر الرواية أو إصدار المصحف';
@@ -596,7 +596,7 @@ class AppLocalizationsAr extends AppLocalizations {
     String limit,
     String used,
   ) {
-    return 'المصدر: $source\n$url\nلا يُضمّن النص الملوّن في التطبيق؛ التنزيل اختياري عند توفر الإنترنت. حجم المصدر نحو $approx (حد الأمان $limit). المساحة المستخدمة: $used. التلوين وسيلة إيضاح بصرية لا حكم فقهي.';
+    return 'المصدر: $source\n$url\nالنص الملوّن مضمَّن في التطبيق ويعمل دون اتصال؛ تثبيته يجهّز نحو $approx (حد الأمان $limit). المساحة المستخدمة: $used. التلوين وسيلة إيضاح بصرية لا حكم فقهي.';
   }
 
   @override
@@ -964,7 +964,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullSurahOnlineNotice =>
-      'بث عبر الإنترنت فقط؛ إتاحة الاستماع لا تمنح إذن إعادة توزيع التسجيلات.';
+      'تُبث عبر الإنترنت، ويمكنك حفظ السور على جهازك للاستماع الشخصي دون اتصال؛ ولا يمنح ذلك إذن إعادة توزيع التسجيلات.';
 
   @override
   String get fullSurahPlayError => 'تعذّر تشغيل السورة. تحقق من الاتصال.';
@@ -1230,7 +1230,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get modeSilent => 'صامت';
 
   @override
-  String get fajrSoundFallback => 'لا يوجد أذان فجر مستورد، سيصلك إشعار قصير';
+  String get fajrSoundFallback => 'لم تختر أذانًا للفجر، فسيصلك إشعار قصير';
 
   @override
   String get perPrayerAlert => 'التنبيه لكل صلاة';
@@ -1246,15 +1246,19 @@ class AppLocalizationsAr extends AppLocalizations {
       'الأذان الكامل متاح على أندرويد فقط؛ على هذا الجهاز يصلك إشعار عند دخول الوقت للصلوات المضبوطة على «أذان».';
 
   @override
+  String get adhanIosClip =>
+      'على الآيفون يُرفع أول ٣٠ ثانية من الأذان مع إشعار دخول الوقت، وهي أقصى مدة تسمح بها آبل.';
+
+  @override
   String get adhanDisabled =>
       'التنبيهات متوقفة من الإعدادات العامة، فعّلها ليُرفع الأذان.';
 
   @override
   String get fajrSoundNotice =>
-      'الأذان المرفق لا يتضمن «الصلاة خير من النوم»، لذلك لا يُستخدم لصلاة الفجر. استورد أذان فجر من هاتفك، وإلا يصلك إشعار قصير بصوت التنبيه.';
+      'لصلاة الفجر أذان خاص فيه «الصلاة خير من النوم»، لذلك تظهر هنا أذانات الفجر فقط. ويمكنك استيراد أذان فجر آخر من هاتفك.';
 
   @override
-  String get fajrImportHint => 'لم تستورد أذان فجر بعد، فسيصلك إشعار قصير.';
+  String get fajrImportHint => 'لم تختر أذانًا للفجر، فسيصلك إشعار قصير.';
 
   @override
   String get adhanOptions => 'خيارات';
@@ -1284,13 +1288,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get batteryAdvice =>
-      'بعض الهواتف توقف منبّهات التطبيقات المغلقة لتوفير البطارية. افتح الإعدادات، واختر «كل التطبيقات»، ثم «فضل»، واجعله «غير محسَّن» أو «بلا قيود». وفي بعض الأجهزة فعّل أيضًا «التشغيل التلقائي».';
+      'بعض الهواتف توقف منبّهات التطبيقات المغلقة لتوفير البطارية. اضغط «فتح إعدادات البطارية» فتظهر صفحة «فضل»، ثم اختر «البطارية» واجعلها «غير مقيّد» (أو «بلا قيود»). وفي هواتف شاومي وأوبو وفيفو فعّل أيضًا «التشغيل التلقائي» من نفس الصفحة.';
 
   @override
   String get openBatterySettings => 'فتح إعدادات البطارية';
-
-  @override
-  String get bundledAdhan => 'الأذان المرفق مع التطبيق';
 
   @override
   String get noFajrAdhan => 'بدون أذان (إشعار قصير)';
@@ -2671,4 +2672,203 @@ class AppLocalizationsAr extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'الترجمة الإنجليزية: $url';
   }
+
+  @override
+  String get dhikrReminderTitle => 'ذكر الله';
+
+  @override
+  String get dhikrReminder => 'تذكير بالأذكار';
+
+  @override
+  String get dhikrReminderHint =>
+      'ذكر أو دعاء قصير بين الثامنة صباحًا والعاشرة مساءً';
+
+  @override
+  String dhikrEvery(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $number ساعة',
+      few: 'كل $number ساعات',
+      two: 'كل ساعتين',
+      one: 'كل ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fullSurahSaveWhileListening => 'احفظ السور التي أستمع إليها';
+
+  @override
+  String get fullSurahSaveHint =>
+      'تُحفظ السورة للاستماع دون اتصال بعد اكتمال تحميلها أثناء التشغيل.';
+
+  @override
+  String get fullSurahDownloadFailed =>
+      'تعذّر تنزيل السورة. تحقق من الاتصال وأعد المحاولة.';
+
+  @override
+  String get fullSurahDownloads => 'تلاوات السور كاملة';
+
+  @override
+  String fullSurahSavedCount(String count, String size) {
+    return 'السور المحفوظة: $count • $size';
+  }
+
+  @override
+  String get fullSurahDeleteEdition => 'حذف السور المحفوظة لهذا القارئ؟';
+
+  @override
+  String get fullSurahPlayingOffline => 'تُشغَّل من جهازك';
+
+  @override
+  String get recitationDownloadTab => 'تحميل التلاوات';
+
+  @override
+  String get recitationDownloadedTab => 'التلاوات المحملة';
+
+  @override
+  String get recitationDownloadIntro =>
+      'يمكنك تحميل التلاوات لتشغيلها بدون إنترنت.';
+
+  @override
+  String get recitationFrom => 'من';
+
+  @override
+  String get recitationTo => 'إلى';
+
+  @override
+  String get recitationReciter => 'القارئ';
+
+  @override
+  String get recitationDownload => 'تحميل';
+
+  @override
+  String recitationDownloadingRange(String current, String total) {
+    return 'جارٍ تحميل السورة $current من $total…';
+  }
+
+  @override
+  String get recitationRangeDone => 'اكتمل تحميل التلاوات';
+
+  @override
+  String get recitationNoneDownloaded => 'لا توجد تلاوات محملة بعد.';
+
+  @override
+  String get chooseReciterTitle => 'اختر القارئ';
+
+  @override
+  String get reciterSearchHint => 'ابحث عن قارئ';
+
+  @override
+  String get reciterFavorite => 'إضافة إلى المفضلة';
+
+  @override
+  String get reciterUnfavorite => 'إزالة من المفضلة';
+
+  @override
+  String get reciterVerseSync => 'يدعم تظليل الآية';
+
+  @override
+  String get recitationAutoDownload => 'حمّل السورة التي أستمع إليها أو أقرؤها';
+
+  @override
+  String get recitationAutoDownloadHint =>
+      'تُحفظ تلقائيًا بصوت القارئ المختار لتعمل دون إنترنت في المرة القادمة.';
+
+  @override
+  String get recitationsButton => 'تحميل التلاوات';
+
+  @override
+  String recitationCompleteSurahs(String count) {
+    return 'السور الكاملة: $count';
+  }
+
+  @override
+  String get hajjUmrah => 'الحج والعمرة';
+
+  @override
+  String get hajjUmrahMore => 'المناسك خطوة بخطوة مع الأدعية وعدّاد الأشواط';
+
+  @override
+  String get riteStart => 'ابدأ';
+
+  @override
+  String get riteContinue => 'متابعة';
+
+  @override
+  String get riteRestart => 'البدء من جديد';
+
+  @override
+  String riteStepOf(String current, String total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get ritePrevious => 'السابق';
+
+  @override
+  String get riteNext => 'التالي';
+
+  @override
+  String get riteDone => 'تمّت المناسك — تقبّل الله منك';
+
+  @override
+  String riteRound(String unit, String current, String total) {
+    return '$unit $current من $total';
+  }
+
+  @override
+  String get riteTapToCount => 'اضغط بعد كل واحد';
+
+  @override
+  String get riteUndo => 'تراجع';
+
+  @override
+  String get riteReset => 'تصفير';
+
+  @override
+  String get riteCounterComplete => 'اكتمل';
+
+  @override
+  String get riteSupplications => 'الأدعية';
+
+  @override
+  String get riteSteps => 'الخطوات';
+
+  @override
+  String get riteDisclaimer =>
+      'خلاصة ما اتفق عليه العلماء. وللحالات الخاصة (المرأة، والمريض، والقِران والإفراد) يُرجع إلى مرشد الحملة أو أهل العلم.';
+
+  @override
+  String get moreAdhansTitle => 'أذانات أكثر بأصوات كبار المؤذنين';
+
+  @override
+  String get moreAdhansHint =>
+      'مكتبة الأذان في موقع «إسلام ويب» فيها مئات الأذانات (منها أذانات الفجر). نزّل الأذان الذي يعجبك من الموقع إلى هاتفك، ثم اختره من «استيراد من الهاتف» بالأعلى. الأذانات ملك موقع إسلام ويب، وتحميلها للاستخدام الشخصي.';
+
+  @override
+  String get moreAdhansOpen => 'فتح مكتبة الأذان في إسلام ويب';
+
+  @override
+  String get moreAdhansOpenError => 'تعذّر فتح الموقع';
+
+  @override
+  String get manualAdjustments => 'تعديل الأوقات يدويًا';
+
+  @override
+  String get manualAdjustmentsSubtitle => 'قدّم أو أخّر أي صلاة بالدقائق';
+
+  @override
+  String get manualAdjustmentsHint =>
+      'إذا اختلف موعد الأذان عن مسجدك أو عن التقويم الرسمي، قدّم الصلاة أو أخّرها بالدقائق. يتغيّر وقت الأذان والتنبيهات فورًا.';
+
+  @override
+  String get minuteEarlier => 'قبل بدقيقة';
+
+  @override
+  String get minuteLater => 'بعد بدقيقة';
+
+  @override
+  String get resetAdjustments => 'إعادة الضبط';
 }

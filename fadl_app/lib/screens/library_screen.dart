@@ -33,6 +33,7 @@ class _LibraryEntry {
     this.download,
     this.remove, {
     this.secondaryUrl,
+    this.bundled = false,
   });
   final String id, title, group, source, url, license;
   final int approxBytes, bytes;
@@ -41,6 +42,9 @@ class _LibraryEntry {
 
   /// A second file the entry downloads (the hadith English translation).
   final String? secondaryUrl;
+
+  /// Installed from a file shipped with the app: no online update check.
+  final bool bundled;
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
@@ -83,12 +87,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
         'نص التجويد الملوّن',
         tajweedSource,
         tajweedSourceUrl,
-        'نص من Quran.com API v4؛ راجع شروط المصدر.',
+        'مواضع التجويد من cpfair/quran-tajweed بترخيص CC BY 4.0، على نص المصحف العثماني من Tanzil.net. مضمَّن في التطبيق ويعمل دون اتصال.',
         tajweedApproxBytes,
         _tajweed.isDownloaded,
         await _tajweed.size(),
         _tajweed.download,
         _tajweed.delete,
+        bundled: true,
       ),
       for (final book in _hadith.availableBooks)
         _LibraryEntry(
@@ -108,7 +113,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ),
         ),
     ];
-    for (final entry in entries.where((entry) => entry.installed)) {
+    for (final entry in entries.where(
+      (entry) => entry.installed && !entry.bundled,
+    )) {
       final record = await _updates.recordFor(entry.id);
       if (record == null ||
           record.etag == null && record.lastModified == null) {
@@ -131,7 +138,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
     setState(() => _checking = true);
     try {
       final entries = await _entries;
-      for (final entry in entries.where((entry) => entry.installed)) {
+      for (final entry in entries.where(
+        (entry) => entry.installed && !entry.bundled,
+      )) {
         try {
           var status = await _updates.check(entry.id, entry.url);
           if (entry.secondaryUrl != null) {

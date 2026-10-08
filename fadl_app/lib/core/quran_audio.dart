@@ -218,7 +218,12 @@ class QuranAudio extends ChangeNotifier {
             'id': ayah['id'],
             'key': ayah['key'],
             'number': ayah['number'],
-            'url': verseAudioUrl(reciterId, bitrate, ayah['id'] as int),
+            'url': ayahAudioUrl(
+              reciterId,
+              ayah['id'] as int,
+              surah: surah,
+              ayah: ayah['number'] as int,
+            ),
           },
       ],
     };

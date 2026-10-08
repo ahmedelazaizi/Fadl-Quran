@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:fadl/core/offline_prayer.dart';
 import 'package:fadl/core/prayer_widget_schedule.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -114,4 +116,31 @@ void main() {
       }
     },
   );
+
+  test('iOS saves two months of calendar for the widget', () async {
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    final calls = <MethodCall>[];
+    messenger.setMockMethodCallHandler(PrayerWidgetSchedule.channel, (
+      call,
+    ) async {
+      calls.add(call);
+      return null;
+    });
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    try {
+      await PrayerWidgetSchedule.update(settings);
+      await PrayerWidgetSchedule.update({'timezone': 'Asia/Riyadh'});
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+      messenger.setMockMethodCallHandler(PrayerWidgetSchedule.channel, null);
+    }
+    expect(calls.map((c) => c.method), ['save', 'clear']);
+    final payload = jsonDecode(calls.first.arguments as String) as Map;
+    expect(payload['dates'], hasLength(PrayerWidgetSchedule.iosHorizonDays));
+    expect(
+      payload['prayers'],
+      hasLength(PrayerWidgetSchedule.iosHorizonDays * 5),
+    );
+  });
 }

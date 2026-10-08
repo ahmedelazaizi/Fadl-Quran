@@ -13,6 +13,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../core/api.dart';
 import '../../core/app_state.dart';
+import '../../core/auto_download.dart';
 import '../../core/format.dart';
 import '../../core/local_user_data.dart';
 import '../../core/mushaf_layout.dart';
@@ -25,14 +26,15 @@ import '../settings_screen.dart';
 import '../../core/quran_data.dart';
 import '../../core/quran_storage.dart';
 import '../../core/quran_audio.dart';
-import '../../core/reciters.dart';
 import '../../core/theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/prayer_labels.dart';
 import '../../widgets/common.dart';
 import '../../widgets/live_search.dart';
 import 'audio_player_screen.dart';
 import 'memorization_sheet.dart';
 import 'quran_widgets.dart';
+import 'recitation_sheets.dart';
 import 'reader_audio_focus.dart';
 
 const _totalPages = 604;
@@ -220,6 +222,7 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
 
   bool _lastPlaying = false;
   int _lastCountdown = 0;
+  int _lastAudioSurah = 0;
 
   void _onAudioChanged() {
     if (!mounted) return;
@@ -238,6 +241,13 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
         _lastCountdown != _audio.countdown;
     _lastPlaying = _audio.playing;
     _lastCountdown = _audio.countdown;
+    // A new surah started playing: optionally keep it for offline use.
+    if (_audio.surahId > 0 && _audio.surahId != _lastAudioSurah) {
+      _lastAudioSurah = _audio.surahId;
+      unawaited(
+        AutoDownload.instance.consider(_audio.reciterId, _audio.surahId),
+      );
+    }
     if (changed) setState(() {});
   }
 
@@ -334,7 +344,16 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
             ? _selectedKey
             : null;
         final key = highlighted ?? ayahs.first['key'] as String;
-        if (key == _lastSavedKey || !mounted || page != _page) return;
+        if (!mounted || page != _page) return;
+        // The page stayed open: optionally keep its surah for offline use.
+        final surahId = ayahs.firstWhere((a) => a['key'] == key)['surahId'];
+        unawaited(
+          AutoDownload.instance.consider(
+            context.read<AppState>().reciterId,
+            surahId as int,
+          ),
+        );
+        if (key == _lastSavedKey) return;
         await _saveLastRead(key, data: data);
       } catch (_) {
         // Best effort; ignore offline failures.
@@ -975,6 +994,11 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
               onPressed: _pickReciter,
               icon: const Icon(Icons.record_voice_over_outlined),
             ),
+            IconButton(
+              tooltip: prayerL(context).recitationsButton,
+              onPressed: _openRecitationDownloads,
+              icon: const Icon(Icons.cloud_download_outlined),
+            ),
           ],
         ),
       );
@@ -982,36 +1006,28 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
   );
 
   Future<void> _pickReciter() async {
-    await showModalBottomSheet<void>(
-      context: context,
-      builder: (sheet) => SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            for (final reciter in reciters)
-              ListTile(
-                title: Text(reciter['nameAr'] as String),
-                subtitle: Text('${reciter['style']} • ${reciter['riwaya']}'),
-                trailing: reciter['id'] == context.read<AppState>().reciterId
-                    ? const Icon(Icons.check)
-                    : null,
-                onTap: () async {
-                  Navigator.pop(sheet);
-                  try {
-                    await context.read<AppState>().updateSettings({
-                      'reciterId': reciter['id'] as String,
-                    });
-                    if (mounted && _audio.ayahNumber > 0) {
-                      await _playAyah(_audio.surahId, _audio.ayahNumber);
-                    }
-                  } on ApiException catch (failure) {
-                    if (mounted) showToast(context, failure.message);
-                  }
-                },
-              ),
-          ],
-        ),
-      ),
+    final state = context.read<AppState>();
+    final picked = await showReciterPicker(context, state.reciterId);
+    if (picked == null || picked == state.reciterId) return;
+    try {
+      await state.updateSettings({'reciterId': picked});
+      if (mounted && _audio.ayahNumber > 0) {
+        await _playAyah(_audio.surahId, _audio.ayahNumber);
+      }
+    } on ApiException catch (failure) {
+      if (mounted) showToast(context, failure.message);
+    }
+  }
+
+  Future<void> _openRecitationDownloads() async {
+    final surah = _audio.surahId > 0
+        ? _audio.surahId
+        : ((await loadPage(_page))['ayahs'] as List).first['surahId'] as int;
+    if (!mounted) return;
+    await showRecitationDownloads(
+      context,
+      reciterId: context.read<AppState>().reciterId,
+      surah: surah,
     );
   }
 

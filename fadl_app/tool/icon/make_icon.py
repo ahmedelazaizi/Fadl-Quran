@@ -1,4 +1,4 @@
-"""Generate the Fadl Android launcher icons and store preview."""
+"""Generate the Fadl Android and iOS launcher icons and store preview."""
 
 import math
 from pathlib import Path
@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw
 
 PROJECT = Path(__file__).resolve().parents[2]
 RES = PROJECT / "android" / "app" / "src" / "main" / "res"
+IOS_ICONS = PROJECT / "ios" / "Runner" / "Assets.xcassets" / "AppIcon.appiconset"
 SCALE = 8
 CANVAS = 108 * SCALE
 GREEN = "#013428"
@@ -61,6 +62,25 @@ def render_legacy(size):
     return background.resize((size, size), Image.Resampling.LANCZOS)
 
 
+def render_ios(size):
+    # iOS masks the corners itself and rejects icons with transparency.
+    canvas = Image.new("RGB", (CANVAS, CANVAS), GREEN)
+    foreground = Image.new("RGBA", (CANVAS, CANVAS), (0, 0, 0, 0))
+    draw_book(foreground)
+    canvas.paste(foreground, mask=foreground)
+    return canvas.resize((size, size), Image.Resampling.LANCZOS)
+
+
+def write_ios_icons():
+    import json
+
+    contents = json.loads((IOS_ICONS / "Contents.json").read_text(encoding="utf-8"))
+    for image in contents["images"]:
+        points_size = float(image["size"].split("x")[0])
+        scale = int(image["scale"].rstrip("x"))
+        render_ios(round(points_size * scale)).save(IOS_ICONS / image["filename"], format="PNG")
+
+
 def main():
     for density, factor in DENSITIES.items():
         folder = RES / f"mipmap-{density}"
@@ -86,6 +106,7 @@ def main():
         '</resources>\n', encoding="utf-8"
     )
     render_legacy(512).save(Path(__file__).with_name("icon_512.png"), format="PNG")
+    write_ios_icons()
 
 
 if __name__ == "__main__":

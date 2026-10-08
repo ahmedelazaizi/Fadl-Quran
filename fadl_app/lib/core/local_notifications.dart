@@ -9,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import 'adhan_service.dart';
 import 'api.dart';
 import 'app_state.dart';
+import 'dhikr_reminders.dart';
 import 'format.dart';
 import 'offline_prayer.dart';
 import 'quran_learning.dart';
@@ -132,6 +133,7 @@ class LocalNotifications {
       // Review progress lives only on this device, so these reminders are
       // added locally whether or not a backend supplies the rest.
       items.addAll(await _reviewUpcoming(state, now));
+      items.addAll(_dhikrUpcoming(state, now));
       // Adhan-mode prayers play the full adhan through native alarms on
       // Android and get no plugin notification; elsewhere they stay here.
       final adhan = AdhanService.instance;
@@ -150,10 +152,16 @@ class LocalNotifications {
         debugPrint('LocalNotifications: adhan alarms failed: $e');
         split = partitionAdhan(items, state.notifications, now, android: false);
       }
-      for (final n in split.plugin) {
+      // iOS drops every pending notification beyond the 64 soonest.
+      final pending = defaultTargetPlatform == TargetPlatform.iOS
+          ? capPending(split.plugin, iosPendingLimit)
+          : split.plugin;
+      for (final n in pending) {
         final fireAt = DateTime.tryParse('${n['fireAt']}')?.toUtc();
         if (fireAt == null || !fireAt.isAfter(now)) continue;
         final isAdhan = n['type'] == 'adhan';
+        final prayer = prayerFromNotification(n);
+        final daily = n['repeat'] == 'daily';
         final channel = isAdhan ? _adhanChannel : _remindersChannel;
         try {
           await plugin.zonedSchedule(
@@ -161,8 +169,14 @@ class LocalNotifications {
             title: n['title'] as String?,
             body: n['body'] as String?,
             payload: n['link'] as String?,
-            // fireAt is an absolute instant, so UTC is exact regardless of the device zone.
-            scheduledDate: tz.TZDateTime.from(fireAt, tz.UTC),
+            // fireAt is an absolute instant, so UTC is exact regardless of
+            // the device zone. Daily repeats follow local wall-clock time
+            // so they stay at the same hour across DST changes.
+            scheduledDate: tz.TZDateTime.from(
+              fireAt,
+              daily ? tz.local : tz.UTC,
+            ),
+            matchDateTimeComponents: daily ? DateTimeComponents.time : null,
             notificationDetails: NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
@@ -173,8 +187,16 @@ class LocalNotifications {
                 category: isAdhan
                     ? AndroidNotificationCategory.alarm
                     : AndroidNotificationCategory.reminder,
+                // Show a whole dhikr and its source, not one cut-off line.
+                styleInformation: n['type'] == 'dhikr'
+                    ? BigTextStyleInformation('${n['body']}')
+                    : null,
               ),
-              iOS: const DarwinNotificationDetails(),
+              iOS: DarwinNotificationDetails(
+                sound: prayer == null
+                    ? null
+                    : iosAdhanClip(state.notifications, prayer),
+              ),
             ),
             androidScheduleMode: _exactAllowed
                 ? AndroidScheduleMode.exactAllowWhileIdle
@@ -187,6 +209,31 @@ class LocalNotifications {
     } catch (e) {
       debugPrint('LocalNotifications.reschedule failed: $e');
     }
+  }
+
+  /// Most notifications iOS keeps pending per app.
+  static const iosPendingLimit = 64;
+
+  /// At most [limit] items, soonest first, with every prayer kept ahead of
+  /// reminders so a busy dhikr schedule never pushes an adhan out.
+  @visibleForTesting
+  static List<Map<String, dynamic>> capPending(
+    List<Map<String, dynamic>> items,
+    int limit,
+  ) {
+    DateTime at(Map item) =>
+        DateTime.tryParse('${item['fireAt']}') ?? DateTime(9999);
+    final sorted = [...items]..sort((a, b) => at(a).compareTo(at(b)));
+    final prayers = [
+      for (final item in sorted)
+        if (item['type'] == 'adhan') item,
+    ];
+    final kept = {
+      ...prayers.take(limit),
+      for (final item in sorted)
+        if (item['type'] != 'adhan') item,
+    }.take(limit).toList();
+    return kept..sort((a, b) => at(a).compareTo(at(b)));
   }
 
   static Future<List<Map<String, dynamic>>> _reviewUpcoming(
@@ -209,6 +256,74 @@ class LocalNotifications {
       debugPrint('LocalNotifications: review reminders failed: $e');
       return [];
     }
+  }
+
+  static List<Map<String, dynamic>> _dhikrUpcoming(
+    AppState state,
+    DateTime now,
+  ) {
+    final hours = dhikrReminderHours(state.notifications);
+    if (hours == null) return [];
+    try {
+      return dhikrReminderItems(
+        intervalHours: hours,
+        location: OfflinePrayer.location(state.timezone),
+        now: now,
+        l: lookupAppLocalizations(state.locale),
+      );
+    } catch (e) {
+      debugPrint('LocalNotifications: dhikr reminders failed: $e');
+      return [];
+    }
+  }
+
+  /// A dhikr every [intervalHours] from 08:00 until before 22:00 local time,
+  /// each slot repeating daily at its next occurrence after [now], so the
+  /// reminders keep coming even when the app is not opened. Each slot has
+  /// its own text, so consecutive reminders differ.
+  @visibleForTesting
+  static List<Map<String, dynamic>> dhikrReminderItems({
+    required int intervalHours,
+    required tz.Location location,
+    required DateTime now,
+    required AppLocalizations l,
+  }) {
+    final today = tz.TZDateTime.from(now, location);
+    final items = <Map<String, dynamic>>[];
+    var slot = 0;
+    for (
+      var hour = dhikrReminderStartHour;
+      hour < dhikrReminderEndHour;
+      hour += intervalHours
+    ) {
+      var at = tz.TZDateTime(
+        location,
+        today.year,
+        today.month,
+        today.day,
+        hour,
+      );
+      if (!at.isAfter(now)) {
+        at = tz.TZDateTime(
+          location,
+          today.year,
+          today.month,
+          today.day + 1,
+          hour,
+        );
+      }
+      final dhikr = dhikrReminders[slot++ % dhikrReminders.length];
+      items.add({
+        'key': 'dhikr:$hour',
+        'type': 'dhikr',
+        'repeat': 'daily',
+        'fireAt': at.toUtc().toIso8601String(),
+        'title': l.dhikrReminderTitle,
+        'body': '${dhikr.text}\n${dhikr.source}',
+        'link': 'fadl://athkar',
+      });
+    }
+    return items;
   }
 
   /// Daily reminders at [time] ("HH:mm" in [location]) within 48 hours of

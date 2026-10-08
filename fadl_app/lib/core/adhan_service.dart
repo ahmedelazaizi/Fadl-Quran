@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'adhan_catalog.dart';
 import 'offline_athkar.dart';
 
 /// Full-length adhan at prayer times (Android): pure scheduling rules plus a
@@ -10,7 +11,7 @@ import 'offline_athkar.dart';
 /// - `adhan`: legacy per-prayer bool map (still synced with the backend);
 ///   `false` means the prayer is silent.
 /// - `adhanModes`: per-prayer `adhan` | `notify` | `silent`.
-/// - `regularSound`: sound for dhuhr…isha (`adhan_default` or an import id).
+/// - `regularSound`: sound for dhuhr…isha (a bundled id or an import id).
 /// - `fajrSound`: imported Fajr adhan id, or null.
 /// - `respectSilent`: vibrate + notify instead of sound in silent/vibrate mode.
 
@@ -25,23 +26,38 @@ const prayerNames = <String, String>{
 
 const adhanModeValues = ['adhan', 'notify', 'silent'];
 
-/// Bundled raw resource; it lacks the Fajr-specific words, so never Fajr.
-const defaultAdhanSound = 'adhan_default';
+/// The adhan for dhuhr…isha on a fresh install, and the fallback when a
+/// chosen sound is gone. Not a Fajr adhan, so never used for Fajr.
+const defaultAdhanSound = 'adhan_imadi';
+
+/// The Fajr adhan on a fresh install (it has «الصلاة خير من النوم»).
+const defaultFajrAdhanSound = 'adhan_fajr_alafasy';
+
+/// Bundled adhans for dhuhr…isha (see core/adhan_catalog.dart).
+final bundledAdhanSounds = [
+  for (final adhan in bundledAdhans)
+    if (!adhan.fajr) adhan.id,
+];
+
+/// Bundled adhans with «الصلاة خير من النوم», offered for Fajr only.
+final bundledFajrAdhanSounds = [
+  for (final adhan in bundledAdhans)
+    if (adhan.fajr) adhan.id,
+];
 
 /// Window of native alarms; matches the 48h of plugin notifications.
 const adhanScheduleWindow = Duration(hours: 48);
 
 /// Mode chosen for [prayer], migrating the legacy bool map:
 /// `false` → silent; `true` (or unset, except sunrise) → the explicit mode
-/// if any, else `adhan` for dhuhr/asr/maghrib/isha and `notify` for
-/// fajr/sunrise.
+/// if any, else `adhan` for the five prayers and `notify` for sunrise.
 String prayerMode(Map notifications, String prayer) {
   final legacy = notifications['adhan'] as Map? ?? const {};
   final enabled = legacy[prayer] ?? prayer != 'sunrise';
   if (enabled != true) return 'silent';
   final explicit = (notifications['adhanModes'] as Map?)?[prayer];
   if (explicit == 'adhan' || explicit == 'notify') return explicit as String;
-  return prayer == 'fajr' || prayer == 'sunrise' ? 'notify' : 'adhan';
+  return prayer == 'sunrise' ? 'notify' : 'adhan';
 }
 
 /// What actually happens at [prayer] time: the master switch silences all,
@@ -55,18 +71,34 @@ String effectivePrayerMode(Map notifications, String prayer) {
   return mode;
 }
 
-/// Sound id for [prayer]; null when no adhan may be played (Fajr without an
-/// imported Fajr adhan, sunrise). Never [defaultAdhanSound] for Fajr.
+/// Sound id for [prayer]; null when no adhan may be played (Fajr without a
+/// Fajr adhan chosen, sunrise). Fajr only ever gets a Fajr adhan: an
+/// imported one or a bundled one with the Fajr words.
 String? soundForPrayer(Map notifications, String prayer) {
   if (prayer == 'sunrise') return null;
   if (prayer == 'fajr') {
     final value = notifications['fajrSound'];
-    return value is String && value.startsWith('fajr_') ? value : null;
+    return value is String &&
+            (value.startsWith('fajr_') ||
+                bundledFajrAdhanSounds.contains(value))
+        ? value
+        : null;
   }
   final value = notifications['regularSound'];
-  return value is String && value.startsWith('regular_')
+  return value is String &&
+          (value.startsWith('regular_') || bundledAdhanSounds.contains(value))
       ? value
       : defaultAdhanSound;
+}
+
+/// Notification sound for [prayer] on iOS, where a 30-second clip rings with
+/// the alert: a bundled adhan (`ios/Runner/*.caf`) or one imported on this
+/// iPhone (`Library/Sounds/*.caf`, see ios/Runner/AdhanSounds.swift); null
+/// for the default alert sound.
+String? iosAdhanClip(Map notifications, String prayer) {
+  if (effectivePrayerMode(notifications, prayer) != 'adhan') return null;
+  // An adhan-mode prayer always has a sound (effectivePrayerMode).
+  return '${soundForPrayer(notifications, prayer)}.caf';
 }
 
 class AdhanEvent {
@@ -202,6 +234,13 @@ class AdhanService {
   bool get supported =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
+  /// iOS rings a 30-second clip with the notification ([iosAdhanClip]):
+  /// it previews and imports clips but has no full-length adhan alarms.
+  bool get clipsOnly => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+  /// Whether the user can add their own adhan recordings.
+  bool get importSupported => supported || clipsOnly;
+
   /// Replaces every scheduled adhan alarm with [events].
   Future<void> schedule(List<AdhanEvent> events) async {
     if (!supported) return;
@@ -215,20 +254,22 @@ class AdhanService {
   }
 
   Future<void> preview(String soundId) async {
-    if (supported) {
+    if (supported || clipsOnly) {
       await channel.invokeMethod<void>('preview', {'soundId': soundId});
     }
   }
 
   Future<void> stopPreview() async {
-    if (supported) await channel.invokeMethod<void>('stopPreview');
+    if (supported || clipsOnly) {
+      await channel.invokeMethod<void>('stopPreview');
+    }
   }
 
   /// Opens the system audio picker and copies the file into app storage;
   /// null when cancelled. [kind] is `fajr` or `regular`.
   Future<AdhanSound?> pickAndImport({required String kind}) async {
     assert(kind == 'fajr' || kind == 'regular');
-    if (!supported) return null;
+    if (!importSupported) return null;
     final result = await channel.invokeMapMethod<String, dynamic>(
       'pickAndImport',
       {'kind': kind},
@@ -237,13 +278,13 @@ class AdhanService {
   }
 
   Future<List<AdhanSound>> listImported() async {
-    if (!supported) return const [];
+    if (!importSupported) return const [];
     final list = await channel.invokeListMethod<dynamic>('listImported');
     return [for (final item in list ?? const []) AdhanSound.fromMap(item)];
   }
 
   Future<void> deleteImported(String id) async {
-    if (supported) {
+    if (importSupported) {
       await channel.invokeMethod<void>('deleteImported', {'id': id});
     }
   }

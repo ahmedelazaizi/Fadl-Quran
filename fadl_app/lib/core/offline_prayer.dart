@@ -22,6 +22,45 @@ const calcMethods = <String, String>{
   'MoonsightingCommittee': 'لجنة رؤية الهلال',
 };
 
+/// The calculation method official calendars use in the country of
+/// [timezone], or null when the zone does not identify one. GPS gives
+/// coordinates but no method, so this keeps an Egyptian user off the Umm
+/// al-Qura default (minutes apart at Fajr and Isha).
+String? methodForTimezone(String timezone) {
+  const byZone = {
+    'Africa/Cairo': 'Egyptian',
+    'Africa/Khartoum': 'Egyptian',
+    'Africa/Tripoli': 'Egyptian',
+    'Asia/Riyadh': 'UmmAlQura',
+    'Asia/Aden': 'UmmAlQura',
+    'Asia/Bahrain': 'UmmAlQura',
+    'Asia/Muscat': 'UmmAlQura',
+    'Asia/Kuwait': 'Kuwait',
+    'Asia/Qatar': 'Qatar',
+    'Asia/Dubai': 'Dubai',
+    'Asia/Karachi': 'Karachi',
+    'Asia/Kolkata': 'Karachi',
+    'Asia/Calcutta': 'Karachi',
+    'Asia/Dhaka': 'Karachi',
+    'Asia/Kabul': 'Karachi',
+    'Europe/Istanbul': 'Turkey',
+    'Asia/Tehran': 'Tehran',
+    'Asia/Singapore': 'Singapore',
+    'Asia/Kuala_Lumpur': 'Singapore',
+    'Asia/Jakarta': 'Singapore',
+    'Asia/Brunei': 'Singapore',
+  };
+  final known = byZone[timezone];
+  if (known != null) return known;
+  if (timezone.startsWith('America/')) return 'NorthAmerica';
+  if (timezone.startsWith('Europe/') ||
+      timezone.startsWith('Africa/') ||
+      timezone.startsWith('Asia/')) {
+    return 'MuslimWorldLeague';
+  }
+  return null;
+}
+
 const prayerNamesAr = <String, String>{
   'fajr': 'الفجر',
   'sunrise': 'الشروق',
@@ -174,6 +213,17 @@ class OfflinePrayer {
     };
     return params;
   }
+
+  /// Prayers whose time the user can shift by minutes (settings
+  /// `adjustments`).
+  static const adjustablePrayers = [
+    'fajr',
+    'sunrise',
+    'dhuhr',
+    'asr',
+    'maghrib',
+    'isha',
+  ];
 
   static const _prayerEnums = <String, adhan.Prayer>{
     'fajr': adhan.Prayer.fajr,

@@ -4,17 +4,17 @@ import 'dart:io';
 import 'dart:ui' show Color;
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
-import 'download_updates.dart';
-
 const tajweedPreferenceKey = 'fadl.tajweedColors';
-const tajweedSource = 'Quran.com API v4';
-const tajweedSourceUrl =
-    'https://api.quran.com/api/v4/quran/verses/uthmani_tajweed';
+// Quran.com's unauthenticated API v4 was retired, so the colored text ships
+// with the app, built by tool/build_tajweed_asset.py from open annotations.
+const tajweedSource = 'cpfair/quran-tajweed (CC BY 4.0) • Tanzil.net';
+const tajweedSourceUrl = 'https://github.com/cpfair/quran-tajweed';
+const tajweedAsset = 'assets/quran/tajweed.json.gz';
 const tajweedMaxBytes = 12 * 1024 * 1024;
-const tajweedApproxBytes = 4061465;
+const tajweedApproxBytes = 428452;
 
 class TajweedDownloadException implements Exception {
   const TajweedDownloadException(this.message);
@@ -156,12 +156,16 @@ Map<String, String> parseTajweedVerses(
 }
 
 class OfflineTajweed extends ChangeNotifier {
-  OfflineTajweed({http.Client? client, Future<Directory> Function()? root})
-    : _client = client ?? http.Client(),
-      _rootProvider = root ?? getApplicationSupportDirectory;
+  OfflineTajweed({
+    Future<List<int>> Function()? asset,
+    Future<Directory> Function()? root,
+  }) : _asset = asset ?? _bundledAsset,
+       _rootProvider = root ?? getApplicationSupportDirectory;
 
   static final OfflineTajweed instance = OfflineTajweed();
-  final http.Client _client;
+  static Future<List<int>> _bundledAsset() async =>
+      (await rootBundle.load(tajweedAsset)).buffer.asUint8List();
+  final Future<List<int>> Function() _asset;
   final Future<Directory> Function() _rootProvider;
   Future<void>? _ready;
   File? _file;
@@ -212,62 +216,32 @@ class OfflineTajweed extends ChangeNotifier {
     notifyListeners();
   });
 
+  /// Installs the bundled text after validating every verse.
   Future<void> _download() async {
     await ready();
-    final uri = Uri.parse(tajweedSourceUrl);
-    if (uri.scheme != 'https' || uri.host != 'api.quran.com') {
-      throw const TajweedDownloadException('مصدر التنزيل غير موثوق');
-    }
     notifyListeners();
     try {
-      final request = http.Request('GET', uri)..followRedirects = false;
-      final response = await _client
-          .send(request)
-          .timeout(const Duration(seconds: 30));
-      if (response.statusCode != 200 ||
-          response.request?.url.host != uri.host) {
-        throw const FormatException('Invalid download response');
+      final compressed = await _asset();
+      expectedBytes = compressed.length;
+      if (compressed.length > tajweedMaxBytes) {
+        throw const FormatException('Oversized tajweed asset');
       }
-      expectedBytes = response.contentLength;
-      if (expectedBytes != null && expectedBytes! > tajweedMaxBytes) {
-        throw const FormatException('Oversized download');
-      }
-      final chunks = <int>[];
-      final watch = Stopwatch()..start();
-      await for (final chunk in response.stream.timeout(
-        const Duration(seconds: 30),
-      )) {
-        receivedBytes += chunk.length;
-        if (receivedBytes > tajweedMaxBytes ||
-            watch.elapsed > const Duration(minutes: 3)) {
-          throw const FormatException('Download limit exceeded');
-        }
-        chunks.addAll(chunk);
-        notifyListeners();
-      }
-      if (expectedBytes != null && receivedBytes != expectedBytes) {
-        throw const FormatException('Truncated download');
-      }
-      final verses = await compute(parseTajweedVerses, chunks);
+      final verses = await compute(_parseGzip, compressed);
+      receivedBytes = compressed.length;
       final part = File('${_file!.path}.part');
       await part.parent.create(recursive: true);
       try {
-        await part.writeAsBytes(await compute(_gzip, chunks), flush: true);
+        await part.writeAsBytes(compressed, flush: true);
         await part.rename(_file!.path);
       } finally {
         if (await part.exists()) await part.delete();
       }
       _verses = verses;
       _pieces.clear();
-      await DownloadUpdates.instance.record(
-        'tajweed',
-        tajweedSourceUrl,
-        response.headers,
-      );
       notifyListeners();
     } on Object {
       throw const TajweedDownloadException(
-        'تعذّر تنزيل نص التجويد أو التحقق منه. أعد المحاولة.',
+        'تعذّر تجهيز نص التجويد أو التحقق منه. أعد المحاولة.',
       );
     }
   }
@@ -283,13 +257,10 @@ class OfflineTajweed extends ChangeNotifier {
     final part = File('${_file!.path}.part');
     if (await part.exists()) await part.delete();
     _verses = null;
-    await DownloadUpdates.instance.remove('tajweed');
     _pieces.clear();
     notifyListeners();
   }
 }
-
-List<int> _gzip(List<int> bytes) => gzip.encode(bytes);
 
 Map<String, String> _parseGzip(List<int> compressed) =>
     parseTajweedVerses(gzip.decode(compressed));

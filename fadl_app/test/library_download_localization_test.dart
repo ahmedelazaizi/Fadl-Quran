@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fadl/core/audio_store.dart';
+import 'package:fadl/core/full_surah_store.dart';
 import 'package:fadl/core/offline_hadith.dart';
 import 'package:fadl/core/offline_tafsir.dart';
 import 'package:fadl/core/offline_tajweed.dart';
@@ -27,6 +28,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     await Future.wait([
       AudioStore.instance.ready(),
+      FullSurahStore.instance.ready(),
       OfflineTafsir.instance.ready(),
       OfflineTajweed.instance.ready(),
       OfflineHadith.instance.ready(),

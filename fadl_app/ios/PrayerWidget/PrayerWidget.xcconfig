@@ -1,0 +1,2 @@
+// Version and build number shared with the app (FLUTTER_BUILD_NAME/NUMBER).
+#include "../Flutter/Generated.xcconfig"

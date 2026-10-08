@@ -396,7 +396,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get streamingNotice =>
-      'Streaming only; permission to listen does not grant redistribution rights.';
+      'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.';
 
   @override
   String get chooseEdition => 'Choose a reading or edition';
@@ -601,7 +601,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String limit,
     String used,
   ) {
-    return 'Source: $source\n$url\nThe color-coded text is not bundled; download is optional when online. Source size about $approx (safety limit $limit). Space used: $used. Colors are a visual aid, not a religious ruling.';
+    return 'Source: $source\n$url\nThe color-coded text ships with the app and works offline; installing it unpacks about $approx (safety limit $limit). Space used: $used. Colors are a visual aid, not a religious ruling.';
   }
 
   @override
@@ -974,7 +974,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fullSurahOnlineNotice =>
-      'Online streaming only; permission to listen does not grant redistribution rights.';
+      'Streams online; you can save surahs on your device for personal offline listening. This does not grant redistribution rights.';
 
   @override
   String get fullSurahPlayError =>
@@ -1247,7 +1247,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fajrSoundFallback =>
-      'No Fajr adhan has been imported; you will receive a short notification.';
+      'No Fajr adhan is chosen; you will receive a short notification.';
 
   @override
   String get perPrayerAlert => 'Alert for each prayer';
@@ -1263,16 +1263,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Full adhan is available on Android only; on this device, prayers set to Adhan receive a notification at prayer time.';
 
   @override
+  String get adhanIosClip =>
+      'On iPhone, the first 30 seconds of the adhan play with the prayer-time notification, the longest Apple allows.';
+
+  @override
   String get adhanDisabled =>
       'Notifications are off in general settings. Enable them to hear the adhan.';
 
   @override
   String get fajrSoundNotice =>
-      'The bundled adhan does not include the Fajr phrase ‘prayer is better than sleep’, so it is not used for Fajr. Import a Fajr adhan from your phone or receive a short notification.';
+      'Fajr has its own adhan with «prayer is better than sleep», so only Fajr adhans are listed here. You can also import another Fajr adhan from your phone.';
 
   @override
   String get fajrImportHint =>
-      'No Fajr adhan imported yet; you will receive a short notification.';
+      'No Fajr adhan is chosen; you will receive a short notification.';
 
   @override
   String get adhanOptions => 'Options';
@@ -1303,13 +1307,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get batteryAdvice =>
-      'Some phones stop alarms from closed apps to save battery. Open settings, select All apps, then Fadl, and set it to Unrestricted or Not optimized. On some devices, also enable Autostart.';
+      'Some phones stop alarms from closed apps to save battery. Tap \"Open battery settings\" to open Fadl\'s app page, then choose Battery and set it to Unrestricted. On Xiaomi, Oppo and Vivo phones, also enable Autostart on the same page.';
 
   @override
   String get openBatterySettings => 'Open battery settings';
-
-  @override
-  String get bundledAdhan => 'Bundled adhan';
 
   @override
   String get noFajrAdhan => 'No adhan (short notification)';
@@ -2695,4 +2696,203 @@ class AppLocalizationsEn extends AppLocalizations {
   String libraryTranslationLabel(String url) {
     return 'English translation: $url';
   }
+
+  @override
+  String get dhikrReminderTitle => 'Remember Allah';
+
+  @override
+  String get dhikrReminder => 'Dhikr reminders';
+
+  @override
+  String get dhikrReminderHint =>
+      'A short remembrance or supplication between 8 AM and 10 PM';
+
+  @override
+  String dhikrEvery(int count, String number) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $number hours',
+      one: 'Every hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fullSurahSaveWhileListening => 'Save surahs I listen to';
+
+  @override
+  String get fullSurahSaveHint =>
+      'A surah is kept for offline listening once it has fully loaded while playing.';
+
+  @override
+  String get fullSurahDownloadFailed =>
+      'Could not download the surah. Check your connection and try again.';
+
+  @override
+  String get fullSurahDownloads => 'Full-surah recitations';
+
+  @override
+  String fullSurahSavedCount(String count, String size) {
+    return 'Saved surahs: $count • $size';
+  }
+
+  @override
+  String get fullSurahDeleteEdition => 'Delete this reciter\'s saved surahs?';
+
+  @override
+  String get fullSurahPlayingOffline => 'Playing from your device';
+
+  @override
+  String get recitationDownloadTab => 'Download recitations';
+
+  @override
+  String get recitationDownloadedTab => 'Downloaded recitations';
+
+  @override
+  String get recitationDownloadIntro =>
+      'Download recitations to play them without internet.';
+
+  @override
+  String get recitationFrom => 'From';
+
+  @override
+  String get recitationTo => 'To';
+
+  @override
+  String get recitationReciter => 'Reciter';
+
+  @override
+  String get recitationDownload => 'Download';
+
+  @override
+  String recitationDownloadingRange(String current, String total) {
+    return 'Downloading surah $current of $total…';
+  }
+
+  @override
+  String get recitationRangeDone => 'Recitations downloaded';
+
+  @override
+  String get recitationNoneDownloaded => 'No recitations downloaded yet.';
+
+  @override
+  String get chooseReciterTitle => 'Choose a reciter';
+
+  @override
+  String get reciterSearchHint => 'Search reciters';
+
+  @override
+  String get reciterFavorite => 'Add to favourites';
+
+  @override
+  String get reciterUnfavorite => 'Remove from favourites';
+
+  @override
+  String get reciterVerseSync => 'Highlights each ayah';
+
+  @override
+  String get recitationAutoDownload => 'Download the surah I listen to or read';
+
+  @override
+  String get recitationAutoDownloadHint =>
+      'Saves it automatically for the chosen reciter so it plays offline next time.';
+
+  @override
+  String get recitationsButton => 'Download recitations';
+
+  @override
+  String recitationCompleteSurahs(String count) {
+    return 'Complete surahs: $count';
+  }
+
+  @override
+  String get hajjUmrah => 'Hajj & Umrah';
+
+  @override
+  String get hajjUmrahMore =>
+      'The rites step by step, with supplications and counters';
+
+  @override
+  String get riteStart => 'Start';
+
+  @override
+  String get riteContinue => 'Continue';
+
+  @override
+  String get riteRestart => 'Start over';
+
+  @override
+  String riteStepOf(String current, String total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get ritePrevious => 'Previous';
+
+  @override
+  String get riteNext => 'Next';
+
+  @override
+  String get riteDone => 'Done — may Allah accept it';
+
+  @override
+  String riteRound(String unit, String current, String total) {
+    return '$unit $current of $total';
+  }
+
+  @override
+  String get riteTapToCount => 'Tap after each one';
+
+  @override
+  String get riteUndo => 'Undo';
+
+  @override
+  String get riteReset => 'Reset';
+
+  @override
+  String get riteCounterComplete => 'Complete';
+
+  @override
+  String get riteSupplications => 'Supplications';
+
+  @override
+  String get riteSteps => 'Steps';
+
+  @override
+  String get riteDisclaimer =>
+      'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.';
+
+  @override
+  String get moreAdhansTitle => 'More adhans by renowned muezzins';
+
+  @override
+  String get moreAdhansHint =>
+      'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.';
+
+  @override
+  String get moreAdhansOpen => 'Open the Islamweb adhan library';
+
+  @override
+  String get moreAdhansOpenError => 'Could not open the website';
+
+  @override
+  String get manualAdjustments => 'Adjust times manually';
+
+  @override
+  String get manualAdjustmentsSubtitle =>
+      'Move any prayer earlier or later by minutes';
+
+  @override
+  String get manualAdjustmentsHint =>
+      'If the adhan differs from your mosque or the official calendar, move the prayer earlier or later by minutes. The adhan and alerts update at once.';
+
+  @override
+  String get minuteEarlier => 'One minute earlier';
+
+  @override
+  String get minuteLater => 'One minute later';
+
+  @override
+  String get resetAdjustments => 'Reset';
 }

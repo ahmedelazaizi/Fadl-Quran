@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api.dart';
 import '../core/app_state.dart';
+import '../core/dhikr_reminders.dart';
 import '../core/format.dart';
 import '../core/local_notifications.dart';
 import '../core/local_user_data.dart';
@@ -45,7 +46,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       (AppLocalizations.of(context) ??
       lookupAppLocalizations(const Locale('ar')));
 
-  final Future<List<Map<String, dynamic>>> _reciters = Future.value(reciters);
+  final Future<List<Map<String, dynamic>>> _reciters = Future.value(
+    allReciters,
+  );
   late Future<List<Map<String, dynamic>>> _tafsirs = _loadTafsirs();
 
   /// Server editions, or the downloadable offline editions without a backend.
@@ -338,6 +341,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => showMadhabSheet(context),
                 ),
                 SettingRow(
+                  icon: Icons.tune_rounded,
+                  title: l.manualAdjustments,
+                  subtitle: l.manualAdjustmentsSubtitle,
+                  onTap: () => showTimeAdjustmentsSheet(context),
+                ),
+                SettingRow(
                   icon: Icons.calendar_month_outlined,
                   title: l.hijriAdjustment,
                   trailing: HijriAdjustmentStepper(),
@@ -418,6 +427,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'quranReviewTime',
                     n,
                     hint: l.quranReviewReminderHint,
+                  ),
+                  SettingRow(
+                    icon: Icons.favorite_border_rounded,
+                    title: l.dhikrReminder,
+                    subtitle: l.dhikrReminderHint,
+                    trailing: DropdownButton<int>(
+                      value: dhikrReminderHours({...n, 'enabled': true}) ?? 0,
+                      underline: const SizedBox.shrink(),
+                      borderRadius: BorderRadius.circular(12),
+                      items: [
+                        for (final hours in [0, ...dhikrReminderIntervals])
+                          DropdownMenuItem(
+                            value: hours,
+                            child: Text(
+                              hours == 0
+                                  ? l.off
+                                  : l.dhikrEvery(hours, _uiNum(context, hours)),
+                              style: FadlFonts.ui(size: 14),
+                            ),
+                          ),
+                      ],
+                      onChanged: (v) => _notify({'dhikrReminderHours': v}),
+                    ),
                   ),
                   const Divider(height: 8),
                   _switch(

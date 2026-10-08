@@ -201,8 +201,18 @@ class AdhanService : Service() {
     private fun resolveSource(event: JSONObject): Any? {
         val sound = event.optString("sound")
         val fajr = event.optString("prayer") == "fajr"
-        // The bundled adhan lacks the Fajr-specific words: never use it for Fajr.
-        if (sound == "adhan_default") return if (fajr) null else R.raw.adhan_default
+        // Bundled adhans (lib/core/adhan_catalog.dart) are res/raw/adhan_*.
+        // Only those named adhan_fajr_* carry the Fajr words, and they are
+        // for Fajr only.
+        val bundled = if (sound.startsWith("adhan_")) {
+            resources.getIdentifier(sound, "raw", packageName).takeIf { it != 0 }
+        } else {
+            null
+        }
+        if (bundled != null) {
+            val preview = event.optBoolean("preview")
+            return if (preview || fajr == sound.startsWith("adhan_fajr_")) bundled else null
+        }
         val dir = File(filesDir, "adhan").canonicalFile
         val file = File(dir, sound).canonicalFile
         val usable = sound.isNotEmpty() && file.isFile && file.parentFile == dir &&
@@ -210,7 +220,9 @@ class AdhanService : Service() {
         return when {
             usable -> file
             fajr -> null
-            else -> R.raw.adhan_default // A deleted regular import falls back to the bundled adhan.
+            // A deleted regular import falls back to the default adhan
+            // (defaultAdhanSound in lib/core/adhan_service.dart).
+            else -> R.raw.adhan_imadi
         }
     }
 

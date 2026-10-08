@@ -93,9 +93,11 @@ class MainActivity : FlutterActivity() {
                         result.success(null)
                     }
                     "openBatterySettings" -> {
-                        val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-                        if (intent.resolveActivity(packageManager) != null) startActivity(intent)
-                        else startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        // The app's own info page: unlike the system-wide
+                        // optimization list (which many phones filter to
+                        // exempt apps only), Fadl is always there, with
+                        // Battery → Unrestricted one tap away.
+                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             Uri.fromParts("package", packageName, null)))
                         result.success(null)
                     }

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../core/audio_store.dart';
+import '../core/full_surah_reciters.dart';
+import '../core/full_surah_store.dart';
+import '../core/quran_storage.dart';
 import '../core/reciters.dart';
 import '../core/theme.dart';
 import '../l10n/prayer_labels.dart';
 import '../widgets/common.dart';
+import 'quran/full_surah_player_screen.dart';
 
 /// Recitations saved on the device for listening without internet.
 class DownloadsScreen extends StatefulWidget {
@@ -16,17 +20,20 @@ class DownloadsScreen extends StatefulWidget {
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
   final store = AudioStore.instance;
+  final fullStore = FullSurahStore.instance;
   late Future<_Summary> summary = _summarize();
 
   @override
   void initState() {
     super.initState();
     store.addListener(_changed);
+    fullStore.addListener(_changed);
   }
 
   @override
   void dispose() {
     store.removeListener(_changed);
+    fullStore.removeListener(_changed);
     super.dispose();
   }
 
@@ -41,7 +48,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   Future<_Summary> _summarize() async {
     await store.ready();
     final rows = <_ReciterRow>[];
-    for (final reciter in reciters) {
+    for (final reciter in allReciters) {
       final id = reciter['id'] as String;
       if (!store.downloadedReciters.contains(id)) continue;
       rows.add(
@@ -52,7 +59,20 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         ),
       );
     }
-    return _Summary(await store.totalSize(), rows);
+    await fullStore.ready();
+    final editions = [
+      for (final edition in fullStore.downloadedEditions)
+        _EditionRow(
+          edition,
+          fullStore.downloadedSurahs(edition).length,
+          await fullStore.editionSize(edition),
+        ),
+    ];
+    return _Summary(
+      await store.totalSize() + await fullStore.totalSize(),
+      rows,
+      editions,
+    );
   }
 
   Future<bool> _confirm(String title, String message) async =>
@@ -98,7 +118,65 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       return;
     }
     await store.deleteAll();
+    await fullStore.deleteAll();
     if (mounted) showToast(context, prayerL(context).downloadsDeletedAll);
+  }
+
+  Future<void> _deleteEdition(FullSurahEdition edition) async {
+    if (!await _confirm(
+      prayerL(context).downloadsDeleteTitle,
+      prayerL(context).fullSurahDeleteEdition,
+    )) {
+      return;
+    }
+    await fullStore.deleteEdition(edition);
+  }
+
+  /// Saved surahs of [edition]; each plays from the device.
+  Future<void> _openEdition(FullSurahEdition edition) async {
+    final names = {
+      for (final surah in await QuranIndex.surahs())
+        surah['id'] as int: surah['nameAr'] as String,
+    };
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheet) => SafeArea(
+        child: ListenableBuilder(
+          listenable: fullStore,
+          builder: (sheet, _) => ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                title: Text(
+                  edition.nameAr,
+                  style: FadlFonts.ui(size: 16, weight: FontWeight.w700),
+                ),
+                subtitle: Text(edition.editionName),
+              ),
+              for (final surah in fullStore.downloadedSurahs(edition))
+                ListTile(
+                  leading: const Icon(Icons.play_circle_outline_rounded),
+                  title: Text(names[surah] ?? prayerNumber(sheet, surah)),
+                  onTap: () => Navigator.push(
+                    sheet,
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          FullSurahPlayerScreen(edition: edition, surah: surah),
+                    ),
+                  ),
+                  trailing: IconButton(
+                    tooltip: prayerL(sheet).libraryDelete,
+                    icon: const Icon(Icons.delete_outline_rounded),
+                    onPressed: () => fullStore.deleteSurah(edition, surah),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -157,7 +235,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                       ],
                     ),
                   ),
-                  if (data.rows.isNotEmpty)
+                  if (data.rows.isNotEmpty || data.editions.isNotEmpty)
                     TextButton.icon(
                       onPressed: _deleteAll,
                       style: TextButton.styleFrom(
@@ -171,7 +249,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
             ),
             const SizedBox(height: 20),
             SectionTitle(prayerL(context).reciters),
-            if (data.rows.isEmpty)
+            if (data.rows.isEmpty && data.editions.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Text(
@@ -207,6 +285,41 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
               ),
               const SizedBox(height: 10),
             ],
+            if (data.editions.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              SectionTitle(prayerL(context).fullSurahDownloads),
+              for (final row in data.editions) ...[
+                FadlCard(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  onTap: () => _openEdition(row.edition),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const CircleAvatar(
+                      child: Icon(Icons.library_music_outlined),
+                    ),
+                    title: Text(
+                      '${row.edition.nameAr} (${row.edition.editionName})',
+                      style: FadlFonts.ui(size: 15, weight: FontWeight.w700),
+                    ),
+                    subtitle: Text(
+                      prayerL(context).fullSurahSavedCount(
+                        prayerNumber(context, row.surahs),
+                        prayerBytes(context, row.bytes),
+                      ),
+                    ),
+                    trailing: IconButton(
+                      tooltip: prayerL(context).downloadsDeleteReciterTooltip,
+                      icon: const Icon(Icons.delete_outline_rounded),
+                      onPressed: () => _deleteEdition(row.edition),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ],
           ],
         );
       },
@@ -221,8 +334,16 @@ class _ReciterRow {
   final int bytes;
 }
 
+class _EditionRow {
+  const _EditionRow(this.edition, this.surahs, this.bytes);
+  final FullSurahEdition edition;
+  final int surahs;
+  final int bytes;
+}
+
 class _Summary {
-  const _Summary(this.totalBytes, this.rows);
+  const _Summary(this.totalBytes, this.rows, this.editions);
   final int totalBytes;
   final List<_ReciterRow> rows;
+  final List<_EditionRow> editions;
 }

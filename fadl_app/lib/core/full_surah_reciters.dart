@@ -32,6 +32,47 @@ class FullSurahEdition {
   final Uri server;
   final Set<int> surahs;
 
+  /// Stable folder name for this reciter + riwaya.
+  String get key => '${reciterId}_$editionId';
+
+  Map<String, Object> toJson() => {
+    'reciterId': reciterId,
+    'editionId': editionId,
+    'nameAr': nameAr,
+    'nameEn': nameEn,
+    'editionName': editionName,
+    'server': server.toString(),
+    'surahs': surahs.toList()..sort(),
+  };
+
+  /// Reads metadata saved with downloads; null when it is malformed or the
+  /// server is not an MP3Quran host.
+  static FullSurahEdition? fromJson(Object? json) {
+    if (json is! Map ||
+        json['reciterId'] is! int ||
+        json['editionId'] is! int ||
+        json['nameAr'] is! String ||
+        json['editionName'] is! String ||
+        json['server'] is! String ||
+        json['surahs'] is! List) {
+      return null;
+    }
+    final server = Uri.tryParse(json['server'] as String);
+    if (server == null || !isMp3QuranServer(server)) return null;
+    return FullSurahEdition(
+      reciterId: json['reciterId'] as int,
+      editionId: json['editionId'] as int,
+      nameAr: json['nameAr'] as String,
+      nameEn: json['nameEn'] is String ? json['nameEn'] as String : '',
+      editionName: json['editionName'] as String,
+      server: server,
+      surahs: {
+        for (final number in json['surahs'] as List)
+          if (number is int && number >= 1 && number <= 114) number,
+      },
+    );
+  }
+
   String? urlForSurah(int surah) => surahs.contains(surah)
       ? server.resolve('${surah.toString().padLeft(3, '0')}.mp3').toString()
       : null;
@@ -44,6 +85,12 @@ class FullSurahEdition {
         normalizeArabic(server.path).contains(needle);
   }
 }
+
+/// Only HTTPS folders on MP3Quran hosts are played or downloaded.
+bool isMp3QuranServer(Uri server) =>
+    server.scheme == 'https' &&
+    (server.host == 'mp3quran.net' || server.host.endsWith('.mp3quran.net')) &&
+    server.path.endsWith('/');
 
 /// Keep reciter + edition IDs together: a reciter can have several riwayat.
 List<FullSurahEdition> parseFullSurahReciters(
@@ -74,13 +121,7 @@ List<FullSurahEdition> parseFullSurahReciters(
       }
       final editionId = moshaf['id'] as int;
       final server = Uri.tryParse(moshaf['server'] as String);
-      if (server == null ||
-          server.scheme != 'https' ||
-          (server.host != 'mp3quran.net' &&
-              !server.host.endsWith('.mp3quran.net')) ||
-          !server.path.endsWith('/')) {
-        continue;
-      }
+      if (server == null || !isMp3QuranServer(server)) continue;
       final surahs = (moshaf['surah_list'] as String)
           .split(',')
           .map((number) => int.tryParse(number.trim()))
