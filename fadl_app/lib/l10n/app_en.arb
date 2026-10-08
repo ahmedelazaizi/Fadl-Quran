@@ -794,5 +794,11 @@
   "moreAdhansTitle": "More adhans by renowned muezzins",
   "moreAdhansHint": "The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.",
   "moreAdhansOpen": "Open the Islamweb adhan library",
-  "moreAdhansOpenError": "Could not open the website"
+  "moreAdhansOpenError": "Could not open the website",
+  "manualAdjustments": "Adjust times manually",
+  "manualAdjustmentsSubtitle": "Move any prayer earlier or later by minutes",
+  "manualAdjustmentsHint": "If the adhan differs from your mosque or the official calendar, move the prayer earlier or later by minutes. The adhan and alerts update at once.",
+  "minuteEarlier": "One minute earlier",
+  "minuteLater": "One minute later",
+  "resetAdjustments": "Reset"
 }

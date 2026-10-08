@@ -2875,4 +2875,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreAdhansOpenError => 'Could not open the website';
+
+  @override
+  String get manualAdjustments => 'Adjust times manually';
+
+  @override
+  String get manualAdjustmentsSubtitle =>
+      'Move any prayer earlier or later by minutes';
+
+  @override
+  String get manualAdjustmentsHint =>
+      'If the adhan differs from your mosque or the official calendar, move the prayer earlier or later by minutes. The adhan and alerts update at once.';
+
+  @override
+  String get minuteEarlier => 'One minute earlier';
+
+  @override
+  String get minuteLater => 'One minute later';
+
+  @override
+  String get resetAdjustments => 'Reset';
 }

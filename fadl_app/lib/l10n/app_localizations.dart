@@ -5131,6 +5131,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not open the website'**
   String get moreAdhansOpenError;
+
+  /// No description provided for @manualAdjustments.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust times manually'**
+  String get manualAdjustments;
+
+  /// No description provided for @manualAdjustmentsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move any prayer earlier or later by minutes'**
+  String get manualAdjustmentsSubtitle;
+
+  /// No description provided for @manualAdjustmentsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If the adhan differs from your mosque or the official calendar, move the prayer earlier or later by minutes. The adhan and alerts update at once.'**
+  String get manualAdjustmentsHint;
+
+  /// No description provided for @minuteEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute earlier'**
+  String get minuteEarlier;
+
+  /// No description provided for @minuteLater.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute later'**
+  String get minuteLater;
+
+  /// No description provided for @resetAdjustments.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get resetAdjustments;
 }
 
 class _AppLocalizationsDelegate

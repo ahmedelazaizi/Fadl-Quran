@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'adhan_service.dart';
 import 'api.dart';
+import 'offline_prayer.dart';
 import 'prayer_widget_schedule.dart';
 
 /// Preset cities used when GPS is unavailable or denied.
@@ -163,11 +164,34 @@ class AppState extends ChangeNotifier {
         ...?storedNotifications['adhan'] as Map?,
       },
     };
+    final method = gpsMethodFix(settings);
+    if (method != null) {
+      settings = {...settings, 'calcMethod': method};
+      await prefs.setString(_settingsKey, jsonEncode(settings));
+    }
     error = null;
     ready = true;
     notifyListeners();
     refreshPrayerWidget();
     if (Api.hasBackend) unawaited(_sync(tz));
+  }
+
+  /// Location name stored for a GPS fix.
+  static const gpsLocationName = 'موقعي الحالي';
+
+  /// The method a GPS location set before methods followed the country
+  /// should use: only when it still has the old Umm al-Qura default (never
+  /// chosen) and its time zone names another country's method.
+  @visibleForTesting
+  static String? gpsMethodFix(Map<String, dynamic> settings) {
+    if (settings['locationName'] != gpsLocationName ||
+        settings['calcMethodManual'] == true) {
+      return null;
+    }
+    final current = settings['calcMethod'] as String?;
+    if (current != null && current != 'UmmAlQura') return null;
+    final method = methodForTimezone('${settings['timezone']}');
+    return method == current ? null : method;
   }
 
   static Map<String, dynamic> _readLocal(SharedPreferences prefs, String key) {
@@ -223,7 +247,12 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_settingsKey, jsonEncode(settings));
     if (patch.keys.any(_prayerKeys.contains)) refreshPrayerWidget();
-    if (Api.hasBackend) unawaited(_syncSettingsPatch(patch, revision));
+    // Device-only: whether the user chose the calculation method.
+    final backendPatch = Map<String, Object?>.from(patch)
+      ..remove('calcMethodManual');
+    if (Api.hasBackend && backendPatch.isNotEmpty) {
+      unawaited(_syncSettingsPatch(backendPatch, revision));
+    }
   }
 
   Future<void> _syncSettingsPatch(
@@ -317,11 +346,16 @@ class AppState extends ChangeNotifier {
     try {
       tz = (await FlutterTimezone.getLocalTimezone()).identifier;
     } catch (_) {}
+    // The country's official method, unless the user picked one.
+    final method = settings['calcMethodManual'] == true
+        ? null
+        : methodForTimezone(tz);
     await updateSettings({
       'latitude': pos.latitude,
       'longitude': pos.longitude,
-      'locationName': 'موقعي الحالي',
+      'locationName': gpsLocationName,
       'timezone': tz,
+      'calcMethod': ?method,
     });
     return true;
   }

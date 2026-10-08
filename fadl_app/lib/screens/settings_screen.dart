@@ -341,6 +341,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => showMadhabSheet(context),
                 ),
                 SettingRow(
+                  icon: Icons.tune_rounded,
+                  title: l.manualAdjustments,
+                  subtitle: l.manualAdjustmentsSubtitle,
+                  onTap: () => showTimeAdjustmentsSheet(context),
+                ),
+                SettingRow(
                   icon: Icons.calendar_month_outlined,
                   title: l.hijriAdjustment,
                   trailing: HijriAdjustmentStepper(),

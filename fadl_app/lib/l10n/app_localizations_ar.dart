@@ -2852,4 +2852,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get moreAdhansOpenError => 'تعذّر فتح الموقع';
+
+  @override
+  String get manualAdjustments => 'تعديل الأوقات يدويًا';
+
+  @override
+  String get manualAdjustmentsSubtitle => 'قدّم أو أخّر أي صلاة بالدقائق';
+
+  @override
+  String get manualAdjustmentsHint =>
+      'إذا اختلف موعد الأذان عن مسجدك أو عن التقويم الرسمي، قدّم الصلاة أو أخّرها بالدقائق. يتغيّر وقت الأذان والتنبيهات فورًا.';
+
+  @override
+  String get minuteEarlier => 'قبل بدقيقة';
+
+  @override
+  String get minuteLater => 'بعد بدقيقة';
+
+  @override
+  String get resetAdjustments => 'إعادة الضبط';
 }
