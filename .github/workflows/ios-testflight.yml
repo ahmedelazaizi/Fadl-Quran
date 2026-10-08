@@ -1,0 +1,101 @@
+name: iOS TestFlight
+
+# Builds a signed release of the iOS app and uploads it to App Store Connect,
+# where it appears in TestFlight after Apple's processing (10–30 min).
+# Run it by hand from the Actions tab. It needs these repository secrets
+# (Settings → Secrets and variables → Actions), all from the owner's Apple
+# Developer account:
+#   APPLE_TEAM_ID                    Team ID (Membership details)
+#   APP_STORE_CONNECT_ISSUER_ID      Users and Access → Integrations → Keys
+#   APP_STORE_CONNECT_KEY_ID         the key's ID (Admin role, so Xcode can
+#                                    create certificates and profiles)
+#   APP_STORE_CONNECT_KEY_P8         the whole AuthKey_XXXX.p8 file
+# Signing is automatic: Xcode creates or reuses the certificates and
+# provisioning profiles through the API key.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-testflight
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: fadl_app
+    env:
+      KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+    steps:
+      - name: Check the secrets are set
+        working-directory: .
+        env:
+          KEY_P8: ${{ secrets.APP_STORE_CONNECT_KEY_P8 }}
+        run: |
+          missing=0
+          for name in KEY_ID ISSUER_ID TEAM_ID KEY_P8; do
+            if [ -z "${!name}" ]; then echo "::error::Secret for $name is not set"; missing=1; fi
+          done
+          exit $missing
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.0'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Write the API key
+        env:
+          KEY_P8: ${{ secrets.APP_STORE_CONNECT_KEY_P8 }}
+        run: |
+          key="$RUNNER_TEMP/AuthKey_$KEY_ID.p8"
+          printf '%s\n' "$KEY_P8" > "$key"
+          chmod 600 "$key"
+          echo "KEY_PATH=$key" >> "$GITHUB_ENV"
+      - name: Prepare the Xcode project
+        # The build number must grow with every upload; the run number does.
+        run: flutter build ios --release --config-only --build-number ${{ github.run_number }}
+      - name: Archive
+        run: |
+          xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Runner.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY_PATH" \
+            -authenticationKeyID "$KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic
+      - name: Export and upload to App Store Connect
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Runner.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY_PATH" \
+            -authenticationKeyID "$KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID"
+      - name: Remove the API key
+        if: always()
+        run: rm -f "$RUNNER_TEMP"/AuthKey_*.p8
