@@ -117,11 +117,17 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
 
   int _count(Map<String, dynamic> item) => _counts[item['id']] ?? 0;
 
-  int _shown(Map<String, dynamic> item) =>
-      athkarRoundCount(_count(item), item['repeat'] as int);
+  /// The dhikr whose round was just finished: it shows full (3 / 3) until
+  /// the page moves on, then its counter starts again from zero. The day's
+  /// count keeps growing, so the dhikr stays finished for today.
+  int? _justFinished;
 
-  bool _roundDone(Map<String, dynamic> item) =>
-      athkarRoundDone(_count(item), item['repeat'] as int);
+  bool _roundDone(Map<String, dynamic> item) => _justFinished == item['id'];
+
+  int _shown(Map<String, dynamic> item) {
+    final repeat = item['repeat'] as int;
+    return _roundDone(item) ? repeat : _count(item) % repeat;
+  }
 
   void _tap(Map<String, dynamic> item) {
     final id = item['id'] as int;
@@ -129,9 +135,13 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
     final current = _count(item);
     if (current >= OfflineAthkarStore.maxCount) return;
     final updated = current + 1;
-    setState(() => _counts[id] = updated);
+    final finished = athkarRoundDone(updated, repeat);
+    setState(() {
+      _counts[id] = updated;
+      _justFinished = finished ? id : null;
+    });
     _scheduleSync(id);
-    if (athkarRoundDone(updated, repeat)) {
+    if (finished) {
       HapticFeedback.mediumImpact();
       Future.delayed(const Duration(milliseconds: 450), () {
         if (mounted && _items.isNotEmpty && _items[_page]['id'] == id) _next();
@@ -141,9 +151,14 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
     }
   }
 
+  /// Restarts the current round; finished rounds still count for today.
   void _reset(Map<String, dynamic> item) {
     final id = item['id'] as int;
-    setState(() => _counts[id] = 0);
+    final count = _count(item);
+    setState(() {
+      _counts[id] = count - count % (item['repeat'] as int);
+      _justFinished = null;
+    });
     _scheduleSync(id);
   }
 
@@ -279,7 +294,10 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
                   child: PageView.builder(
                     controller: _pages,
                     itemCount: _items.length + 1,
-                    onPageChanged: (p) => setState(() => _page = p),
+                    onPageChanged: (p) => setState(() {
+                      _page = p;
+                      _justFinished = null;
+                    }),
                     itemBuilder: (context, i) => i == _items.length
                         ? _finishPage()
                         : _dhikrPage(_items[i]),
@@ -427,7 +445,7 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
                         ),
                         Text(
                           done
-                              ? prayerL(context).athkarTapAgain
+                              ? prayerL(context).athkarRoundDone
                               : prayerL(context).athkarTapCount,
                           style: FadlFonts.ui(
                             size: 13,
