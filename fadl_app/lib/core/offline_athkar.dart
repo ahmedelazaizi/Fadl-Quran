@@ -340,6 +340,9 @@ class OfflineAthkarStore {
   OfflineAthkarStore._();
 
   static const progressKey = 'fadl.offline.athkarProgress';
+
+  /// Highest daily count kept for one dhikr (the backend's limit too).
+  static const maxCount = 10000;
   static const amenKey = 'fadl.offline.duaAmen';
   static const readsKey = 'fadl.offline.duaReads';
   static const dedicationsKey = 'fadl.offline.dedications';
@@ -435,7 +438,7 @@ class OfflineAthkarStore {
   }) async {
     final dhikr = data._dhikr[dhikrId];
     if (dhikr == null) throw ArgumentError.value(dhikrId, 'dhikrId');
-    final value = count.clamp(0, 10000);
+    final value = count.clamp(0, maxCount);
     final prefs = await SharedPreferences.getInstance();
     final today = ymd(now ?? DateTime.now());
     final counts = _daily(prefs, progressKey, today);

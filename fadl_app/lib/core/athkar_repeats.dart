@@ -47,3 +47,15 @@ int? statedAthkarRepeat(String text) {
   }
   return null;
 }
+
+/// The counter shown for a dhikr said [count] times today: counting goes on
+/// in rounds of [repeat] after the dhikr is finished (1 / 3 after 3 / 3),
+/// and a finished round shows full (3 / 3) until the next tap.
+int athkarRoundCount(int count, int repeat) {
+  if (count <= 0) return 0;
+  final inRound = count % repeat;
+  return inRound == 0 ? repeat : inRound;
+}
+
+/// Whether the last tap finished a round of [repeat].
+bool athkarRoundDone(int count, int repeat) => count > 0 && count % repeat == 0;

@@ -2269,7 +2269,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get athkarVirtue => 'Virtue:';
 
   @override
-  String get athkarTapNext => 'Done ✓ — Next';
+  String get athkarTapAgain => 'Done ✓ — tap to repeat';
 
   @override
   String get athkarTapCount => 'Tap to count';

@@ -58,4 +58,17 @@ void main() {
     // A text that writes out its own repetitions stays a single count.
     expect(repeatOf('والحمد لله كثيرا، والحمد لله كثيرا'), 1);
   });
+
+  test('a finished dhikr counts again in new rounds', () {
+    expect(
+      [for (var c = 0; c <= 7; c++) athkarRoundCount(c, 3)],
+      [0, 1, 2, 3, 1, 2, 3, 1],
+    );
+    expect(
+      [for (var c = 0; c <= 7; c++) athkarRoundDone(c, 3)],
+      [false, false, false, true, false, false, true, false],
+    );
+    expect(athkarRoundCount(5, 1), 1);
+    expect(athkarRoundDone(5, 1), isTrue);
+  });
 }
