@@ -593,7 +593,7 @@
   "athkarCompletedCount": "أتممت {done} من {total}",
   "@athkarCompletedCount": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
   "athkarVirtue": "الفضل:",
-  "athkarTapNext": "تم ✓ — التالي",
+  "athkarTapAgain": "تم ✓ — اضغط للتكرار",
   "athkarTapCount": "اضغط للعدّ",
   "athkarLongPress": "اضغط مطولاً لإعادة العدّ",
   "athkarAccepted": "تقبّل الله منك",

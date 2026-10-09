@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/api.dart';
 import '../../core/app_state.dart';
+import '../../core/athkar_repeats.dart';
 import '../../l10n/prayer_labels.dart';
 import '../../core/offline_athkar.dart';
 import '../../core/theme.dart';
@@ -116,18 +117,21 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
 
   int _count(Map<String, dynamic> item) => _counts[item['id']] ?? 0;
 
+  int _shown(Map<String, dynamic> item) =>
+      athkarRoundCount(_count(item), item['repeat'] as int);
+
+  bool _roundDone(Map<String, dynamic> item) =>
+      athkarRoundDone(_count(item), item['repeat'] as int);
+
   void _tap(Map<String, dynamic> item) {
     final id = item['id'] as int;
     final repeat = item['repeat'] as int;
     final current = _count(item);
-    if (current >= repeat) {
-      _next();
-      return;
-    }
+    if (current >= OfflineAthkarStore.maxCount) return;
     final updated = current + 1;
     setState(() => _counts[id] = updated);
     _scheduleSync(id);
-    if (updated >= repeat) {
+    if (athkarRoundDone(updated, repeat)) {
       HapticFeedback.mediumImpact();
       Future.delayed(const Duration(milliseconds: 450), () {
         if (mounted && _items.isNotEmpty && _items[_page]['id'] == id) _next();
@@ -288,8 +292,8 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
 
   Widget _dhikrPage(Map<String, dynamic> item) {
     final repeat = item['repeat'] as int;
-    final count = _count(item);
-    final done = count >= repeat;
+    final count = _shown(item);
+    final done = _roundDone(item);
     final scheme = Theme.of(context).colorScheme;
     final virtue = item['virtue'] as String?;
     final reference = item['reference'] as String?;
@@ -423,7 +427,7 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
                         ),
                         Text(
                           done
-                              ? prayerL(context).athkarTapNext
+                              ? prayerL(context).athkarTapAgain
                               : prayerL(context).athkarTapCount,
                           style: FadlFonts.ui(
                             size: 13,

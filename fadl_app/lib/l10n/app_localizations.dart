@@ -4106,11 +4106,11 @@ abstract class AppLocalizations {
   /// **'Virtue:'**
   String get athkarVirtue;
 
-  /// No description provided for @athkarTapNext.
+  /// No description provided for @athkarTapAgain.
   ///
   /// In en, this message translates to:
-  /// **'Done ✓ — Next'**
-  String get athkarTapNext;
+  /// **'Done ✓ — tap to repeat'**
+  String get athkarTapAgain;
 
   /// No description provided for @athkarTapCount.
   ///
