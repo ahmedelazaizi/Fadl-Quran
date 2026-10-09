@@ -2244,7 +2244,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get athkarVirtue => 'الفضل:';
 
   @override
-  String get athkarTapAgain => 'تم ✓ — اضغط للتكرار';
+  String get athkarRoundDone => 'تم ✓';
 
   @override
   String get athkarTapCount => 'اضغط للعدّ';
