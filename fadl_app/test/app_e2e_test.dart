@@ -84,8 +84,16 @@ void main() {
           messenger.setMockMethodCallHandler(pathChannel, null);
           dir.deleteSync(recursive: true);
         });
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 3;
+        // E2E_SHORT=1: a small 320×640 phone with system bars.
+        final short = Platform.environment['E2E_SHORT'] == '1';
+        tester.view.physicalSize = short
+            ? const Size(640, 1280)
+            : const Size(1080, 2400);
+        tester.view.devicePixelRatio = short ? 2.0 : 3;
+        if (short) {
+          tester.view.padding = const FakeViewPadding(top: 48, bottom: 96);
+          tester.view.viewPadding = const FakeViewPadding(top: 48, bottom: 96);
+        }
         addTearDown(tester.view.reset);
 
         final state = AppState();

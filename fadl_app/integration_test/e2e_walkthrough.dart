@@ -77,6 +77,10 @@ class E2eWalkthrough {
     _previous = FlutterError.onError;
     FlutterError.onError = (details) {
       final text = details.exceptionAsString().split('\n').take(3).join(' ');
+      // The full report names the widget and source line that failed.
+      debugPrint(
+        'E2E problem at $_where:\n${details.toString().split('\n').take(14).join('\n')}',
+      );
       final widget = details.context?.toDescription() ?? '';
       _record('$text${widget.isEmpty ? '' : ' ($widget)'}');
     };

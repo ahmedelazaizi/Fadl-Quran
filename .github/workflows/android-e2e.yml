@@ -61,5 +61,6 @@ jobs:
           disable-animations: true
           working-directory: fadl_app
           script: |
+            adb shell wm size && adb shell wm density
             adb shell cmd location set-location-enabled false
             flutter test integration_test/app_e2e_test.dart --timeout none
