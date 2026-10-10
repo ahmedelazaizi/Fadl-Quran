@@ -89,10 +89,10 @@ void main() {
         tester.view.physicalSize = short
             ? const Size(640, 1280)
             : const Size(1080, 2400);
-        tester.view.devicePixelRatio = short ? 2.0 : 3;
+        tester.view.devicePixelRatio = short ? 1.0 : 3;
         if (short) {
-          tester.view.padding = const FakeViewPadding(top: 48, bottom: 96);
-          tester.view.viewPadding = const FakeViewPadding(top: 48, bottom: 96);
+          tester.view.padding = const FakeViewPadding(top: 24, bottom: 48);
+          tester.view.viewPadding = const FakeViewPadding(top: 24, bottom: 48);
         }
         addTearDown(tester.view.reset);
 

@@ -1869,37 +1869,48 @@ class _SurahFrame extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              if (!compact)
+          // A compact frame fills one mushaf line, whose height follows the
+          // screen: the title scales down to fit short lines.
+          if (compact)
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.surahName(surah['nameAr'] as String),
+                  maxLines: 1,
+                  style: FadlFonts.quran(size: 15, color: palette.accent),
+                ),
+              ),
+            )
+          else
+            Row(
+              children: [
                 Text(
                   AppLocalizations.of(
                     context,
                   )!.surahOrder(_number(context, surah['id'])),
                   style: FadlFonts.ui(size: 11.5, color: palette.muted),
                 ),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.surahName(surah['nameAr'] as String),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: FadlFonts.quran(
-                    size: compact ? 15 : 20,
-                    color: palette.accent,
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.surahName(surah['nameAr'] as String),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: FadlFonts.quran(size: 20, color: palette.accent),
                   ),
                 ),
-              ),
-              if (!compact)
                 Text(
                   AppLocalizations.of(
                     context,
                   )!.surahVerses(_number(context, surah['ayahCount'])),
                   style: FadlFonts.ui(size: 11.5, color: palette.muted),
                 ),
-            ],
-          ),
+              ],
+            ),
           if (showBasmala)
             Expanded(
               child: FittedBox(

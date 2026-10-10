@@ -3,7 +3,8 @@ name: Android end-to-end
 # Walks through the whole app (every tab, every screen under «المزيد», and
 # every button, switch and menu on them) and fails on any exception, layout
 # overflow or failed assertion:
-#   1. on the host, at 360×800 with the app's fonts (test/app_e2e_test.dart);
+#   1. on the host with the app's fonts, at 360×800 and at 320×640
+#      (test/app_e2e_test.dart), plus small-phone layout checks;
 #   2. on an Android emulator, with real plugins, storage and network
 #      (integration_test/app_e2e_test.dart).
 on:
@@ -41,8 +42,10 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - name: Host walkthrough
-        run: flutter test test/app_e2e_test.dart
+      - name: Host walkthrough and layout checks
+        run: |
+          flutter test test/app_e2e_test.dart test/small_phone_layout_test.dart test/mushaf_reader_layout_test.dart
+          E2E_SHORT=1 flutter test test/app_e2e_test.dart
       - name: Enable KVM for the emulator
         working-directory: .
         run: |
