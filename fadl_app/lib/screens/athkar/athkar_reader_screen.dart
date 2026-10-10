@@ -414,12 +414,12 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
         Center(
           child: GestureDetector(
             onLongPress: () => _reset(item),
+            // Solid, high-contrast counter: green while counting, gold when
+            // a round is finished.
             child: Material(
-              color: done
-                  ? FadlColors.sage
-                  : (isDark(context)
-                        ? FadlColors.darkSurfaceHigh
-                        : FadlColors.mint),
+              color: done ? FadlColors.gold : FadlColors.sage,
+              elevation: 4,
+              shadowColor: FadlColors.primary.withValues(alpha: 0.4),
               shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
@@ -431,16 +431,16 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
                     value: count / repeat,
                     size: 168,
                     stroke: 8,
-                    color: done ? FadlColors.goldLight : FadlColors.sage,
-                    track: Colors.white.withValues(alpha: 0.35),
+                    color: done ? Colors.white : FadlColors.goldLight,
+                    track: Colors.white.withValues(alpha: 0.25),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           '${prayerNumber(context, count)} / ${prayerNumber(context, repeat)}',
                           style: FadlFonts.heading(
-                            size: 34,
-                            color: done ? Colors.white : FadlColors.primary,
+                            size: 40,
+                            color: Colors.white,
                           ),
                         ),
                         Text(
@@ -448,9 +448,9 @@ class _AthkarReaderScreenState extends State<AthkarReaderScreen> {
                               ? prayerL(context).athkarRoundDone
                               : prayerL(context).athkarTapCount,
                           style: FadlFonts.ui(
-                            size: 13,
-                            color: done ? Colors.white : FadlColors.sage,
-                            weight: FontWeight.w600,
+                            size: 14,
+                            color: Colors.white,
+                            weight: FontWeight.w700,
                           ),
                         ),
                       ],
