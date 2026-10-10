@@ -6,6 +6,7 @@ import '../../core/local_user_data.dart';
 import '../../core/offline_prayer.dart';
 import '../../core/worship_store.dart';
 import '../../l10n/prayer_labels.dart';
+import '../../widgets/text_dialog.dart';
 
 class FastingTrackerScreen extends StatefulWidget {
   const FastingTrackerScreen({super.key});
@@ -45,13 +46,11 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
   }
 
   Future<void> chooseFast() async {
-    final note = TextEditingController(
-      text: records[LocalUserData.ymd(date)]?['notes'],
-    );
     String? selected = records[LocalUserData.ymd(date)]?['type'];
-    final action = await showDialog<String>(
+    final result = await showTextDialog<(String, String)>(
       context: context,
-      builder: (context) => StatefulBuilder(
+      initialTexts: [records[LocalUserData.ymd(date)]?['notes'] ?? ''],
+      builder: (context, fields) => StatefulBuilder(
         builder: (context, rebuild) => AlertDialog(
           title: Text(
             prayerL(context).trackerFastingDay(LocalUserData.ymd(date)),
@@ -72,7 +71,7 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
                 onChanged: (value) => rebuild(() => selected = value),
               ),
               TextField(
-                controller: note,
+                controller: fields[0],
                 decoration: InputDecoration(
                   labelText: prayerL(context).trackerNotes,
                 ),
@@ -81,23 +80,23 @@ class _FastingTrackerScreenState extends State<FastingTrackerScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, 'delete'),
+              onPressed: () => Navigator.pop(context, ('delete', '')),
               child: Text(prayerL(context).trackerDelete),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(context, 'save'),
+              onPressed: () => Navigator.pop(context, ('save', fields[0].text)),
               child: Text(prayerL(context).trackerSave),
             ),
           ],
         ),
       ),
     );
+    final action = result?.$1;
     if (action == 'save' && selected != null) {
-      await store.setFast(LocalUserData.ymd(date), selected, notes: note.text);
+      await store.setFast(LocalUserData.ymd(date), selected, notes: result!.$2);
     } else if (action == 'delete') {
       await store.setFast(LocalUserData.ymd(date), null);
     }
-    note.dispose();
     await refresh();
   }
 

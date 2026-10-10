@@ -11,6 +11,7 @@ import '../core/theme.dart';
 import '../l10n/prayer_labels.dart';
 import '../widgets/common.dart';
 import 'devotion/devotion_widgets.dart';
+import '../widgets/text_dialog.dart';
 
 /// Electronic tasbeeh (design _7). Taps are counted locally and uploaded in
 /// batches; each batch keeps its clientEventIds until the server accepts it,
@@ -224,17 +225,16 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
     String initialText = '',
     int initialTarget = 33,
   }) async {
-    final text = TextEditingController(text: initialText);
-    final target = TextEditingController(text: '$initialTarget');
-    final ok = await showDialog<bool>(
+    final entered = await showTextDialog<(String, String)>(
       context: context,
-      builder: (c) => AlertDialog(
+      initialTexts: [initialText, '$initialTarget'],
+      builder: (c, fields) => AlertDialog(
         title: Text(title),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: text,
+              controller: fields[0],
               autofocus: true,
               decoration: InputDecoration(
                 labelText: prayerL(context).tasbeehText,
@@ -242,7 +242,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: target,
+              controller: fields[1],
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
@@ -253,21 +253,20 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(c, false),
+            onPressed: () => Navigator.pop(c),
             child: Text(prayerL(context).cancel),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(c, true),
+            onPressed: () => Navigator.pop(c, (fields[0].text, fields[1].text)),
             child: Text(action),
           ),
         ],
       ),
     );
-    final value = text.text.trim();
-    final goal = (int.tryParse(target.text) ?? 33).clamp(1, 10000);
-    text.dispose();
-    target.dispose();
-    if (ok != true || value.isEmpty) return null;
+    if (entered == null) return null;
+    final value = entered.$1.trim();
+    final goal = (int.tryParse(entered.$2) ?? 33).clamp(1, 10000);
+    if (value.isEmpty) return null;
     return (value, goal);
   }
 

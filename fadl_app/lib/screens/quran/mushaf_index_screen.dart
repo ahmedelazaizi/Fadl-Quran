@@ -199,22 +199,33 @@ class _MushafIndexScreenState extends State<MushafIndexScreen> {
       itemBuilder: (context, i) => FadlCard(
         padding: const EdgeInsets.all(8),
         onTap: () => _openJuz(context, i + 1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            NumberBadge(i + 1),
-            const SizedBox(height: 8),
-            Text(
-              AppLocalizations.of(context)!.juzName(
-                Localizations.localeOf(context).languageCode == 'ar'
-                    ? juzNamesAr[i]
-                    : '${i + 1}',
+        // Cells shrink with the screen width; on small phones the content
+        // keeps the cell's width (so the name still wraps) and scales down
+        // instead of overflowing.
+        child: LayoutBuilder(
+          builder: (context, cell) => FittedBox(
+            fit: BoxFit.scaleDown,
+            child: SizedBox(
+              width: cell.maxWidth,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  NumberBadge(i + 1),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppLocalizations.of(context)!.juzName(
+                      Localizations.localeOf(context).languageCode == 'ar'
+                          ? juzNamesAr[i]
+                          : '${i + 1}',
+                    ),
+                    style: FadlFonts.ui(size: 13, weight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                  ),
+                ],
               ),
-              style: FadlFonts.ui(size: 13, weight: FontWeight.w700),
-              textAlign: TextAlign.center,
-              maxLines: 2,
             ),
-          ],
+          ),
         ),
       ),
     );

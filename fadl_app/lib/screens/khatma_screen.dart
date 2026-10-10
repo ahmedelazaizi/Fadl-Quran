@@ -9,6 +9,7 @@ import '../l10n/prayer_labels.dart';
 import '../widgets/common.dart';
 import 'devotion/devotion_widgets.dart';
 import 'quran/mushaf_reader_screen.dart';
+import '../widgets/text_dialog.dart';
 
 class _KhatmaData {
   _KhatmaData(this.plan, this.presets);
@@ -166,13 +167,13 @@ class _KhatmaScreenState extends State<KhatmaScreen> {
   }
 
   Future<void> _toPageDialog() async {
-    final ctrl = TextEditingController();
-    final page = await showDialog<int>(
+    final page = await showTextDialog<int>(
       context: context,
-      builder: (c) => AlertDialog(
+      initialTexts: [''],
+      builder: (c, fields) => AlertDialog(
         title: const Text('وصلت إلى صفحة...'),
         content: TextField(
-          controller: ctrl,
+          controller: fields[0],
           autofocus: true,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -188,13 +189,12 @@ class _KhatmaScreenState extends State<KhatmaScreen> {
             child: const Text('إلغاء'),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(c, int.tryParse(ctrl.text)),
+            onPressed: () => Navigator.pop(c, int.tryParse(fields[0].text)),
             child: const Text('تسجيل'),
           ),
         ],
       ),
     );
-    ctrl.dispose();
     if (page == null) return;
     if (page < 1 || page > 604) {
       if (mounted) showToast(context, 'رقم الصفحة يجب أن يكون بين ١ و٦٠٤');

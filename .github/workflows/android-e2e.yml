@@ -1,0 +1,69 @@
+name: Android end-to-end
+
+# Walks through the whole app (every tab, every screen under «المزيد», and
+# every button, switch and menu on them) and fails on any exception, layout
+# overflow or failed assertion:
+#   1. on the host with the app's fonts, at 360×800 and at 320×640
+#      (test/app_e2e_test.dart), plus small-phone layout checks;
+#   2. on an Android emulator, with real plugins, storage and network
+#      (integration_test/app_e2e_test.dart).
+on:
+  pull_request:
+    paths:
+      - 'fadl_app/**'
+      - '.github/workflows/android-e2e.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'fadl_app/**'
+      - '.github/workflows/android-e2e.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: android-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    defaults:
+      run:
+        working-directory: fadl_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.0'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Host walkthrough and layout checks
+        run: |
+          flutter test test/app_e2e_test.dart test/small_phone_layout_test.dart test/mushaf_reader_layout_test.dart
+          E2E_SHORT=1 flutter test test/app_e2e_test.dart
+      - name: Enable KVM for the emulator
+        working-directory: .
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Emulator walkthrough
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          # Android 11: no runtime notification permission dialog. Location
+          # is switched off so «حدد موقعك» shows the app's own message
+          # instead of the system permission dialog.
+          api-level: 30
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          working-directory: fadl_app
+          script: |
+            adb shell wm size && adb shell wm density
+            adb shell cmd location set-location-enabled false
+            flutter test integration_test/app_e2e_test.dart --timeout none

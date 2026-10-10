@@ -31,6 +31,7 @@ import '../../l10n/app_localizations.dart';
 import '../../l10n/prayer_labels.dart';
 import '../../widgets/common.dart';
 import '../../widgets/live_search.dart';
+import '../../widgets/measure_size.dart';
 import 'audio_player_screen.dart';
 import 'memorization_sheet.dart';
 import 'quran_widgets.dart';
@@ -125,6 +126,21 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
   TajweedScheme _tajweedScheme = TajweedScheme.simple;
   int? _sliderPage;
   bool _chromeVisible = true;
+
+  /// Heights of the floating top and bottom panels (safe area included), so
+  /// the page shrinks to show every line between them instead of under them.
+  double _topChrome = 0;
+  double _bottomChrome = 0;
+
+  void _setTopChrome(double height) {
+    if (mounted && height != _topChrome) setState(() => _topChrome = height);
+  }
+
+  void _setBottomChrome(double height) {
+    if (mounted && height != _bottomChrome) {
+      setState(() => _bottomChrome = height);
+    }
+  }
 
   void _toggleChrome() {
     setState(() => _chromeVisible = !_chromeVisible);
@@ -445,51 +461,67 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
   Widget build(BuildContext context) {
     final palette = _Palette.of(_mode);
     final fontSize = context.watch<AppState>().quranFontSize;
+    // Notch and system bars; viewPadding keeps the cutout in immersive mode.
+    final safe = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       backgroundColor: palette.canvas,
       body: Stack(
         children: [
           Positioned.fill(
             // Page 1 sits on the right; keep swipe direction independent of chrome.
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: _totalPages,
-                onPageChanged: _onPageChanged,
-                itemBuilder: (context, index) => RepaintBoundary(
-                  child: FutureBuilder<Map<String, dynamic>>(
-                    future: loadPage(index + 1),
-                    builder: (context, snap) {
-                      if (snap.hasError) {
-                        return ErrorCard(
-                          message: '${snap.error}',
-                          onRetry: () => setState(() {}),
-                        );
-                      }
-                      if (!snap.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: palette.accent,
+            // The page stays clear of the notch and system bars, and of the
+            // floating panels while they show.
+            child: AnimatedPadding(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              padding: EdgeInsets.only(
+                top: _chromeVisible ? _topChrome : safe.top,
+                bottom: _chromeVisible ? _bottomChrome : safe.bottom,
+                left: safe.left,
+                right: safe.right,
+              ),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: _totalPages,
+                  onPageChanged: _onPageChanged,
+                  itemBuilder: (context, index) => RepaintBoundary(
+                    child: FutureBuilder<Map<String, dynamic>>(
+                      future: loadPage(index + 1),
+                      builder: (context, snap) {
+                        if (snap.hasError) {
+                          return ErrorCard(
+                            message: '${snap.error}',
+                            onRetry: () => setState(() {}),
+                          );
+                        }
+                        if (!snap.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: palette.accent,
+                            ),
+                          );
+                        }
+                        return Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: _MushafPage(
+                            data: snap.data!,
+                            palette: palette,
+                            fontSize: fontSize,
+                            colored: _tajweedEnabled && _tajweed.isDownloaded,
+                            tajweed: _tajweed,
+                            scheme: _tajweedScheme,
+                            dark: _mode != ReaderMode.day,
+                            selectedKey: _audioFocus.highlightedKey(
+                              _selectedKey,
+                            ),
+                            onAyahTap: _onAyahTap,
+                            onEmptyTap: _toggleChrome,
                           ),
                         );
-                      }
-                      return Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: _MushafPage(
-                          data: snap.data!,
-                          palette: palette,
-                          fontSize: fontSize,
-                          colored: _tajweedEnabled && _tajweed.isDownloaded,
-                          tajweed: _tajweed,
-                          scheme: _tajweedScheme,
-                          dark: _mode != ReaderMode.day,
-                          selectedKey: _audioFocus.highlightedKey(_selectedKey),
-                          onAyahTap: _onAyahTap,
-                          onEmptyTap: _toggleChrome,
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -500,141 +532,144 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
               top: 0,
               left: 12,
               right: 12,
-              child: SafeArea(
-                bottom: false,
-                child: _floatingPanel(
-                  palette,
-                  Row(
-                    children: [
-                      IconButton(
-                        tooltip: AppLocalizations.of(context)!.back,
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back_rounded),
-                      ),
-                      Expanded(
-                        child: ValueListenableBuilder<int>(
-                          valueListenable: _visiblePage,
-                          builder: (_, page, _) =>
-                              _HeaderTitle(page: page, palette: palette),
+              child: MeasureHeight(
+                onChange: _setTopChrome,
+                child: SafeArea(
+                  bottom: false,
+                  child: _floatingPanel(
+                    palette,
+                    Row(
+                      children: [
+                        IconButton(
+                          tooltip: AppLocalizations.of(context)!.back,
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back_rounded),
                         ),
-                      ),
-                      IconButton(
-                        tooltip: _mode == ReaderMode.day
-                            ? AppLocalizations.of(context)!.nightMode
-                            : AppLocalizations.of(context)!.dayMode,
-                        icon: Icon(
-                          _mode == ReaderMode.day
-                              ? Icons.dark_mode_outlined
-                              : Icons.light_mode_outlined,
+                        Expanded(
+                          child: ValueListenableBuilder<int>(
+                            valueListenable: _visiblePage,
+                            builder: (_, page, _) =>
+                                _HeaderTitle(page: page, palette: palette),
+                          ),
                         ),
-                        onPressed: () => setState(
-                          () => _mode = _mode == ReaderMode.day
-                              ? ReaderMode.night
-                              : ReaderMode.day,
+                        IconButton(
+                          tooltip: _mode == ReaderMode.day
+                              ? AppLocalizations.of(context)!.nightMode
+                              : AppLocalizations.of(context)!.dayMode,
+                          icon: Icon(
+                            _mode == ReaderMode.day
+                                ? Icons.dark_mode_outlined
+                                : Icons.light_mode_outlined,
+                          ),
+                          onPressed: () => setState(
+                            () => _mode = _mode == ReaderMode.day
+                                ? ReaderMode.night
+                                : ReaderMode.day,
+                          ),
                         ),
-                      ),
-                      PopupMenuButton<String>(
-                        icon: const Icon(Icons.tune_rounded),
-                        onSelected: (v) {
-                          switch (v) {
-                            case 'day':
-                              setState(() => _mode = ReaderMode.day);
-                            case 'night':
-                              setState(() => _mode = ReaderMode.night);
-                            case 'black':
-                              setState(() => _mode = ReaderMode.black);
-                            case 'bigger':
-                              _changeFont(2);
-                            case 'smaller':
-                              _changeFont(-2);
-                            case 'jump':
-                              _openJumpSheet();
-                            case 'dedicate':
-                              dedicate(
-                                context,
-                                'READING',
-                                refKey: 'page:$_page',
-                              );
-                            case 'bookmarks':
-                              _openBookmarks();
-                            case 'tajweed':
-                              _toggleTajweed();
-                            case 'scheme':
-                              _openSchemePicker();
-                          }
-                        },
-                        itemBuilder: (_) => [
-                          _menuItem(
-                            'day',
-                            Icons.light_mode_outlined,
-                            AppLocalizations.of(context)!.light,
-                            _mode == ReaderMode.day,
-                          ),
-                          _menuItem(
-                            'night',
-                            Icons.nights_stay_outlined,
-                            AppLocalizations.of(context)!.dark,
-                            _mode == ReaderMode.night,
-                          ),
-                          _menuItem(
-                            'black',
-                            Icons.contrast_rounded,
-                            AppLocalizations.of(context)!.blackMode,
-                            _mode == ReaderMode.black,
-                          ),
-                          const PopupMenuDivider(),
-                          _menuItem(
-                            'bigger',
-                            Icons.text_increase_rounded,
-                            AppLocalizations.of(
-                              context,
-                            )!.increaseFont(_number(context, fontSize.round())),
-                            false,
-                          ),
-                          _menuItem(
-                            'smaller',
-                            Icons.text_decrease_rounded,
-                            AppLocalizations.of(context)!.decreaseFont,
-                            false,
-                          ),
-                          const PopupMenuDivider(),
-                          if (_tajweed.isDownloaded)
+                        PopupMenuButton<String>(
+                          icon: const Icon(Icons.tune_rounded),
+                          onSelected: (v) {
+                            switch (v) {
+                              case 'day':
+                                setState(() => _mode = ReaderMode.day);
+                              case 'night':
+                                setState(() => _mode = ReaderMode.night);
+                              case 'black':
+                                setState(() => _mode = ReaderMode.black);
+                              case 'bigger':
+                                _changeFont(2);
+                              case 'smaller':
+                                _changeFont(-2);
+                              case 'jump':
+                                _openJumpSheet();
+                              case 'dedicate':
+                                dedicate(
+                                  context,
+                                  'READING',
+                                  refKey: 'page:$_page',
+                                );
+                              case 'bookmarks':
+                                _openBookmarks();
+                              case 'tajweed':
+                                _toggleTajweed();
+                              case 'scheme':
+                                _openSchemePicker();
+                            }
+                          },
+                          itemBuilder: (_) => [
                             _menuItem(
-                              'tajweed',
-                              Icons.color_lens_outlined,
-                              AppLocalizations.of(context)!.coloredTajweed,
-                              _tajweedEnabled,
+                              'day',
+                              Icons.light_mode_outlined,
+                              AppLocalizations.of(context)!.light,
+                              _mode == ReaderMode.day,
                             ),
-                          _menuItem(
-                            'scheme',
-                            Icons.palette_outlined,
-                            AppLocalizations.of(
-                              context,
-                            )!.tajweedScheme(_schemeName(_tajweedScheme)),
-                            false,
-                          ),
-                          _menuItem(
-                            'jump',
-                            Icons.menu_book_outlined,
-                            AppLocalizations.of(context)!.goToPage,
-                            false,
-                          ),
-                          if (!Api.hasBackend)
                             _menuItem(
-                              'bookmarks',
-                              Icons.bookmarks_outlined,
-                              AppLocalizations.of(context)!.myBookmarks,
+                              'night',
+                              Icons.nights_stay_outlined,
+                              AppLocalizations.of(context)!.dark,
+                              _mode == ReaderMode.night,
+                            ),
+                            _menuItem(
+                              'black',
+                              Icons.contrast_rounded,
+                              AppLocalizations.of(context)!.blackMode,
+                              _mode == ReaderMode.black,
+                            ),
+                            const PopupMenuDivider(),
+                            _menuItem(
+                              'bigger',
+                              Icons.text_increase_rounded,
+                              AppLocalizations.of(context)!.increaseFont(
+                                _number(context, fontSize.round()),
+                              ),
                               false,
                             ),
-                          _menuItem(
-                            'dedicate',
-                            Icons.volunteer_activism_outlined,
-                            AppLocalizations.of(context)!.dedicateReading,
-                            false,
-                          ),
-                        ],
-                      ),
-                    ],
+                            _menuItem(
+                              'smaller',
+                              Icons.text_decrease_rounded,
+                              AppLocalizations.of(context)!.decreaseFont,
+                              false,
+                            ),
+                            const PopupMenuDivider(),
+                            if (_tajweed.isDownloaded)
+                              _menuItem(
+                                'tajweed',
+                                Icons.color_lens_outlined,
+                                AppLocalizations.of(context)!.coloredTajweed,
+                                _tajweedEnabled,
+                              ),
+                            _menuItem(
+                              'scheme',
+                              Icons.palette_outlined,
+                              AppLocalizations.of(
+                                context,
+                              )!.tajweedScheme(_schemeName(_tajweedScheme)),
+                              false,
+                            ),
+                            _menuItem(
+                              'jump',
+                              Icons.menu_book_outlined,
+                              AppLocalizations.of(context)!.goToPage,
+                              false,
+                            ),
+                            if (!Api.hasBackend)
+                              _menuItem(
+                                'bookmarks',
+                                Icons.bookmarks_outlined,
+                                AppLocalizations.of(context)!.myBookmarks,
+                                false,
+                              ),
+                            _menuItem(
+                              'dedicate',
+                              Icons.volunteer_activism_outlined,
+                              AppLocalizations.of(context)!.dedicateReading,
+                              false,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -644,25 +679,28 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
               bottom: 0,
               left: 12,
               right: 12,
-              child: SafeArea(
-                top: false,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (_tajweedEnabled && _tajweed.isDownloaded)
-                      _floatingPanel(palette, _tajweedLegend(palette)),
-                    if (_audio.ayahs.isNotEmpty)
-                      _floatingPanel(palette, _audioStrip(palette)),
-                    ValueListenableBuilder<int>(
-                      valueListenable: _visiblePage,
-                      builder: (_, page, _) => _pageSlider(palette, page),
-                    ),
-                    ValueListenableBuilder<int>(
-                      valueListenable: _visiblePage,
-                      builder: (_, page, _) =>
-                          _floatingPanel(palette, _quickActions(page)),
-                    ),
-                  ],
+              child: MeasureHeight(
+                onChange: _setBottomChrome,
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_tajweedEnabled && _tajweed.isDownloaded)
+                        _floatingPanel(palette, _tajweedLegend(palette)),
+                      if (_audio.ayahs.isNotEmpty)
+                        _floatingPanel(palette, _audioStrip(palette)),
+                      ValueListenableBuilder<int>(
+                        valueListenable: _visiblePage,
+                        builder: (_, page, _) => _pageSlider(palette, page),
+                      ),
+                      ValueListenableBuilder<int>(
+                        valueListenable: _visiblePage,
+                        builder: (_, page, _) =>
+                            _floatingPanel(palette, _quickActions(page)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -751,65 +789,68 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
     child: _quickActionsRow(page),
   );
 
+  // Each button takes an equal share, so the 48 px tap targets never overflow
+  // a 360 px-wide phone.
   Widget _quickActionsRow(int page) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      IconButton(
-        constraints: const BoxConstraints(minWidth: 38, minHeight: 48),
-        padding: EdgeInsets.zero,
-        tooltip: AppLocalizations.of(context)!.previous,
-        onPressed: page > 1
-            ? () => _controller.previousPage(
-                duration: _turn,
-                curve: Curves.easeOut,
-              )
-            : null,
-        icon: const Icon(Icons.chevron_left_rounded),
-      ),
-      _quickButton(
-        _audio.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
-        AppLocalizations.of(context)!.togglePlayback,
-        _audio.playing ? _audio.pause : _playCurrentPage,
-      ),
-      _quickButton(
-        Icons.bookmark_add_outlined,
-        AppLocalizations.of(context)!.bookmarkPage,
-        _bookmarkCurrentPage,
-      ),
-      _quickButton(
-        Icons.menu_book_outlined,
-        AppLocalizations.of(context)!.mushafIndex,
-        () => Navigator.push(
-          context,
-          MaterialPageRoute<void>(builder: (_) => const MushafIndexScreen()),
-        ),
-      ),
-      _quickButton(
-        Icons.swap_horiz_rounded,
-        AppLocalizations.of(context)!.goTo,
-        _openJumpSheet,
-      ),
-      _quickButton(
-        Icons.search_rounded,
-        AppLocalizations.of(context)!.quickSearch,
-        () => Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (_) => const AssistantScreen(openSearch: true),
-          ),
-        ),
-      ),
-      IconButton(
-        constraints: const BoxConstraints(minWidth: 38, minHeight: 48),
-        padding: EdgeInsets.zero,
-        tooltip: AppLocalizations.of(context)!.next,
-        onPressed: page < _totalPages
-            ? () => _controller.nextPage(duration: _turn, curve: Curves.easeOut)
-            : null,
-        icon: const Icon(Icons.chevron_right_rounded),
-      ),
+      for (final button in _quickActionButtons(page)) Expanded(child: button),
     ],
   );
+
+  List<Widget> _quickActionButtons(int page) => [
+    IconButton(
+      constraints: const BoxConstraints(minWidth: 38, minHeight: 48),
+      padding: EdgeInsets.zero,
+      tooltip: AppLocalizations.of(context)!.previous,
+      onPressed: page > 1
+          ? () =>
+                _controller.previousPage(duration: _turn, curve: Curves.easeOut)
+          : null,
+      icon: const Icon(Icons.chevron_left_rounded),
+    ),
+    _quickButton(
+      _audio.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
+      AppLocalizations.of(context)!.togglePlayback,
+      _audio.playing ? _audio.pause : _playCurrentPage,
+    ),
+    _quickButton(
+      Icons.bookmark_add_outlined,
+      AppLocalizations.of(context)!.bookmarkPage,
+      _bookmarkCurrentPage,
+    ),
+    _quickButton(
+      Icons.menu_book_outlined,
+      AppLocalizations.of(context)!.mushafIndex,
+      () => Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const MushafIndexScreen()),
+      ),
+    ),
+    _quickButton(
+      Icons.swap_horiz_rounded,
+      AppLocalizations.of(context)!.goTo,
+      _openJumpSheet,
+    ),
+    _quickButton(
+      Icons.search_rounded,
+      AppLocalizations.of(context)!.quickSearch,
+      () => Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => const AssistantScreen(openSearch: true),
+        ),
+      ),
+    ),
+    IconButton(
+      constraints: const BoxConstraints(minWidth: 38, minHeight: 48),
+      padding: EdgeInsets.zero,
+      tooltip: AppLocalizations.of(context)!.next,
+      onPressed: page < _totalPages
+          ? () => _controller.nextPage(duration: _turn, curve: Curves.easeOut)
+          : null,
+      icon: const Icon(Icons.chevron_right_rounded),
+    ),
+  ];
 
   Widget _quickButton(IconData icon, String tooltip, VoidCallback action) =>
       IconButton(
@@ -1828,37 +1869,48 @@ class _SurahFrame extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              if (!compact)
+          // A compact frame fills one mushaf line, whose height follows the
+          // screen: the title scales down to fit short lines.
+          if (compact)
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.surahName(surah['nameAr'] as String),
+                  maxLines: 1,
+                  style: FadlFonts.quran(size: 15, color: palette.accent),
+                ),
+              ),
+            )
+          else
+            Row(
+              children: [
                 Text(
                   AppLocalizations.of(
                     context,
                   )!.surahOrder(_number(context, surah['id'])),
                   style: FadlFonts.ui(size: 11.5, color: palette.muted),
                 ),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.surahName(surah['nameAr'] as String),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: FadlFonts.quran(
-                    size: compact ? 15 : 20,
-                    color: palette.accent,
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.surahName(surah['nameAr'] as String),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: FadlFonts.quran(size: 20, color: palette.accent),
                   ),
                 ),
-              ),
-              if (!compact)
                 Text(
                   AppLocalizations.of(
                     context,
                   )!.surahVerses(_number(context, surah['ayahCount'])),
                   style: FadlFonts.ui(size: 11.5, color: palette.muted),
                 ),
-            ],
-          ),
+              ],
+            ),
           if (showBasmala)
             Expanded(
               child: FittedBox(
