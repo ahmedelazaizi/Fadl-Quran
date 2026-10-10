@@ -455,7 +455,9 @@ class _OfflineHomeBodyState extends State<OfflineHomeBody> {
       context,
     ).push(MaterialPageRoute<void>(builder: (_) => const KhatmaScreen()));
     if (mounted) {
-      setState(() => _plans = LocalUserData.instance.khatmas(status: 'ACTIVE'));
+      setState(() {
+        _plans = LocalUserData.instance.khatmas(status: 'ACTIVE');
+      });
     }
   }
 

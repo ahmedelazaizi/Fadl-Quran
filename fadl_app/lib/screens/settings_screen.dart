@@ -18,6 +18,7 @@ import '../widgets/common.dart';
 import '../widgets/location_picker.dart';
 import 'prayer/prayer_settings_sheets.dart';
 import 'library_screen.dart';
+import '../widgets/text_dialog.dart';
 
 String _uiNum(BuildContext context, Object number) =>
     Localizations.localeOf(context).languageCode == 'en'
@@ -666,15 +667,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _editDedicatee() async {
-    final controller = TextEditingController(
-      text: context.read<AppState>().dedicatee,
-    );
-    final name = await showDialog<String>(
+    final name = await showTextDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      initialTexts: [context.read<AppState>().dedicatee],
+      builder: (dialogContext, fields) => AlertDialog(
         title: Text(l.recipientName, style: FadlFonts.heading(size: 18)),
         content: TextField(
-          controller: controller,
+          controller: fields[0],
           autofocus: true,
           maxLength: 120,
           decoration: InputDecoration(hintText: l.recipientExample),
@@ -686,13 +685,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           FilledButton(
             onPressed: () =>
-                Navigator.pop(dialogContext, controller.text.trim()),
+                Navigator.pop(dialogContext, fields[0].text.trim()),
             child: Text(l.save),
           ),
         ],
       ),
     );
-    controller.dispose();
     if (name == null || name.isEmpty) return;
     await _settings({'dedicateeName': name});
     if (mounted) showToast(context, l.nameSaved);

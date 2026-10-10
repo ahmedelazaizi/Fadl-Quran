@@ -7,6 +7,7 @@ import '../../core/local_user_data.dart';
 import '../../core/offline_prayer.dart';
 import '../../core/worship_store.dart';
 import '../../l10n/prayer_labels.dart';
+import '../../widgets/text_dialog.dart';
 
 class PrayerTrackerScreen extends StatefulWidget {
   const PrayerTrackerScreen({super.key});
@@ -59,13 +60,13 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
   }
 
   Future<void> importJson() async {
-    final controller = TextEditingController();
-    final source = await showDialog<String>(
+    final source = await showTextDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      initialTexts: [''],
+      builder: (context, fields) => AlertDialog(
         title: Text(prayerL(context).trackerImportJson),
         content: TextField(
-          controller: controller,
+          controller: fields[0],
           maxLines: 6,
           decoration: InputDecoration(
             hintText: prayerL(context).trackerPasteBackup,
@@ -77,13 +78,12 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
             child: Text(prayerL(context).trackerCancel),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, controller.text),
+            onPressed: () => Navigator.pop(context, fields[0].text),
             child: Text(prayerL(context).trackerImport),
           ),
         ],
       ),
     );
-    controller.dispose();
     if (source == null) return;
     try {
       await store.importPrayers(source);
