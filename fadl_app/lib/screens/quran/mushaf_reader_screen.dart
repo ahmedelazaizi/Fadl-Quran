@@ -191,7 +191,10 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
     _setScreenAwake(true);
     _controller = PageController(initialPage: _page - 1);
     _audio.addListener(_onAudioChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _onAudioChanged());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _decideAudioFollow();
+      _onAudioChanged();
+    });
     _tajweed.addListener(_onTajweedChanged);
     unawaited(_loadTajweed());
     unawaited(_audio.loadSettings());
@@ -240,11 +243,24 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
   int _lastCountdown = 0;
   int _lastAudioSurah = 0;
 
+  /// Whether the reader follows the recitation (turns pages, highlights the
+  /// ayah). Opening another surah while a recitation plays must not jump
+  /// back to it: the reader then ignores it until playback starts here.
+  bool _followAudio = true;
+
+  Future<void> _decideAudioFollow() async {
+    final key = _audio.playlist == null ? null : _audio.ayahKey;
+    if (key == null) return;
+    final ayah = (await QuranData.load()).ayah(key);
+    _followAudio = ayah == null || ayah['page'] == _page;
+  }
+
   void _onAudioChanged() {
     if (!mounted) return;
     final focusChanged = _audioFocus.update(
       ayahKey: _audio.ayahKey,
       sourceActive:
+          _followAudio &&
           _audio.playlist != null &&
           _audio.player.processingState != ProcessingState.idle,
     );
@@ -275,6 +291,7 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
   }
 
   Future<void> _playAyah(int surahId, int number) async {
+    _followAudio = true;
     final state = context.read<AppState>();
     try {
       if (_audio.surahId == surahId &&
@@ -808,10 +825,13 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
           : null,
       icon: const Icon(Icons.chevron_left_rounded),
     ),
+    // While another surah's recitation plays, play starts this page.
     _quickButton(
-      _audio.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
+      _audio.playing && _followAudio
+          ? Icons.pause_rounded
+          : Icons.play_arrow_rounded,
       AppLocalizations.of(context)!.togglePlayback,
-      _audio.playing ? _audio.pause : _playCurrentPage,
+      _audio.playing && _followAudio ? _audio.pause : _playCurrentPage,
     ),
     _quickButton(
       Icons.bookmark_add_outlined,
@@ -956,7 +976,7 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
                   : AppLocalizations.of(context)!.playFromPage,
               onPressed: () => _audio.playing
                   ? _audio.pause()
-                  : _audio.ayahs.isEmpty
+                  : _audio.ayahs.isEmpty || !_followAudio
                   ? _playCurrentPage()
                   : _audio.resume(),
               icon: Icon(
