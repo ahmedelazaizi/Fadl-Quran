@@ -84,6 +84,7 @@ String calculationLabel(AppLocalizations l, String id) => switch (id) {
   'Qatar' => l.methodQatar,
   'Singapore' => l.methodSingapore,
   'Turkey' => l.methodTurkey,
+  'Jordan' => l.methodJordan,
   'Tehran' => l.methodTehran,
   'NorthAmerica' => l.methodNorthAmerica,
   'MoonsightingCommittee' => l.methodMoonsightingCommittee,

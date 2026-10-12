@@ -37,7 +37,7 @@ const presetCities = <City>[
   City('دبي، الإمارات', 25.2048, 55.2708, 'Asia/Dubai', 'Dubai'),
   City('الكويت، الكويت', 29.3759, 47.9774, 'Asia/Kuwait', 'Kuwait'),
   City('الدوحة، قطر', 25.2854, 51.5310, 'Asia/Qatar', 'Qatar'),
-  City('عمّان، الأردن', 31.9454, 35.9284, 'Asia/Amman', 'MuslimWorldLeague'),
+  City('عمّان، الأردن', 31.9454, 35.9284, 'Asia/Amman', 'Jordan'),
   City(
     'الدار البيضاء، المغرب',
     33.5731,
@@ -164,7 +164,7 @@ class AppState extends ChangeNotifier {
         ...?storedNotifications['adhan'] as Map?,
       },
     };
-    final method = gpsMethodFix(settings);
+    final method = countryMethodFix(settings);
     if (method != null) {
       settings = {...settings, 'calcMethod': method};
       await prefs.setString(_settingsKey, jsonEncode(settings));
@@ -179,19 +179,29 @@ class AppState extends ChangeNotifier {
   /// Location name stored for a GPS fix.
   static const gpsLocationName = 'موقعي الحالي';
 
-  /// The method a GPS location set before methods followed the country
-  /// should use: only when it still has the old Umm al-Qura default (never
-  /// chosen) and its time zone names another country's method.
+  /// Countries that got their own method after users there were given the
+  /// Muslim World League fallback.
+  static const _ownMethodSince = {'Asia/Amman'};
+
+  /// The method a location saved by an older version should now use, or
+  /// null to keep it. Never overrides a method the user picked.
+  /// - A GPS location set before methods followed the country, still on
+  ///   the old Umm al-Qura default.
+  /// - A location in a country that now has its own method (Jordan), still
+  ///   on the Muslim World League fallback.
   @visibleForTesting
-  static String? gpsMethodFix(Map<String, dynamic> settings) {
-    if (settings['locationName'] != gpsLocationName ||
-        settings['calcMethodManual'] == true) {
-      return null;
-    }
+  static String? countryMethodFix(Map<String, dynamic> settings) {
+    if (settings['calcMethodManual'] == true) return null;
     final current = settings['calcMethod'] as String?;
-    if (current != null && current != 'UmmAlQura') return null;
-    final method = methodForTimezone('${settings['timezone']}');
-    return method == current ? null : method;
+    final timezone = '${settings['timezone']}';
+    final method = methodForTimezone(timezone);
+    if (method == null || method == current) return null;
+    final oldGpsDefault =
+        settings['locationName'] == gpsLocationName &&
+        (current == null || current == 'UmmAlQura');
+    final oldFallback =
+        current == 'MuslimWorldLeague' && _ownMethodSince.contains(timezone);
+    return oldGpsDefault || oldFallback ? method : null;
   }
 
   static Map<String, dynamic> _readLocal(SharedPreferences prefs, String key) {

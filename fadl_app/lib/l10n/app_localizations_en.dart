@@ -1120,6 +1120,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get methodTurkey => 'Turkish Presidency of Religious Affairs';
 
   @override
+  String get methodJordan => 'Ministry of Awqaf, Jordan';
+
+  @override
   String get methodTehran => 'Institute of Geophysics, Tehran';
 
   @override

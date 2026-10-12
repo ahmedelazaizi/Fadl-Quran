@@ -111,12 +111,16 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Umm al-Qura University, Makkah'), findsWidgets);
       expect(find.text('Egyptian General Authority of Survey'), findsOneWidget);
-      expect(
-        find.text('Moonsighting Committee', skipOffstage: false),
-        findsOneWidget,
+      // The list scrolls; the last methods are further down.
+      await tester.scrollUntilVisible(
+        find.text('Moonsighting Committee'),
+        100,
+        scrollable: find.byType(Scrollable).last,
       );
+      expect(find.text('Moonsighting Committee'), findsOneWidget);
+      expect(find.text('Ministry of Awqaf, Jordan'), findsOneWidget);
       Navigator.of(
-        tester.element(find.text('Egyptian General Authority of Survey')),
+        tester.element(find.text('Ministry of Awqaf, Jordan')),
       ).pop();
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Asr school'));

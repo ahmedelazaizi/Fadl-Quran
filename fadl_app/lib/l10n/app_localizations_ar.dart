@@ -1107,6 +1107,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get methodTurkey => 'رئاسة الشؤون الدينية التركية';
 
   @override
+  String get methodJordan => 'وزارة الأوقاف الأردنية';
+
+  @override
   String get methodTehran => 'معهد الجيوفيزياء - طهران';
 
   @override
