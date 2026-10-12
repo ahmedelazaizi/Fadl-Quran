@@ -17,6 +17,7 @@ const calcMethods = <String, String>{
   'Qatar': 'قطر',
   'Singapore': 'سنغافورة',
   'Turkey': 'رئاسة الشؤون الدينية التركية',
+  'Jordan': 'وزارة الأوقاف الأردنية',
   'Tehran': 'معهد الجيوفيزياء - طهران',
   'NorthAmerica': 'الجمعية الإسلامية لأمريكا الشمالية (ISNA)',
   'MoonsightingCommittee': 'لجنة رؤية الهلال',
@@ -44,6 +45,7 @@ String? methodForTimezone(String timezone) {
     'Asia/Dhaka': 'Karachi',
     'Asia/Kabul': 'Karachi',
     'Europe/Istanbul': 'Turkey',
+    'Asia/Amman': 'Jordan',
     'Asia/Tehran': 'Tehran',
     'Asia/Singapore': 'Singapore',
     'Asia/Kuala_Lumpur': 'Singapore',
@@ -181,6 +183,14 @@ class OfflinePrayer {
       'Qatar' => adhan.CalculationMethodParameters.qatar(),
       'Singapore' => adhan.CalculationMethodParameters.singapore(),
       'Turkey' => adhan.CalculationMethodParameters.turkiye(),
+      // Ministry of Awqaf, Jordan: Fajr and Isha at 18°, Maghrib 5 minutes
+      // after sunset (Aladhan method 23).
+      'Jordan' => adhan.CalculationParameters(
+        method: adhan.CalculationMethod.other,
+        fajrAngle: 18,
+        ishaAngle: 18,
+        methodAdjustments: {adhan.Prayer.maghrib: 5},
+      ),
       'Tehran' => adhan.CalculationMethodParameters.tehran(),
       'NorthAmerica' => adhan.CalculationMethodParameters.northAmerica(),
       'MoonsightingCommittee' =>

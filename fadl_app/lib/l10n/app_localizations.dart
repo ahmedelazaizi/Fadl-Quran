@@ -2102,6 +2102,12 @@ abstract class AppLocalizations {
   /// **'Turkish Presidency of Religious Affairs'**
   String get methodTurkey;
 
+  /// No description provided for @methodJordan.
+  ///
+  /// In en, this message translates to:
+  /// **'Ministry of Awqaf, Jordan'**
+  String get methodJordan;
+
   /// No description provided for @methodTehran.
   ///
   /// In en, this message translates to:
