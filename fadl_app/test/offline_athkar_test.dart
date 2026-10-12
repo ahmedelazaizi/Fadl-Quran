@@ -159,71 +159,74 @@ void main() {
     expect(first['reference'], 'سورة ${surah['nameAr']} - آية 24');
   });
 
-  test('athkar progress persists across reloads and resets after 24 hours', () async {
-    final day = DateTime(2026, 3, 1, 9);
-    final items = (athkar.category('morning')!['items'] as List)
-        .cast<Map<String, dynamic>>();
-    for (final i in items) {
-      await OfflineAthkarStore.setProgress(
+  test(
+    'athkar progress persists across reloads and resets after 24 hours',
+    () async {
+      final day = DateTime(2026, 3, 1, 9);
+      final items = (athkar.category('morning')!['items'] as List)
+          .cast<Map<String, dynamic>>();
+      for (final i in items) {
+        await OfflineAthkarStore.setProgress(
+          athkar,
+          i['id'] as int,
+          i['repeat'] as int,
+          now: day,
+        );
+      }
+      final partial = items.firstWhere((i) => (i['repeat'] as int) > 1);
+      final put = await OfflineAthkarStore.setProgress(
         athkar,
-        i['id'] as int,
-        i['repeat'] as int,
+        partial['id'] as int,
+        1,
         now: day,
       );
-    }
-    final partial = items.firstWhere((i) => (i['repeat'] as int) > 1);
-    final put = await OfflineAthkarStore.setProgress(
-      athkar,
-      partial['id'] as int,
-      1,
-      now: day,
-    );
-    expect(put, {
-      'dhikrId': partial['id'],
-      'count': 1,
-      'repeat': partial['repeat'],
-      'done': false,
-    });
+      expect(put, {
+        'dhikrId': partial['id'],
+        'count': 1,
+        'repeat': partial['repeat'],
+        'done': false,
+      });
 
-    await reloadPrefs();
-    final progress = await OfflineAthkarStore.progress(athkar, now: day);
-    final morning = (progress['categories'] as List).firstWhere(
-      (c) => c['slug'] == 'morning',
-    );
-    expect(morning['completed'], items.length - 1);
-    expect(morning['total'], items.length);
-    expect(morning['status'], 'PARTIAL');
-    expect(
-      (progress['items'] as List).firstWhere(
-        (p) => p['dhikrId'] == partial['id'],
-      )['count'],
-      1,
-    );
-    final evening = (progress['categories'] as List).firstWhere(
-      (c) => c['slug'] == 'evening',
-    );
-    expect(evening['status'], 'NOT_STARTED');
-
-    await OfflineAthkarStore.setProgress(
-      athkar,
-      partial['id'] as int,
-      partial['repeat'] as int,
-      now: day,
-    );
-    final done = await OfflineAthkarStore.progress(athkar, now: day);
-    expect(
-      (done['categories'] as List).firstWhere(
+      await reloadPrefs();
+      final progress = await OfflineAthkarStore.progress(athkar, now: day);
+      final morning = (progress['categories'] as List).firstWhere(
         (c) => c['slug'] == 'morning',
-      )['status'],
-      'COMPLETED',
-    );
+      );
+      expect(morning['completed'], items.length - 1);
+      expect(morning['total'], items.length);
+      expect(morning['status'], 'PARTIAL');
+      expect(
+        (progress['items'] as List).firstWhere(
+          (p) => p['dhikrId'] == partial['id'],
+        )['count'],
+        1,
+      );
+      final evening = (progress['categories'] as List).firstWhere(
+        (c) => c['slug'] == 'evening',
+      );
+      expect(evening['status'], 'NOT_STARTED');
 
-    final next = await OfflineAthkarStore.progress(
-      athkar,
-      now: day.add(const Duration(days: 1)),
-    );
-    expect(next['items'], isEmpty);
-  });
+      await OfflineAthkarStore.setProgress(
+        athkar,
+        partial['id'] as int,
+        partial['repeat'] as int,
+        now: day,
+      );
+      final done = await OfflineAthkarStore.progress(athkar, now: day);
+      expect(
+        (done['categories'] as List).firstWhere(
+          (c) => c['slug'] == 'morning',
+        )['status'],
+        'COMPLETED',
+      );
+
+      final next = await OfflineAthkarStore.progress(
+        athkar,
+        now: day.add(const Duration(days: 1)),
+      );
+      expect(next['items'], isEmpty);
+    },
+  );
 
   test('amen, reads, dedications and personal duas persist locally', () async {
     final day = DateTime(2026, 3, 1, 12);
