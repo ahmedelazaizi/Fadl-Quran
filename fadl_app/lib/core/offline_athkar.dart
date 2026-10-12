@@ -339,7 +339,15 @@ List<String> searchTerms(String query) {
 class OfflineAthkarStore {
   OfflineAthkarStore._();
 
-  static const progressKey = 'fadl.offline.athkarProgress';
+  /// Per-dhikr progress: `{id: {count, at, doneAt}}` (epoch ms).
+  static const progressKey = 'fadl.offline.athkarProgress.v2';
+
+  /// The day-based store used before; today's counts are carried over once.
+  static const legacyProgressKey = 'fadl.offline.athkarProgress';
+
+  /// A finished dhikr stays finished this long after it was finished; an
+  /// unfinished count is kept this long after the last tap.
+  static const progressLifetime = Duration(hours: 24);
 
   /// Highest daily count kept for one dhikr (the backend's limit too).
   static const maxCount = 10000;
@@ -384,19 +392,64 @@ class OfflineAthkarStore {
 
   // ───────────── Athkar progress ─────────────
 
-  /// Same map as GET /me/athkar/progress.
+  /// Progress still in effect at [now], by dhikr id; expired entries and
+  /// the legacy day-based store are dropped.
+  static Map<int, Map<String, int>> _progress(
+    SharedPreferences prefs,
+    DateTime now,
+  ) {
+    final nowMs = now.millisecondsSinceEpoch;
+    final lifetime = progressLifetime.inMilliseconds;
+    final entries = <int, Map<String, int>>{};
+    final stored = _readMap(prefs, progressKey);
+    for (final e in stored.entries) {
+      final id = int.tryParse(e.key);
+      final value = e.value;
+      if (id == null || value is! Map) continue;
+      final entry = {
+        for (final f in value.entries)
+          if (f.value is num) f.key as String: (f.value as num).toInt(),
+      };
+      final since = entry['doneAt'] ?? entry['at'];
+      if (since == null || nowMs - since >= lifetime) continue;
+      entries[id] = entry;
+    }
+    // Carry over today's counts from the day-based store, once.
+    if (prefs.containsKey(legacyProgressKey)) {
+      for (final e in _daily(prefs, legacyProgressKey, ymd(now)).entries) {
+        final id = int.tryParse(e.key);
+        if (id != null) {
+          entries.putIfAbsent(id, () => {'count': e.value, 'at': nowMs});
+        }
+      }
+    }
+    return entries;
+  }
+
+  static Future<void> _writeProgress(
+    SharedPreferences prefs,
+    Map<int, Map<String, int>> entries,
+  ) async {
+    await prefs.setString(
+      progressKey,
+      jsonEncode({for (final e in entries.entries) '${e.key}': e.value}),
+    );
+    await prefs.remove(legacyProgressKey);
+  }
+
+  /// Same map as GET /me/athkar/progress. A dhikr counts as finished for
+  /// [progressLifetime] after it was finished, then starts again from zero.
   static Future<Map<String, dynamic>> progress(
     OfflineAthkar data, {
     DateTime? now,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    final today = ymd(now ?? DateTime.now());
+    final at = now ?? DateTime.now();
     final counts = {
-      for (final e in _daily(prefs, progressKey, today).entries)
-        int.parse(e.key): e.value,
+      for (final e in _progress(prefs, at).entries) e.key: e.value['count']!,
     };
     return {
-      'date': today,
+      'date': ymd(at),
       'categories': [
         for (final c in data._categories)
           if (c.featured) _categoryProgress(c, counts),
@@ -429,7 +482,9 @@ class OfflineAthkarStore {
     };
   }
 
-  /// Same as PUT /me/athkar/progress: sets today's absolute count.
+  /// Same as PUT /me/athkar/progress: sets the dhikr's absolute count. The
+  /// first time the count reaches the dhikr's repeat starts its
+  /// [progressLifetime]; going below it (a reset) clears that.
   static Future<Map<String, dynamic>> setProgress(
     OfflineAthkar data,
     int dhikrId,
@@ -439,16 +494,22 @@ class OfflineAthkarStore {
     final dhikr = data._dhikr[dhikrId];
     if (dhikr == null) throw ArgumentError.value(dhikrId, 'dhikrId');
     final value = count.clamp(0, maxCount);
-    final prefs = await SharedPreferences.getInstance();
-    final today = ymd(now ?? DateTime.now());
-    final counts = _daily(prefs, progressKey, today);
-    if (value == 0) {
-      counts.remove('$dhikrId');
-    } else {
-      counts['$dhikrId'] = value;
-    }
-    await _writeDaily(prefs, progressKey, today, counts);
     final repeat = dhikr['repeat'] as int;
+    final prefs = await SharedPreferences.getInstance();
+    final at = now ?? DateTime.now();
+    final nowMs = at.millisecondsSinceEpoch;
+    final entries = _progress(prefs, at);
+    if (value == 0) {
+      entries.remove(dhikrId);
+    } else {
+      final doneAt = entries[dhikrId]?['doneAt'];
+      entries[dhikrId] = {
+        'count': value,
+        'at': nowMs,
+        if (value >= repeat) 'doneAt': doneAt ?? nowMs,
+      };
+    }
+    await _writeProgress(prefs, entries);
     return {
       'dhikrId': dhikrId,
       'count': value,

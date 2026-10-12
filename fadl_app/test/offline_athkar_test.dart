@@ -159,7 +159,7 @@ void main() {
     expect(first['reference'], 'سورة ${surah['nameAr']} - آية 24');
   });
 
-  test('athkar progress persists across reloads and resets next day', () async {
+  test('athkar progress persists across reloads and resets after 24 hours', () async {
     final day = DateTime(2026, 3, 1, 9);
     final items = (athkar.category('morning')!['items'] as List)
         .cast<Map<String, dynamic>>();
