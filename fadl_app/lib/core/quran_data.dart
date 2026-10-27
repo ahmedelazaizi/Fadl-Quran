@@ -16,8 +16,12 @@ class QuranData {
 
   static Future<QuranData>? _cached;
 
-  static Future<QuranData> load() =>
-      _cached ??= _read().catchError((Object error) {
+  /// The data once loaded, for building without waiting a frame.
+  static QuranData? loaded;
+
+  static Future<QuranData> load() => _cached ??= _read()
+      .then((data) => loaded = data)
+      .catchError((Object error) {
         _cached = null;
         throw error;
       });
