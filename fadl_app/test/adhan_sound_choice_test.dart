@@ -189,13 +189,10 @@ void main() {
     // Clips and imports only: no alarm or battery calls.
     expect(calls.map((c) => c.method).toSet(), {'listImported', 'preview'});
 
-    final more = find.text('Open the Islamweb adhan library');
-    await tester.scrollUntilVisible(
-      more,
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    expect(more, findsOneWidget);
+    // Islamweb does not allow its recordings in apps: no link to them.
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -5000));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Islamweb', skipOffstage: false), findsNothing);
     await tester.pumpWidget(const SizedBox());
     debugDefaultTargetPlatformOverride = null;
   });
