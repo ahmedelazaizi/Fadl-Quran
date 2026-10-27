@@ -83,4 +83,33 @@ void main() {
     expect(tester.getTopLeft(page).dy, 40);
     expect(tester.getBottomLeft(page).dy, 800 - 16);
   });
+
+  testWidgets('a swiped-to page is drawn in its first frame', (tester) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/path_provider'),
+          (_) async => '${Directory.systemTemp.path}/fadl_mushaf_swipe_test',
+        );
+    final state = AppState();
+    await tester.runAsync(state.load);
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: state,
+        child: const MaterialApp(
+          locale: Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MushafReaderScreen(initialPage: 50),
+        ),
+      ),
+    );
+    await settle(tester);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+
+    // Jump to a page never built before and look at the very first frame.
+    tester.widget<PageView>(find.byType(PageView)).controller!.jumpToPage(300);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('٣٠١'), findsOneWidget);
+  });
 }

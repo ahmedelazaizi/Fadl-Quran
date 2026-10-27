@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' show ImageFilter;
 import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
@@ -506,6 +505,9 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
                   itemBuilder: (context, index) => RepaintBoundary(
                     child: FutureBuilder<Map<String, dynamic>>(
                       future: loadPage(index + 1),
+                      // Pages are in memory once the mushaf has loaded: build
+                      // them in the swipe's first frame, not one later.
+                      initialData: QuranData.loaded?.page(index + 1),
                       builder: (context, snap) {
                         if (snap.hasError) {
                           return ErrorCard(
@@ -756,18 +758,17 @@ class _MushafReaderScreenState extends State<MushafReaderScreen>
     padding: const EdgeInsets.only(bottom: 7),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(20),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-        child: Container(
-          decoration: BoxDecoration(
-            color: palette.frame.withValues(alpha: 0.93),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: palette.muted.withValues(alpha: 0.25)),
-          ),
-          child: IconTheme(
-            data: IconThemeData(color: palette.accent),
-            child: child,
-          ),
+      // Opaque rather than a backdrop blur: the blur was recomputed every
+      // frame of a page swipe.
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: palette.frame,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: palette.muted.withValues(alpha: 0.25)),
+        ),
+        child: IconTheme(
+          data: IconThemeData(color: palette.accent),
+          child: child,
         ),
       ),
     ),
@@ -1399,6 +1400,8 @@ class _MushafPageState extends State<_MushafPage> {
   @override
   Widget build(BuildContext context) => FutureBuilder<MushafLayout>(
     future: MushafLayout.load(),
+    // Without it every new page first laid out the free-flow fallback.
+    initialData: MushafLayout.loaded,
     builder: (context, snapshot) => snapshot.hasData
         ? _LinePage(
             lines: snapshot.data!.lines(widget.data['page'] as int),
@@ -1595,6 +1598,9 @@ class _MushafPageState extends State<_MushafPage> {
 }
 
 class _LinePage extends StatelessWidget {
+  /// Natural width of each mushaf line's words, by font size.
+  static final _naturalWidths = Expando<Map<double, double>>();
+
   const _LinePage({
     required this.lines,
     required this.data,
@@ -1716,19 +1722,24 @@ class _LinePage extends StatelessWidget {
       for (final token in line.tokens)
         _word(token, style, ayahs, surahs, colors),
     ];
-    final painter = TextPainter(textDirection: TextDirection.rtl);
-    var naturalWidth = 0.0;
-    for (final token in line.tokens) {
-      painter.text = TextSpan(
-        text: token.isEnd
-            ? ayahMarker(ayahs[token.ayahKey]!['number'] as int)
-            : token.text,
-        style: style,
-      );
-      painter.layout();
-      naturalWidth += painter.width;
-    }
-    painter.dispose();
+    // Measuring every word costs ~150 text layouts a page; lines are
+    // immutable, so each is measured once per font size.
+    final naturalWidth = (_naturalWidths[line] ??= {})[size] ??= () {
+      final painter = TextPainter(textDirection: TextDirection.rtl);
+      var width = 0.0;
+      for (final token in line.tokens) {
+        painter.text = TextSpan(
+          text: token.isEnd
+              ? ayahMarker(ayahs[token.ayahKey]!['number'] as int)
+              : token.text,
+          style: style,
+        );
+        painter.layout();
+        width += painter.width;
+      }
+      painter.dispose();
+      return width;
+    }();
     final shortLine =
         line.tokens.length < 7 && line.tokens.any((token) => token.isEnd);
     final rowWidth = shortLine && naturalWidth < width * 0.72

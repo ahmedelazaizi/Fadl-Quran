@@ -22,8 +22,12 @@ class MushafLayout {
 
   static Future<MushafLayout>? _cached;
 
-  static Future<MushafLayout> load() =>
-      _cached ??= _read().catchError((Object error) {
+  /// The layout once loaded, for building without waiting a frame.
+  static MushafLayout? loaded;
+
+  static Future<MushafLayout> load() => _cached ??= _read()
+      .then((layout) => loaded = layout)
+      .catchError((Object error) {
         _cached = null;
         throw error;
       });
