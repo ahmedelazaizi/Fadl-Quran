@@ -22,6 +22,7 @@ void main() {
     expect(methodForTimezone('Asia/Riyadh'), 'UmmAlQura');
     expect(methodForTimezone('Asia/Kuwait'), 'Kuwait');
     expect(methodForTimezone('Europe/Istanbul'), 'Turkey');
+    expect(methodForTimezone('Asia/Amman'), 'Jordan');
     expect(methodForTimezone('America/New_York'), 'NorthAmerica');
     expect(methodForTimezone('Europe/London'), 'MuslimWorldLeague');
     expect(methodForTimezone('UTC'), isNull);
@@ -48,14 +49,112 @@ void main() {
       'locationName': AppState.gpsLocationName,
       'calcMethod': 'UmmAlQura',
     };
-    expect(AppState.gpsMethodFix(gps), 'Egyptian');
-    expect(AppState.gpsMethodFix({...gps, 'calcMethod': null}), 'Egyptian');
+    expect(AppState.countryMethodFix(gps), 'Egyptian');
+    expect(AppState.countryMethodFix({...gps, 'calcMethod': null}), 'Egyptian');
     // A choice the user made is kept.
-    expect(AppState.gpsMethodFix({...gps, 'calcMethodManual': true}), isNull);
-    expect(AppState.gpsMethodFix({...gps, 'calcMethod': 'Karachi'}), isNull);
+    expect(
+      AppState.countryMethodFix({...gps, 'calcMethodManual': true}),
+      isNull,
+    );
+    expect(
+      AppState.countryMethodFix({...gps, 'calcMethod': 'Karachi'}),
+      isNull,
+    );
     // Cities carry their own method.
-    expect(AppState.gpsMethodFix({...gps, 'locationName': 'القاهرة'}), isNull);
-    expect(AppState.gpsMethodFix({...gps, 'timezone': 'Asia/Riyadh'}), isNull);
+    expect(
+      AppState.countryMethodFix({...gps, 'locationName': 'القاهرة'}),
+      isNull,
+    );
+    expect(
+      AppState.countryMethodFix({...gps, 'timezone': 'Asia/Riyadh'}),
+      isNull,
+    );
+  });
+
+  test('Jordan gets the Awqaf method, also for saved locations', () {
+    const amman = {
+      'latitude': 31.9454,
+      'longitude': 35.9284,
+      'timezone': 'Asia/Amman',
+    };
+    // Saved by an older version on the generic fallback: upgraded.
+    expect(
+      AppState.countryMethodFix({
+        ...amman,
+        'locationName': 'عمّان، الأردن',
+        'calcMethod': 'MuslimWorldLeague',
+      }),
+      'Jordan',
+    );
+    expect(
+      AppState.countryMethodFix({
+        ...amman,
+        'locationName': AppState.gpsLocationName,
+        'calcMethod': 'MuslimWorldLeague',
+      }),
+      'Jordan',
+    );
+    // A method the user picked is kept.
+    expect(
+      AppState.countryMethodFix({
+        ...amman,
+        'calcMethod': 'MuslimWorldLeague',
+        'calcMethodManual': true,
+      }),
+      isNull,
+    );
+    // Elsewhere, Muslim World League stays.
+    expect(
+      AppState.countryMethodFix({
+        ...cairo,
+        'locationName': 'القاهرة',
+        'calcMethod': 'MuslimWorldLeague',
+      }),
+      isNull,
+    );
+  });
+
+  test('Jordan times match the Awqaf calendar (Aladhan method 23)', () {
+    // Amman, from api.aladhan.com/v1/timings?method=23, local time (UTC+3).
+    const amman = {
+      'latitude': 31.9454,
+      'longitude': 35.9284,
+      'timezone': 'Asia/Amman',
+      'calcMethod': 'Jordan',
+    };
+    final expected = {
+      DateTime.utc(2026, 10, 12): {
+        'fajr': '05:16',
+        'sunrise': '06:37',
+        'dhuhr': '12:23',
+        'asr': '15:40',
+        'maghrib': '18:13',
+        'isha': '19:29',
+      },
+      DateTime.utc(2027, 1, 15): {
+        'fajr': '06:11',
+        'sunrise': '07:37',
+        'dhuhr': '12:46',
+        'asr': '15:35',
+        'maghrib': '17:59',
+        'isha': '19:20',
+      },
+    };
+    for (final MapEntry(key: date, value: times) in expected.entries) {
+      for (final p in OfflinePrayer.day(amman, date)['prayers'] as List) {
+        final local = DateTime.parse(
+          p['time'] as String,
+        ).toUtc().add(const Duration(hours: 3));
+        final want = (times[p['name']]!).split(':').map(int.parse).toList();
+        final minutes = local.hour * 60 + local.minute - want[0] * 60 - want[1];
+        // Both round to the minute, differently.
+        expect(
+          minutes.abs(),
+          lessThanOrEqualTo(1),
+          reason: '$date ${p['name']}',
+        );
+      }
+    }
   });
 
   test('a stored GPS location is fixed on load', () async {

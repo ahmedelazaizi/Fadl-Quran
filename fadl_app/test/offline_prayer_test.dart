@@ -19,7 +19,7 @@ void main() {
   test(
     'every server method has a distinct localized entry and a working factory',
     () {
-      expect(calcMethods.length, 12);
+      expect(calcMethods.length, 13);
       for (final method in calcMethods.keys) {
         final daily = OfflinePrayer.day({
           ...cairo,
