@@ -5114,30 +5114,6 @@ abstract class AppLocalizations {
   /// **'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.'**
   String get riteDisclaimer;
 
-  /// No description provided for @moreAdhansTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'More adhans by renowned muezzins'**
-  String get moreAdhansTitle;
-
-  /// No description provided for @moreAdhansHint.
-  ///
-  /// In en, this message translates to:
-  /// **'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.'**
-  String get moreAdhansHint;
-
-  /// No description provided for @moreAdhansOpen.
-  ///
-  /// In en, this message translates to:
-  /// **'Open the Islamweb adhan library'**
-  String get moreAdhansOpen;
-
-  /// No description provided for @moreAdhansOpenError.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not open the website'**
-  String get moreAdhansOpenError;
-
   /// No description provided for @manualAdjustments.
   ///
   /// In en, this message translates to:

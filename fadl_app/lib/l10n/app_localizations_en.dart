@@ -2867,19 +2867,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'A summary of what scholars agree on. For special cases (women, the ill, qiran or ifrad) ask your group\'s guide or a scholar.';
 
   @override
-  String get moreAdhansTitle => 'More adhans by renowned muezzins';
-
-  @override
-  String get moreAdhansHint =>
-      'The adhan library on Islamweb has hundreds of recordings, including Fajr adhans. Download one you like to your phone, then choose it with \"Import from phone\" above. The recordings belong to Islamweb and are downloaded for personal use.';
-
-  @override
-  String get moreAdhansOpen => 'Open the Islamweb adhan library';
-
-  @override
-  String get moreAdhansOpenError => 'Could not open the website';
-
-  @override
   String get manualAdjustments => 'Adjust times manually';
 
   @override
