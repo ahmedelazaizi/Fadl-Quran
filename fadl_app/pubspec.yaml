@@ -46,6 +46,7 @@ flutter:
     - assets/fonts/AmiriQuran-OFL.txt
     - assets/fonts/Tajawal-OFL.txt
     - assets/fonts/NotoNaskhArabic-OFL.txt
+    - assets/fonts/Al-Madinah-OFL.txt
   fonts:
     - family: Tajawal
       fonts:
@@ -67,3 +68,6 @@ flutter:
     - family: NotoNaskhArabic
       fonts:
         - asset: assets/fonts/NotoNaskhArabic.ttf
+    - family: AlMadinah
+      fonts:
+        - asset: assets/fonts/Al-Madinah.ttf

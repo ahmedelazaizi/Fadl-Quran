@@ -1448,7 +1448,7 @@ class _MushafPageState extends State<_MushafPage> {
               child: Text(
                 _basmala,
                 textAlign: TextAlign.center,
-                style: FadlFonts.quran(
+                style: FadlFonts.mushaf(
                   size: widget.fontSize + 2,
                   color: p.accent,
                 ),
@@ -1534,7 +1534,7 @@ class _MushafPageState extends State<_MushafPage> {
 
   Widget _ayahText(List<Map<String, dynamic>> run, String surahName) {
     final p = widget.palette;
-    final base = FadlFonts.quran(
+    final base = FadlFonts.mushaf(
       size: widget.fontSize,
       color: p.text,
       height: 2.1,
@@ -1710,8 +1710,8 @@ class _LinePage extends StatelessWidget {
     Map<MushafToken, List<TextSpan>> colors,
   ) {
     if (line.tokens.isEmpty) return SizedBox(height: height, width: width);
-    final size = (height * 0.43 + (fontSize - 24) * 0.5).clamp(15.0, 48.0);
-    final style = FadlFonts.quran(size: size, height: 1.85);
+    final size = (height * 0.45 + (fontSize - 24) * 0.5).clamp(15.0, 48.0);
+    final style = FadlFonts.mushaf(size: size, height: 1.85);
     final words = [
       for (final token in line.tokens)
         _word(token, style, ayahs, surahs, colors),
@@ -1729,14 +1729,8 @@ class _LinePage extends StatelessWidget {
       naturalWidth += painter.width;
     }
     painter.dispose();
-    final shortLine =
-        line.tokens.length < 7 && line.tokens.any((token) => token.isEnd);
-    final rowWidth = shortLine && naturalWidth < width * 0.72
-        ? naturalWidth + math.max(0, line.tokens.length - 1) * 8
-        : math.max(
-            width,
-            naturalWidth + math.max(0, line.tokens.length - 1) * 3,
-          );
+    final wordGap = math.max(0, line.tokens.length - 1) * 4;
+    final rowWidth = naturalWidth + wordGap;
     return SizedBox(
       height: height,
       width: width,
@@ -1783,7 +1777,7 @@ class _LinePage extends StatelessWidget {
             child: Text(
               _basmala,
               textDirection: TextDirection.rtl,
-              style: FadlFonts.quran(
+              style: FadlFonts.mushaf(
                 size: height * 0.49,
                 color: palette.accent,
                 height: 1.5,
@@ -1885,71 +1879,124 @@ class _SurahFrame extends StatelessWidget {
           color: FadlColors.gold.withValues(alpha: 0.7),
           width: 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: FadlColors.gold.withValues(alpha: 0.12),
+            blurRadius: 3,
+            spreadRadius: 1,
+          ),
+        ],
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // A compact frame fills one mushaf line, whose height follows the
-          // screen: the title scales down to fit short lines.
-          if (compact)
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.surahName(surah['nameAr'] as String),
-                  maxLines: 1,
-                  style: FadlFonts.quran(size: 15, color: palette.accent),
-                ),
-              ),
-            )
-          else
-            Row(
-              children: [
-                Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.surahOrder(_number(context, surah['id'])),
-                  style: FadlFonts.ui(size: 11.5, color: palette.muted),
-                ),
-                Expanded(
+      child: CustomPaint(
+        foregroundPainter: _SurahFrameOrnamentPainter(
+          color: FadlColors.gold.withValues(alpha: 0.45),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // A compact frame fills one mushaf line, whose height follows the
+            // screen: the title scales down to fit short lines.
+            if (compact)
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
                   child: Text(
                     AppLocalizations.of(
                       context,
                     )!.surahName(surah['nameAr'] as String),
-                    textAlign: TextAlign.center,
                     maxLines: 1,
-                    style: FadlFonts.quran(size: 20, color: palette.accent),
+                    style: FadlFonts.mushaf(size: 15, color: palette.accent),
                   ),
                 ),
-                Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.surahVerses(_number(context, surah['ayahCount'])),
-                  style: FadlFonts.ui(size: 11.5, color: palette.muted),
-                ),
-              ],
-            ),
-          if (showBasmala)
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  _basmala,
-                  textDirection: TextDirection.rtl,
-                  style: FadlFonts.quran(
-                    size: 18,
-                    color: palette.accent,
-                    height: 1.3,
+              )
+            else
+              Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.surahOrder(_number(context, surah['id'])),
+                    style: FadlFonts.ui(size: 11.5, color: palette.muted),
+                  ),
+                  Expanded(
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.surahName(surah['nameAr'] as String),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      style: FadlFonts.mushaf(size: 20, color: palette.accent),
+                    ),
+                  ),
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.surahVerses(_number(context, surah['ayahCount'])),
+                    style: FadlFonts.ui(size: 11.5, color: palette.muted),
+                  ),
+                ],
+              ),
+            if (showBasmala)
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    _basmala,
+                    textDirection: TextDirection.rtl,
+                    style: FadlFonts.mushaf(
+                      size: 18,
+                      color: palette.accent,
+                      height: 1.3,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+class _SurahFrameOrnamentPainter extends CustomPainter {
+  const _SurahFrameOrnamentPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.7;
+    final inset = size.shortestSide < 30 ? 3.5 : 5.0;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          inset,
+          inset,
+          size.width - inset * 2,
+          size.height - inset * 2,
+        ),
+        const Radius.circular(9),
+      ),
+      paint,
+    );
+    final centerY = size.height / 2;
+    for (final centerX in <double>[inset, size.width - inset]) {
+      final diamond = Path()
+        ..moveTo(centerX, centerY - 3)
+        ..lineTo(centerX + 3, centerY)
+        ..lineTo(centerX, centerY + 3)
+        ..lineTo(centerX - 3, centerY)
+        ..close();
+      canvas.drawPath(diamond, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SurahFrameOrnamentPainter oldDelegate) =>
+      oldDelegate.color != color;
 }
 
 /// Bottom sheet for a tapped ayah: tafsir with edition chips and actions.

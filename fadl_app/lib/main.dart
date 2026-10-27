@@ -23,6 +23,7 @@ Future<void> main() async {
       (['Amiri', 'Amiri Quran'], 'AmiriQuran-OFL.txt'),
       (['Tajawal'], 'Tajawal-OFL.txt'),
       (['Noto Naskh Arabic'], 'NotoNaskhArabic-OFL.txt'),
+      (['Al-Madinah'], 'Al-Madinah-OFL.txt'),
     ]) {
       final license = await rootBundle.loadString('assets/fonts/$file');
       yield LicenseEntryWithLineBreaks(fonts, license);

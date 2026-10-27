@@ -70,6 +70,20 @@ abstract final class FadlFonts {
     height: height,
   );
 
+  static TextStyle mushaf({
+    double size = 24,
+    Color? color,
+    FontWeight weight = FontWeight.w400,
+    double height = 2.0,
+  }) => TextStyle(
+    fontFamily: 'AlMadinah',
+    fontFamilyFallback: const ['AmiriQuran'],
+    fontSize: size,
+    color: color,
+    fontWeight: weight,
+    height: height,
+  );
+
   /// Other scripture and decorative text: generous line height for tashkeel.
   static TextStyle scripture({
     double size = 24,

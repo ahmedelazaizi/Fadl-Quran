@@ -4,6 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('Al-Madinah font asset loads and contains font data', () async {
+    final font = await rootBundle.load('assets/fonts/Al-Madinah.ttf');
+    expect(font.lengthInBytes, greaterThan(2000000));
+
+    final loader = FontLoader('AlMadinah')..addFont(Future.value(font));
+    await loader.load();
+  });
+
   test('Amiri Quran font asset loads and contains font data', () async {
     final font = await rootBundle.load('assets/fonts/AmiriQuran.ttf');
     expect(font.lengthInBytes, greaterThan(100000));
@@ -27,6 +35,7 @@ void main() {
       'AmiriQuran-OFL.txt',
       'Tajawal-OFL.txt',
       'NotoNaskhArabic-OFL.txt',
+      'Al-Madinah-OFL.txt',
     ]) {
       final license = await rootBundle.loadString('assets/fonts/$file');
       expect(
