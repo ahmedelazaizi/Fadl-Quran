@@ -2844,19 +2844,6 @@ class AppLocalizationsAr extends AppLocalizations {
       'خلاصة ما اتفق عليه العلماء. وللحالات الخاصة (المرأة، والمريض، والقِران والإفراد) يُرجع إلى مرشد الحملة أو أهل العلم.';
 
   @override
-  String get moreAdhansTitle => 'أذانات أكثر بأصوات كبار المؤذنين';
-
-  @override
-  String get moreAdhansHint =>
-      'مكتبة الأذان في موقع «إسلام ويب» فيها مئات الأذانات (منها أذانات الفجر). نزّل الأذان الذي يعجبك من الموقع إلى هاتفك، ثم اختره من «استيراد من الهاتف» بالأعلى. الأذانات ملك موقع إسلام ويب، وتحميلها للاستخدام الشخصي.';
-
-  @override
-  String get moreAdhansOpen => 'فتح مكتبة الأذان في إسلام ويب';
-
-  @override
-  String get moreAdhansOpenError => 'تعذّر فتح الموقع';
-
-  @override
   String get manualAdjustments => 'تعديل الأوقات يدويًا';
 
   @override

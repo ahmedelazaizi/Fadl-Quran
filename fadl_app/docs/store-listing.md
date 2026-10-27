@@ -14,7 +14,8 @@
 | التصنيف | Play: Lifestyle (أسلوب الحياة) · Apple: Reference (مراجع)، وثانوي Lifestyle |
 | السعر | مجاني، بلا مشتريات داخل التطبيق ولا إعلانات |
 | التصنيف العمري | Play: الجميع (Everyone) · Apple: 4+ |
-| رابط سياسة الخصوصية | `https://ahmedelazaizi.github.io/Fadl-Quran/` (بعد تفعيل GitHub Pages) |
+| رابط سياسة الخصوصية | `https://ahmedelazaizi.github.io/Fadl-Quran/` (منشور) |
+| صور المتجر | `docs/store-assets/icon-512.png` و`feature-graphic.png` (`tool/store/make_store_assets.py`) |
 | بريد الدعم | `moathfdal555@gmail.com` |
 | معرّف الحزمة | `com.fadl.fadl` (Android وiOS) |
 

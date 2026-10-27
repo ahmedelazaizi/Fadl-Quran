@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/adhan_catalog.dart';
 import '../../core/adhan_service.dart';
@@ -284,8 +283,6 @@ class _AdhanSettingsScreenState extends State<AdhanSettingsScreen>
               onImport: () => _import('regular'),
               onDelete: _delete,
             ),
-            const SizedBox(height: 8),
-            const _MoreAdhans(),
           ],
           if (supported) ...[
             const SizedBox(height: 8),
@@ -555,57 +552,6 @@ class _SoundCard extends StatelessWidget {
               onPressed: () => onDelete(sound),
               icon: const Icon(Icons.delete_outline_rounded),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Points to Islamweb's adhan library: the user downloads a recording there
-/// for personal use and adds it with "import from phone". Their recordings
-/// are not redistributed by the app.
-class _MoreAdhans extends StatelessWidget {
-  const _MoreAdhans();
-
-  static final library = Uri.parse(
-    'https://audio.islamweb.net/audio/index.php?page=AudioGroup&Gtype=1',
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    final l = prayerL(context);
-    return FadlCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.library_music_outlined, color: FadlColors.gold),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  l.moreAdhansTitle,
-                  style: FadlFonts.ui(size: 15, weight: FontWeight.w700),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(l.moreAdhansHint, style: FadlFonts.ui(size: 13)),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: () async {
-              final opened = await launchUrl(
-                library,
-                mode: LaunchMode.externalApplication,
-              );
-              if (!opened && context.mounted) {
-                showToast(context, l.moreAdhansOpenError);
-              }
-            },
-            icon: const Icon(Icons.open_in_new_rounded),
-            label: Text(l.moreAdhansOpen),
-          ),
         ],
       ),
     );
